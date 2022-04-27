@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<resources>  
+   <string name="app_name">Xplore BG</string>
+   <string name="facebook_app_id">501743401313384</string>
+   <string name="fb_login_protocol_scheme">fb501743401313384</string>
+   <string name="facebook_client_token">bad348f272b1d7e1f2eef0bda3b94516</string>
+   <string name="maps_api_key">AIzaSyCeAhX_oifgNEat12FLWk2GsACFteq4_BM</string>
+</resources>
