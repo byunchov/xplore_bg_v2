@@ -1,3 +1,4 @@
+import 'package:auto_route/annotations.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -7,6 +8,7 @@ import 'models/filter_checkbox.model.dart';
 import 'providers/categories.provider.dart';
 
 class CategoryFilterScreen extends ConsumerWidget {
+  @pathParam
   final String tag;
   final String name;
   const CategoryFilterScreen({

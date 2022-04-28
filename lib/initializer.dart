@@ -5,13 +5,14 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:xplore_bg_v2/firebase_options.dart';
 
 class Initializer {
   static Future<void> init() async {
     try {
       WidgetsFlutterBinding.ensureInitialized();
       await EasyLocalization.ensureInitialized();
-      await Firebase.initializeApp();
+      await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
       await dotenv.load(fileName: ".env");
       await _initStorage();
       _initScreenPreference();

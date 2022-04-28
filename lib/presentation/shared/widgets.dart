@@ -10,7 +10,13 @@ export 'package:xplore_bg_v2/presentation/shared/location/gallery_overlay.widget
 export 'package:xplore_bg_v2/presentation/shared/location/section_title.widget.dart';
 export 'package:xplore_bg_v2/presentation/shared/widgets/unfocus.widget.dart';
 
-export 'package:xplore_bg_v2/presentation/shared/places/place_listtile.widget.dart';
+// Place widgets
+export 'package:xplore_bg_v2/presentation/shared/places/place_list_tile.widget.dart';
+export 'package:xplore_bg_v2/presentation/shared/places/swipe_list_tile.widget.dart';
+export 'package:xplore_bg_v2/presentation/shared/places/action_icons.dart';
+export 'package:xplore_bg_v2/presentation/shared/places/action_icon_buttons.widget.dart';
+export 'package:xplore_bg_v2/presentation/shared/places/place_action_dialog.widget.dart';
+
 export 'package:xplore_bg_v2/presentation/shared/widgets/carousel_slider.widget.dart';
 export 'package:xplore_bg_v2/presentation/shared/widgets/marquee.widget.dart';
 

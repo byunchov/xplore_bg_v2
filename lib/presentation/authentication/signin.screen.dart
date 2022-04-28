@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:xplore_bg_v2/infrastructure/routing/router.gr.dart';
 import 'package:xplore_bg_v2/presentation/authentication/controllers/auth.controller.dart';
 import 'package:xplore_bg_v2/presentation/authentication/repositories/auth.repository.dart';
 import 'package:xplore_bg_v2/presentation/screens.dart';
@@ -26,7 +28,11 @@ class SignInScreen extends ConsumerWidget {
         print(previous?.displayName);
         print(next?.displayName);
         if (next != null) {
-          pushReplacement(context, const HomeScreen());
+          // pushReplacement(context, const HomeScreen());
+          context.router.pushAndPopUntil(
+            const HomeRoute(),
+            predicate: (route) => true,
+          );
         }
       },
     );

@@ -1,16 +1,18 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:get/get.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:xplore_bg_v2/domain/core/utils/config.util.dart';
 import 'package:xplore_bg_v2/infrastructure/routing/router.gr.dart';
 import 'package:xplore_bg_v2/infrastructure/theme/themes.dart';
 import 'package:xplore_bg_v2/models/place.model.dart';
+import 'package:xplore_bg_v2/models/swipe_action.model.dart';
+import 'package:xplore_bg_v2/presentation/explore/snackbar.util.dart';
 import 'package:xplore_bg_v2/presentation/explore/widgets/appbar_avatar.widget.dart';
 import 'package:xplore_bg_v2/presentation/explore/widgets/featured_card.widget.dart';
 import 'package:xplore_bg_v2/presentation/explore/widgets/nearby_card.widget.dart';
+import 'package:xplore_bg_v2/presentation/place/controllers/bookmarks.controller.dart';
 import 'package:xplore_bg_v2/presentation/search/controllers/search.controller.dart';
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
 import 'package:auto_route/auto_route.dart';
@@ -48,7 +50,6 @@ final locationSortProvider = FutureProvider.autoDispose<List<PlaceModel>>((ref) 
     filter: ['lang = "bg"'],
     sort: ["${sortField.toString()}:desc"],
   );
-  await 2.delay();
   return searchResult.hits!.map((e) => PlaceModel.previewFromJson(e)).toList();
 });
 
@@ -161,51 +162,6 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                                   children: data.map((e) => FeaturedCardWidget(place: e)).toList(),
                                 ),
                               ),
-                              // data: (data) {
-                              //   return Column(
-                              //     children: [
-                              //       Container(
-                              //         // padding: const EdgeInsets.all(15),
-                              //         margin: const EdgeInsets.all(15),
-                              //         height: 280,
-                              //         width: screenSize.width,
-                              //         child: CarouselSlider(
-                              //           // carouselController: ,
-                              //           options: CarouselOptions(
-                              //               autoPlay: true,
-                              //               autoPlayInterval: const Duration(seconds: 6),
-                              //               viewportFraction: 1,
-                              //               aspectRatio: 0.8,
-                              //               enlargeCenterPage: true,
-                              //               onPageChanged: (index, reason) {
-                              //                 // controller.currentIndex = index;
-                              //               }),
-                              //           items:
-                              //               data.map((e) => FeaturedCardWidget(place: e)).toList(),
-                              //         ),
-                              //       ),
-                              //       Padding(
-                              //         padding: const EdgeInsets.symmetric(vertical: 12),
-                              //         child: AnimatedSmoothIndicator(
-                              //           activeIndex: 2,
-                              //           count: data.length,
-                              //           effect: WormEffect(
-                              //             type: WormType.thin,
-                              //             dotWidth: 12,
-                              //             dotHeight: 12,
-                              //             activeDotColor: Colors.cyan[500]!,
-                              //           ),
-                              //           duration: const Duration(milliseconds: 800),
-                              //           onDotClicked: (index) {
-                              //             // controller.currentIndex = index;
-                              //             // controller.carouselController
-                              //             //     .animateToPage(controller.currentIndex);
-                              //           },
-                              //         ),
-                              //       )
-                              //     ],
-                              //   );
-                              // },
                               error: (err, stack) => Text("Error: $err"),
                               loading: () => const Center(child: CircularProgressIndicator()),
                             );
@@ -265,7 +221,17 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                         ref.read(locationSortTypeProvider.notifier).state = value!;
                       },
                     ),
-                    postfix: IconButton(onPressed: () {}, icon: const Icon(Feather.arrow_right)),
+                    postfix: IconButton(
+                      onPressed: () {
+                        SnackbarUtils.showSnackBar(
+                          context,
+                          title: "Title",
+                          message: "Test content",
+                          snackBarType: SnackBarType.info,
+                        );
+                      },
+                      icon: const Icon(Feather.arrow_right),
+                    ),
                     child: ref.watch(locationSortProvider).when(
                           data: (data) => ListView.separated(
                             shrinkWrap: true,
@@ -274,7 +240,45 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                             padding: const EdgeInsets.symmetric(horizontal: 8),
                             itemCount: data.length,
                             itemBuilder: (ctx, index) {
-                              return PlaceSwipeListTile(placePreview: data[index]);
+                              final place = data[index];
+                              return PlaceSwipeListTile(
+                                placePreview: place,
+                                actions: [
+                                  SwipeActionModel(
+                                    child: SwipeActionButton(
+                                      id: place.id,
+                                      field: 'bookmark_count',
+                                      iconStyle: BookmarkIcon(colorBold: Colors.white),
+                                      color: Colors.blue,
+                                    ),
+                                    onTap: () async {
+                                      await ref
+                                          .read(bookmarkLocationProvider)
+                                          .bookmarkLocation(place.id);
+                                    },
+                                  ),
+                                  SwipeActionModel(
+                                    child: SwipeActionButton(
+                                      id: place.id,
+                                      field: 'like_count',
+                                      iconStyle: LikeIcon(colorBold: Colors.white),
+                                      color: Colors.red,
+                                    ),
+                                    onTap: () async {
+                                      await ref
+                                          .read(bookmarkLocationProvider)
+                                          .likeLocation(place.id);
+
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: Text("Liked ${place.name}"),
+                                          padding: const EdgeInsets.all(16),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              );
                             },
                             separatorBuilder: (ctx, index) => const SizedBox(width: 12),
                           ),
@@ -299,6 +303,36 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  SnackBar snakBar(ThemeData theme) {
+    return SnackBar(
+      content: Row(
+        children: [
+          const Icon(Icons.info_outline_rounded),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Title",
+                  style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+                ),
+                Text(
+                  "Content",
+                  style: theme.textTheme.bodyLarge,
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.all(16),
+      backgroundColor: Colors.lightBlue,
+      behavior: SnackBarBehavior.fixed,
     );
   }
 

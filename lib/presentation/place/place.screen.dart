@@ -17,8 +17,8 @@ import 'package:xplore_bg_v2/presentation/place/controllers/bookmarks.controller
 import 'package:xplore_bg_v2/presentation/place/widgets/activities.widget.dart';
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
 
-import 'widgets/action_icon_button.widget.dart';
-import 'widgets/action_icons.dart';
+import '../shared/places/action_icon_buttons.widget.dart';
+import '../shared/places/action_icons.dart';
 
 class PlaceDetailsScreen extends HookConsumerWidget {
   final PlaceModel place;
@@ -106,7 +106,7 @@ class PlaceDetailsScreen extends HookConsumerWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            ActionIconButton(
+            NotedActionIconButton(
               id: place.id,
               field: 'like_count',
               iconStyle: LikeIcon(),
@@ -114,7 +114,7 @@ class PlaceDetailsScreen extends HookConsumerWidget {
                 await ref.read(bookmarkLocationProvider).likeLocation(place.id);
               },
             ),
-            ActionIconButton(
+            NotedActionIconButton(
               id: place.id,
               field: 'bookmark_count',
               iconStyle: BookmarkIcon(),
@@ -122,7 +122,7 @@ class PlaceDetailsScreen extends HookConsumerWidget {
                 await ref.read(bookmarkLocationProvider).bookmarkLocation(place.id);
               },
             ),
-            ActionIconButton(
+            NotedActionIconButton(
               id: place.id,
               field: 'review_count',
               iconStyle: const Icon(LineIcons.comments),

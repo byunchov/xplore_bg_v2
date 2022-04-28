@@ -13,7 +13,6 @@
 import 'package:auto_route/auto_route.dart' as _i2;
 import 'package:flutter/material.dart' as _i10;
 import 'package:xplore_bg_v2/models/models.dart' as _i11;
-import 'package:xplore_bg_v2/models/restaurant.model.dart' as _i12;
 import 'package:xplore_bg_v2/presentation/bookmarks/bookmarked.screen.dart'
     as _i6;
 import 'package:xplore_bg_v2/presentation/bookmarks/liked.screen.dart' as _i5;
@@ -393,7 +392,7 @@ class RestaurantDetailsRoute
   RestaurantDetailsRoute(
       {_i10.Key? key,
       required String id,
-      required _i12.RestaurantModel restaurant})
+      required _i11.RestaurantModel restaurant})
       : super(RestaurantDetailsRoute.name,
             path: ':id',
             args: RestaurantDetailsRouteArgs(
@@ -411,7 +410,7 @@ class RestaurantDetailsRouteArgs {
 
   final String id;
 
-  final _i12.RestaurantModel restaurant;
+  final _i11.RestaurantModel restaurant;
 
   @override
   String toString() {
