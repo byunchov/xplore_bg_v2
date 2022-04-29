@@ -1,8 +1,9 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:xplore_bg_v2/infrastructure/theme/themes.dart';
-import 'package:xplore_bg_v2/models/location.model.dart';
+import 'package:xplore_bg_v2/models/location/location.model.dart';
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
 
 class LocationHeaderWidget extends StatefulWidget {
@@ -239,17 +240,19 @@ class _LocationHeaderWidgetExpanded extends StatelessWidget {
             // "subcategory · category",
             child: Row(
               children: [
-                Text(
-                  location.subcategory!,
-                  style: theme.textTheme.labelMedium,
-                ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 4.2),
-                  child: Icon(
-                    Icons.circle,
-                    size: 3.8,
+                if (location.subcategory != null) ...[
+                  Text(
+                    location.subcategory!,
+                    style: theme.textTheme.labelMedium,
+                  ).tr(),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 4.2),
+                    child: Icon(
+                      Icons.circle,
+                      size: 3.8,
+                    ),
                   ),
-                ),
+                ],
                 Expanded(
                   child: Text(
                     location.category!,

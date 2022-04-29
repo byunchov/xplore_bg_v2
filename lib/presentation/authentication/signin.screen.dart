@@ -9,45 +9,42 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:xplore_bg_v2/infrastructure/routing/router.gr.dart';
 import 'package:xplore_bg_v2/presentation/authentication/controllers/auth.controller.dart';
 import 'package:xplore_bg_v2/presentation/authentication/repositories/auth.repository.dart';
-import 'package:xplore_bg_v2/presentation/screens.dart';
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class SignInScreen extends ConsumerWidget {
-  const SignInScreen({Key? key}) : super(key: key);
+  const SignInScreen({
+    Key? key,
+    required this.onSignInCallback,
+  }) : super(key: key);
+
+  final void Function(User user) onSignInCallback;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final size = MediaQuery.of(context).size;
-    final authCOntrolerState = ref.watch(authControllerProvider);
+    final auth = ref.watch(authControllerProvider.notifier);
 
-    ref.listen<User?>(
-      authControllerProvider,
-      (previous, next) {
-        print(previous?.displayName);
-        print(next?.displayName);
-        if (next != null) {
-          // pushReplacement(context, const HomeScreen());
-          context.router.pushAndPopUntil(
-            const HomeRoute(),
-            predicate: (route) => true,
-          );
-        }
-      },
-    );
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.close),
-          onPressed: () {},
+          onPressed: () {
+            print(context.router.stackData.length);
+            if (context.router.stackData.length > 2) {
+              context.router.navigateBack();
+            } else {
+              context.router.popAndPush(const HomeRoute());
+            }
+          },
         ),
         actions: [
           IconButton(
             icon: const Icon(Icons.language),
             onPressed: () {},
           ),
-          if (authCOntrolerState != null)
+          if (auth.isAuthenticated)
             IconButton(
               icon: const Icon(Icons.logout),
               onPressed: () {
@@ -121,6 +118,8 @@ class SignInScreen extends ConsumerWidget {
                         // final user = await signInWithGoogle();
                         final user = await ref.read(authRepositoryProvider).signInWithGoogle();
                         debugPrint(user?.email);
+                        // MainApplication.of(context).authService.isAuthenticated = true;
+                        onSignInCallback.call(user!);
                       } catch (e) {
                         debugPrint(e.toString());
                       }
@@ -136,7 +135,9 @@ class SignInScreen extends ConsumerWidget {
                       try {
                         // final user = await signInWithFacebook();
                         final user = await ref.read(authRepositoryProvider).signInWithFacebook();
-                        debugPrint(user?.email);
+                        // MainApplication.of(context).authService.isAuthenticated = true;
+                        onSignInCallback.call(user!);
+                        debugPrint(user.email);
                       } catch (e) {
                         debugPrint(e.toString());
                       }

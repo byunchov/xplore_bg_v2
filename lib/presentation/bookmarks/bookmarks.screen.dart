@@ -25,7 +25,7 @@ class BookmarksScreen extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(
             title: AppbarTitleWidget(
-              title: tr('menu_bookmarks'),
+              title: LocaleKeys.menu_noted.tr(),
             ),
             bottom: PreferredSize(
               preferredSize: const Size.fromHeight(kToolbarHeight),
@@ -69,7 +69,7 @@ class _BookmarksScreen extends ConsumerWidget {
       child: Scaffold(
         appBar: AppBar(
           title: AppbarTitleWidget(
-            title: tr('menu_bookmarks'),
+            title: LocaleKeys.menu_noted.tr(),
           ),
           bottom: TabBar(
             indicator: UnderlineTabIndicator(
@@ -77,8 +77,8 @@ class _BookmarksScreen extends ConsumerWidget {
               borderSide: BorderSide(color: theme.primaryColor, width: 4),
             ),
             tabs: [
-              Tab(child: const Text('favourites').tr()),
-              Tab(child: const Text('bookmarks').tr()),
+              Tab(child: const Text(LocaleKeys.favourites).tr()),
+              Tab(child: const Text(LocaleKeys.bookmarks).tr()),
             ],
           ),
         ),

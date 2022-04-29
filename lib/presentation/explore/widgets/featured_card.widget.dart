@@ -5,7 +5,7 @@ import 'package:line_icons/line_icons.dart';
 import 'package:xplore_bg_v2/domain/core/constants/widget.constants.dart';
 import 'package:xplore_bg_v2/domain/core/utils/navigation.util.dart';
 import 'package:xplore_bg_v2/infrastructure/routing/router.gr.dart';
-import 'package:xplore_bg_v2/models/place.model.dart';
+import 'package:xplore_bg_v2/models/location/place.model.dart';
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
 
 class FeaturedCardWidget extends StatelessWidget {
@@ -23,7 +23,7 @@ class FeaturedCardWidget extends StatelessWidget {
     final theme = Theme.of(context);
     const radius = WidgetConstants.kCradBorderRadius;
 
-    final heroTag = "reatured@${place.id}";
+    final heroTag = UniqueKey().toString();
 
     return LayoutBuilder(builder: (context, constraints) {
       return Material(
@@ -33,7 +33,9 @@ class FeaturedCardWidget extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(radius),
           onTap: () {
-            context.pushRoute(LocationRouter(children: [LocationRoute(place: place)]));
+            final router = AutoRouterDelegate.of(context).controller;
+            router.navigate(
+                LocationRouter(children: [LocationRoute(place: place, heroTag: heroTag)]));
           },
           child: Container(
             padding: const EdgeInsets.all(12),

@@ -1,7 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:sliver_tools/sliver_tools.dart';
-import 'package:xplore_bg_v2/domain/core/utils/navigation.util.dart';
-import 'package:xplore_bg_v2/models/location.model.dart';
+import 'package:xplore_bg_v2/infrastructure/routing/router.gr.dart';
+import 'package:xplore_bg_v2/models/location/location.model.dart';
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
 
 import 'widgets/header.widget.dart';
@@ -11,11 +12,14 @@ class LocationDetailsScreen extends StatelessWidget {
   final List<Widget> slivers;
   final Widget? bottomNavigationBar;
   final ScrollController scrollController;
+  final String? heroTag;
+
   const LocationDetailsScreen({
     Key? key,
     required this.location,
     required this.slivers,
     required this.scrollController,
+    this.heroTag,
     this.bottomNavigationBar,
   }) : super(key: key);
 
@@ -30,19 +34,20 @@ class LocationDetailsScreen extends StatelessWidget {
             child: Stack(
               children: [
                 Hero(
-                  tag: location.id,
+                  tag: heroTag ?? location.id,
                   child: SizedBox(
                     height: 300,
                     child: GestureDetector(
                       child: CustomCachedImage(imageUrl: location.thumbnail.url),
-                      onTap: () => openPhotoViewGallery(context, 0, location.gallery!),
+                      onTap: () =>
+                          context.router.navigate(GalleryRoute(gallery: location.gallery!)),
                     ),
                   ),
                 ),
                 ...GalleryOverlayWidgets.backButtonAndGalleryStatsOverlay(
                   context,
-                  0,
                   author: location.thumbnail.author,
+                  totalItems: 0,
                 ),
               ],
             ),

@@ -20,27 +20,28 @@ class GalleryStatsWidget extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            color: Colors.black.withOpacity(0.55),
+        if (author != null)
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: Colors.black.withOpacity(0.55),
+            ),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.camera_alt,
+                  color: Colors.white,
+                  size: 15,
+                ),
+                const SizedBox(width: 6),
+                Text(
+                  author ?? "Author $currentIndex",
+                  style: theme.textTheme.labelMedium?.copyWith(color: Colors.white),
+                ),
+              ],
+            ),
           ),
-          child: Row(
-            children: [
-              const Icon(
-                Icons.camera_alt,
-                color: Colors.white,
-                size: 15,
-              ),
-              const SizedBox(width: 6),
-              Text(
-                author ?? "Author $currentIndex",
-                style: theme.textTheme.labelMedium?.copyWith(color: Colors.white),
-              ),
-            ],
-          ),
-        ),
         const Spacer(),
         showCurrentPosition
             ? Container(

@@ -6,13 +6,13 @@ import 'package:line_icons/line_icons.dart';
 import 'package:xplore_bg_v2/domain/core/utils/config.util.dart';
 import 'package:xplore_bg_v2/infrastructure/routing/router.gr.dart';
 import 'package:xplore_bg_v2/infrastructure/theme/themes.dart';
-import 'package:xplore_bg_v2/models/place.model.dart';
+import 'package:xplore_bg_v2/models/location/place.model.dart';
 import 'package:xplore_bg_v2/models/swipe_action.model.dart';
-import 'package:xplore_bg_v2/presentation/explore/snackbar.util.dart';
+import 'package:xplore_bg_v2/domain/core/utils/snackbar.util.dart';
 import 'package:xplore_bg_v2/presentation/explore/widgets/appbar_avatar.widget.dart';
 import 'package:xplore_bg_v2/presentation/explore/widgets/featured_card.widget.dart';
 import 'package:xplore_bg_v2/presentation/explore/widgets/nearby_card.widget.dart';
-import 'package:xplore_bg_v2/presentation/place/controllers/bookmarks.controller.dart';
+import 'package:xplore_bg_v2/presentation/place/controllers/note_action.controller.dart';
 import 'package:xplore_bg_v2/presentation/search/controllers/search.controller.dart';
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
 import 'package:auto_route/auto_route.dart';
@@ -339,7 +339,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
   Widget _searchBar(BuildContext context) {
     return InkWell(
       // onTap: () => Get.to(() => const SearchScreen()),
-      onTap: (() => context.pushRoute(const SearchRoute())),
+      onTap: (() => context.router.navigate(const SearchRoute())),
       child: Container(
         height: 45,
         width: double.infinity,

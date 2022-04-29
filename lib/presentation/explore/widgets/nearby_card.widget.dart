@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:xplore_bg_v2/domain/core/constants/widget.constants.dart';
 import 'package:xplore_bg_v2/infrastructure/routing/router.gr.dart';
-import 'package:xplore_bg_v2/models/place.model.dart';
+import 'package:xplore_bg_v2/models/location/place.model.dart';
 
 class NearbyCardWidget extends StatelessWidget {
   final PlaceModel place;
@@ -32,7 +32,8 @@ class NearbyCardWidget extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(radius),
           onTap: () {
-            context.pushRoute(LocationRouter(children: [LocationRoute(place: place)]));
+            context.pushRoute(
+                LocationRouter(children: [LocationRoute(place: place, heroTag: heroTag)]));
           },
           child: Container(
             width: constraints.maxHeight * 0.8, // 4/3 ratio

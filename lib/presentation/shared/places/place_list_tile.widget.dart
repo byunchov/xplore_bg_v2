@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:xplore_bg_v2/domain/core/constants/widget.constants.dart';
 import 'package:xplore_bg_v2/infrastructure/routing/router.gr.dart';
-import 'package:xplore_bg_v2/models/place.model.dart';
+import 'package:xplore_bg_v2/models/location/place.model.dart';
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
 
 class PlaceListTile extends StatelessWidget {
@@ -48,8 +48,8 @@ class PlaceListTile extends StatelessWidget {
             child: InkWell(
               onTap: onTap ??
                   () {
-                    context
-                        .pushRoute(LocationRouter(children: [LocationRoute(place: placePreview)]));
+                    context.pushRoute(LocationRouter(
+                        children: [LocationRoute(place: placePreview, heroTag: heroTag)]));
                   },
               onLongPress: onLongPress,
               borderRadius: BorderRadius.circular(cardBorderRadius),

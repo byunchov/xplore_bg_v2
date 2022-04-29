@@ -3,7 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:xplore_bg_v2/infrastructure/pagination/pagination_notifier.dart';
 import 'package:xplore_bg_v2/models/pagination/pagination_state.model.dart';
-import 'package:xplore_bg_v2/models/place.model.dart';
+import 'package:xplore_bg_v2/models/location/place.model.dart';
 // import 'package:xplore_bg_v2/presentation/shared/pagination/paginated_list_view.widget%20copy%202.dart';
 import 'package:xplore_bg_v2/presentation/shared/pagination/paginated_list_view.widget.dart';
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';

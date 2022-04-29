@@ -12,34 +12,34 @@ class LauncherScreen extends ConsumerWidget {
     final theme = Theme.of(context);
     final user = ref.watch(authControllerProvider);
 
-    ref.listen<User?>(
-      authControllerProvider,
-      (previous, next) {
-        print(previous?.displayName);
-        print(next?.displayName);
-        if (next == null) {
-          pushReplacement(context, const SignInScreen());
-        } else {
-          pushReplacement(context, const HomeScreen());
-        }
-      },
-    );
-
-    return const SignInScreen();
-
-    // return Scaffold(
-    //   body: Center(
-    //     child: Column(
-    //       children: [
-    //         CircularProgressIndicator.adaptive(
-    //           backgroundColor: Colors.white,
-    //           valueColor: AlwaysStoppedAnimation(theme.primaryColor),
-    //         ),
-    //         Text(user?.uid ?? "none"),
-    //       ],
-    //     ),
-    //   ),
+    // ref.listen<User?>(
+    //   authControllerProvider,
+    //   (previous, next) {
+    //     print(previous?.displayName);
+    //     print(next?.displayName);
+    //     if (next == null) {
+    //       pushReplacement(context, const SignInScreen());
+    //     } else {
+    //       pushReplacement(context, const HomeScreen());
+    //     }
+    //   },
     // );
+
+    // return const SignInScreen();
+
+    return Scaffold(
+      body: Center(
+        child: Column(
+          children: [
+            CircularProgressIndicator.adaptive(
+              backgroundColor: Colors.white,
+              valueColor: AlwaysStoppedAnimation(theme.primaryColor),
+            ),
+            Text(user?.uid ?? "none"),
+          ],
+        ),
+      ),
+    );
   }
 }
 

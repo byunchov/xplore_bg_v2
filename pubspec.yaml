@@ -39,6 +39,7 @@ dependencies:
   intl: ^0.17.0
   latlong2: ^0.8.1
   line_icons: ^2.0.1
+  loading_indicator: ^3.0.3
   marquee: ^2.2.1
   meilisearch: ^0.5.1
   photo_view:

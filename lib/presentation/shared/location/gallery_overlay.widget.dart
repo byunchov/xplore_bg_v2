@@ -4,8 +4,13 @@ import 'package:xplore_bg_v2/presentation/gallery/widgets/gallery_stats.widget.d
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
 
 class GalleryOverlayWidgets {
-  static List<Widget> backButtonAndGalleryStatsOverlay(BuildContext context, int totalItems,
-      {String? author}) {
+  static List<Widget> backButtonAndGalleryStatsOverlay(
+    BuildContext context, {
+    required int totalItems,
+    int currentIndex = 1,
+    String? author,
+    bool showCurrentPosition = false,
+  }) {
     return [
       Positioned(
         top: 20,
@@ -24,9 +29,9 @@ class GalleryOverlayWidgets {
         right: 16,
         bottom: 16,
         child: GalleryStatsWidget(
-          currentIndex: 1,
+          currentIndex: currentIndex,
           totalItems: totalItems,
-          showCurrentPosition: false,
+          showCurrentPosition: showCurrentPosition,
           author: author,
         ),
       ),

@@ -1,12 +1,13 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:xplore_bg_v2/domain/core/utils/config.util.dart';
+import 'package:xplore_bg_v2/infrastructure/routing/router.gr.dart';
 import 'package:xplore_bg_v2/infrastructure/theme/apptheme.provider.dart';
 import 'package:xplore_bg_v2/presentation/authentication/controllers/auth.controller.dart';
-import 'package:xplore_bg_v2/presentation/screens.dart';
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
 
 class UserProfileScreen extends ConsumerWidget {
@@ -35,9 +36,7 @@ class UserProfileScreen extends ConsumerWidget {
                 if (user != null) {
                   ref.read(authControllerProvider.notifier).signOut();
                 } else {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const SignInScreen(),
-                  ));
+                  context.router.navigate(SigninRoute(onSignInCallback: (_) {}));
                 }
               },
             ),
@@ -227,8 +226,8 @@ class DarkModeSwitch extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final darkModeEnabled = ref.read(appThemeProvider);
-    final provider = ref.read(appThemeProvider.notifier);
+    final darkModeEnabled = ref.watch(appThemeProvider);
+    final provider = ref.watch(appThemeProvider.notifier);
 
     return Switch(
       value: darkModeEnabled,

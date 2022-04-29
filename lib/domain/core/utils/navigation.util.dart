@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:xplore_bg_v2/models/image.model.dart';
-import 'package:xplore_bg_v2/models/place.model.dart';
+import 'package:xplore_bg_v2/models/models.dart';
 import 'package:xplore_bg_v2/presentation/gallery/gallery.screen.dart';
 import 'package:xplore_bg_v2/presentation/place/place.screen.dart';
 
@@ -44,6 +43,7 @@ void placeScreenHero(BuildContext context, PlaceModel placeModel) {
           child: PlaceDetailsScreen(
             place: placeModel,
             transitionAnimation: animation,
+            heroTag: "",
           ),
         );
       },
@@ -51,7 +51,7 @@ void placeScreenHero(BuildContext context, PlaceModel placeModel) {
   );
 }
 
-void openPhotoViewGallery(BuildContext context, int index, List<ImageModel> gallery) {
+void openPhotoViewGallery(BuildContext context, int index, GalleryModel gallery) {
   Navigator.push(
     context,
     MaterialPageRoute(

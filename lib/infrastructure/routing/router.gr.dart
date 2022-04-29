@@ -10,191 +10,243 @@
 //
 // ignore_for_file: type=lint
 
-import 'package:auto_route/auto_route.dart' as _i2;
-import 'package:flutter/material.dart' as _i10;
-import 'package:xplore_bg_v2/models/models.dart' as _i11;
+import 'package:auto_route/auto_route.dart' as _i3;
+import 'package:firebase_auth/firebase_auth.dart' as _i13;
+import 'package:flutter/material.dart' as _i12;
+import 'package:xplore_bg_v2/models/location/restaurant.model.dart' as _i15;
+import 'package:xplore_bg_v2/models/models.dart' as _i14;
 import 'package:xplore_bg_v2/presentation/bookmarks/bookmarked.screen.dart'
-    as _i6;
-import 'package:xplore_bg_v2/presentation/bookmarks/liked.screen.dart' as _i5;
-import 'package:xplore_bg_v2/presentation/category/category.screen.dart' as _i3;
+    as _i7;
+import 'package:xplore_bg_v2/presentation/bookmarks/liked.screen.dart' as _i6;
+import 'package:xplore_bg_v2/presentation/category/category.screen.dart' as _i4;
 import 'package:xplore_bg_v2/presentation/category/category_filters.screen.dart'
-    as _i4;
-import 'package:xplore_bg_v2/presentation/place/place.screen.dart' as _i7;
+    as _i5;
+import 'package:xplore_bg_v2/presentation/gallery/gallery.screen.dart' as _i9;
+import 'package:xplore_bg_v2/presentation/launcher/auth_checker.screen.dart'
+    as _i1;
+import 'package:xplore_bg_v2/presentation/place/place.screen.dart' as _i8;
 import 'package:xplore_bg_v2/presentation/restaurants/restaurant_deatils.screen.dart'
-    as _i9;
+    as _i11;
 import 'package:xplore_bg_v2/presentation/restaurants/restaurants.screen.dart'
-    as _i8;
-import 'package:xplore_bg_v2/presentation/screens.dart' as _i1;
+    as _i10;
+import 'package:xplore_bg_v2/presentation/screens.dart' as _i2;
 
-class AppRouter extends _i2.RootStackRouter {
-  AppRouter([_i10.GlobalKey<_i10.NavigatorState>? navigatorKey])
+class AppRouter extends _i3.RootStackRouter {
+  AppRouter([_i12.GlobalKey<_i12.NavigatorState>? navigatorKey])
       : super(navigatorKey);
 
   @override
-  final Map<String, _i2.PageFactory> pagesMap = {
+  final Map<String, _i3.PageFactory> pagesMap = {
+    AuthCheckerRoute.name: (routeData) {
+      return _i3.AdaptivePage<dynamic>(
+          routeData: routeData, child: const _i1.AuthCheckerScreen());
+    },
     HomeRoute.name: (routeData) {
-      return _i2.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i1.HomeScreen());
+      return _i3.AdaptivePage<dynamic>(
+          routeData: routeData, child: const _i2.HomeScreen());
     },
     SigninRoute.name: (routeData) {
-      return _i2.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i1.SignInScreen());
+      final args = routeData.argsAs<SigninRouteArgs>();
+      return _i3.AdaptivePage<dynamic>(
+          routeData: routeData,
+          child: _i2.SignInScreen(
+              key: args.key, onSignInCallback: args.onSignInCallback));
     },
     SearchRoute.name: (routeData) {
-      return _i2.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i1.SearchScreen());
+      return _i3.AdaptivePage<dynamic>(
+          routeData: routeData, child: const _i2.SearchScreen());
     },
     LocationRouter.name: (routeData) {
-      return _i2.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i2.EmptyRouterPage());
+      return _i3.AdaptivePage<dynamic>(
+          routeData: routeData, child: const _i3.EmptyRouterPage());
     },
     ExploreRoute.name: (routeData) {
-      return _i2.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i1.ExploreScreen());
+      return _i3.AdaptivePage<dynamic>(
+          routeData: routeData, child: const _i2.ExploreScreen());
     },
     LandmarksRouter.name: (routeData) {
-      return _i2.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i2.EmptyRouterPage());
+      return _i3.AdaptivePage<dynamic>(
+          routeData: routeData, child: const _i3.EmptyRouterPage());
     },
     NotedLocationsRouter.name: (routeData) {
-      return _i2.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i1.BookmarksScreen());
+      return _i3.AdaptivePage<dynamic>(
+          routeData: routeData, child: const _i2.BookmarksScreen());
     },
     UserProfileRoute.name: (routeData) {
-      return _i2.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i1.UserProfileScreen());
+      return _i3.AdaptivePage<dynamic>(
+          routeData: routeData, child: const _i2.UserProfileScreen());
     },
     LandmarkCategoriesRoute.name: (routeData) {
-      return _i2.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i1.LandmarkCategoriesScreen());
+      return _i3.AdaptivePage<dynamic>(
+          routeData: routeData, child: const _i2.LandmarkCategoriesScreen());
     },
     CategoryRoute.name: (routeData) {
       final pathParams = routeData.inheritedPathParams;
       final args = routeData.argsAs<CategoryRouteArgs>(
           orElse: () => CategoryRouteArgs(tag: pathParams.getString('tag')));
-      return _i2.AdaptivePage<dynamic>(
+      return _i3.AdaptivePage<dynamic>(
           routeData: routeData,
-          child: _i3.CategoryScreen(
+          child: _i4.CategoryScreen(
               key: args.key, tag: args.tag, category: args.category));
     },
     CategoryFilterRoute.name: (routeData) {
       final args = routeData.argsAs<CategoryFilterRouteArgs>();
-      return _i2.AdaptivePage<dynamic>(
+      return _i3.AdaptivePage<dynamic>(
           routeData: routeData,
-          child: _i4.CategoryFilterScreen(
+          child: _i5.CategoryFilterScreen(
               key: args.key, tag: args.tag, name: args.name));
     },
     LikedLocationsRoute.name: (routeData) {
-      return _i2.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i5.LikedLocationsScreen());
+      return _i3.AdaptivePage<dynamic>(
+          routeData: routeData, child: const _i6.LikedLocationsScreen());
     },
     BookmarkedLocationsRoute.name: (routeData) {
-      return _i2.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i6.BookmarkedLocationsScreen());
+      return _i3.AdaptivePage<dynamic>(
+          routeData: routeData, child: const _i7.BookmarkedLocationsScreen());
     },
     LocationRoute.name: (routeData) {
       final args = routeData.argsAs<LocationRouteArgs>();
-      return _i2.AdaptivePage<dynamic>(
+      return _i3.AdaptivePage<dynamic>(
           routeData: routeData,
-          child: _i7.PlaceDetailsScreen(
+          child: _i8.PlaceDetailsScreen(
               key: args.key,
               place: args.place,
+              heroTag: args.heroTag,
               transitionAnimation: args.transitionAnimation));
     },
     RestaurantsRouter.name: (routeData) {
-      return _i2.AdaptivePage<dynamic>(
-          routeData: routeData, child: const _i2.EmptyRouterPage());
+      return _i3.AdaptivePage<dynamic>(
+          routeData: routeData, child: const _i3.EmptyRouterPage());
+    },
+    GalleryRoute.name: (routeData) {
+      final args = routeData.argsAs<GalleryRouteArgs>();
+      return _i3.AdaptivePage<dynamic>(
+          routeData: routeData,
+          child: _i9.GalleryScreen(
+              key: args.key, gallery: args.gallery, index: args.index));
     },
     RestaurantsRoute.name: (routeData) {
       final args = routeData.argsAs<RestaurantsRouteArgs>();
-      return _i2.AdaptivePage<dynamic>(
+      return _i3.AdaptivePage<dynamic>(
           routeData: routeData,
-          child: _i8.RestaurantsScreen(args.location, key: args.key));
+          child: _i10.RestaurantsScreen(args.location, key: args.key));
     },
     RestaurantDetailsRoute.name: (routeData) {
       final args = routeData.argsAs<RestaurantDetailsRouteArgs>();
-      return _i2.AdaptivePage<dynamic>(
+      return _i3.AdaptivePage<dynamic>(
           routeData: routeData,
-          child: _i9.RestaurantDetailsScreen(
-              key: args.key, id: args.id, restaurant: args.restaurant));
+          child: _i11.RestaurantDetailsScreen(
+              key: args.key,
+              id: args.id,
+              restaurant: args.restaurant,
+              heroTag: args.heroTag));
     }
   };
 
   @override
-  List<_i2.RouteConfig> get routes => [
-        _i2.RouteConfig(HomeRoute.name, path: '/', children: [
-          _i2.RouteConfig(ExploreRoute.name,
+  List<_i3.RouteConfig> get routes => [
+        _i3.RouteConfig(AuthCheckerRoute.name, path: '/'),
+        _i3.RouteConfig(HomeRoute.name, path: '/home', children: [
+          _i3.RouteConfig(ExploreRoute.name,
               path: 'explore', parent: HomeRoute.name),
-          _i2.RouteConfig(LandmarksRouter.name,
+          _i3.RouteConfig(LandmarksRouter.name,
               path: 'categories',
               parent: HomeRoute.name,
               children: [
-                _i2.RouteConfig(LandmarkCategoriesRoute.name,
+                _i3.RouteConfig(LandmarkCategoriesRoute.name,
                     path: '', parent: LandmarksRouter.name),
-                _i2.RouteConfig(CategoryRoute.name,
+                _i3.RouteConfig(CategoryRoute.name,
                     path: ':tag', parent: LandmarksRouter.name),
-                _i2.RouteConfig(CategoryFilterRoute.name,
+                _i3.RouteConfig(CategoryFilterRoute.name,
                     path: ':tag/filters', parent: LandmarksRouter.name)
               ]),
-          _i2.RouteConfig(NotedLocationsRouter.name,
+          _i3.RouteConfig(NotedLocationsRouter.name,
               path: 'bookmarks',
               parent: HomeRoute.name,
               children: [
-                _i2.RouteConfig(LikedLocationsRoute.name,
+                _i3.RouteConfig(LikedLocationsRoute.name,
                     path: 'likes', parent: NotedLocationsRouter.name),
-                _i2.RouteConfig(BookmarkedLocationsRoute.name,
+                _i3.RouteConfig(BookmarkedLocationsRoute.name,
                     path: 'bookmarks', parent: NotedLocationsRouter.name)
               ]),
-          _i2.RouteConfig(UserProfileRoute.name,
+          _i3.RouteConfig(UserProfileRoute.name,
               path: 'user', parent: HomeRoute.name)
         ]),
-        _i2.RouteConfig(SigninRoute.name, path: '/signin'),
-        _i2.RouteConfig(SearchRoute.name, path: '/search'),
-        _i2.RouteConfig(LocationRouter.name, path: '/location', children: [
-          _i2.RouteConfig(LocationRoute.name,
+        _i3.RouteConfig(SigninRoute.name, path: '/signin'),
+        _i3.RouteConfig(SearchRoute.name, path: '/search'),
+        _i3.RouteConfig(LocationRouter.name, path: '/location', children: [
+          _i3.RouteConfig(LocationRoute.name,
               path: '', parent: LocationRouter.name),
-          _i2.RouteConfig(RestaurantsRouter.name,
+          _i3.RouteConfig(RestaurantsRouter.name,
               path: 'restaurants',
               parent: LocationRouter.name,
               children: [
-                _i2.RouteConfig(RestaurantsRoute.name,
+                _i3.RouteConfig(RestaurantsRoute.name,
                     path: '', parent: RestaurantsRouter.name),
-                _i2.RouteConfig(RestaurantDetailsRoute.name,
+                _i3.RouteConfig(RestaurantDetailsRoute.name,
                     path: ':id', parent: RestaurantsRouter.name)
-              ])
+              ]),
+          _i3.RouteConfig(GalleryRoute.name,
+              path: 'gallery/:index', parent: LocationRouter.name)
         ])
       ];
 }
 
 /// generated route for
-/// [_i1.HomeScreen]
-class HomeRoute extends _i2.PageRouteInfo<void> {
-  const HomeRoute({List<_i2.PageRouteInfo>? children})
-      : super(HomeRoute.name, path: '/', initialChildren: children);
+/// [_i1.AuthCheckerScreen]
+class AuthCheckerRoute extends _i3.PageRouteInfo<void> {
+  const AuthCheckerRoute() : super(AuthCheckerRoute.name, path: '/');
+
+  static const String name = 'AuthCheckerRoute';
+}
+
+/// generated route for
+/// [_i2.HomeScreen]
+class HomeRoute extends _i3.PageRouteInfo<void> {
+  const HomeRoute({List<_i3.PageRouteInfo>? children})
+      : super(HomeRoute.name, path: '/home', initialChildren: children);
 
   static const String name = 'HomeRoute';
 }
 
 /// generated route for
-/// [_i1.SignInScreen]
-class SigninRoute extends _i2.PageRouteInfo<void> {
-  const SigninRoute() : super(SigninRoute.name, path: '/signin');
+/// [_i2.SignInScreen]
+class SigninRoute extends _i3.PageRouteInfo<SigninRouteArgs> {
+  SigninRoute(
+      {_i12.Key? key, required void Function(_i13.User) onSignInCallback})
+      : super(SigninRoute.name,
+            path: '/signin',
+            args:
+                SigninRouteArgs(key: key, onSignInCallback: onSignInCallback));
 
   static const String name = 'SigninRoute';
 }
 
+class SigninRouteArgs {
+  const SigninRouteArgs({this.key, required this.onSignInCallback});
+
+  final _i12.Key? key;
+
+  final void Function(_i13.User) onSignInCallback;
+
+  @override
+  String toString() {
+    return 'SigninRouteArgs{key: $key, onSignInCallback: $onSignInCallback}';
+  }
+}
+
 /// generated route for
-/// [_i1.SearchScreen]
-class SearchRoute extends _i2.PageRouteInfo<void> {
+/// [_i2.SearchScreen]
+class SearchRoute extends _i3.PageRouteInfo<void> {
   const SearchRoute() : super(SearchRoute.name, path: '/search');
 
   static const String name = 'SearchRoute';
 }
 
 /// generated route for
-/// [_i2.EmptyRouterPage]
-class LocationRouter extends _i2.PageRouteInfo<void> {
-  const LocationRouter({List<_i2.PageRouteInfo>? children})
+/// [_i3.EmptyRouterPage]
+class LocationRouter extends _i3.PageRouteInfo<void> {
+  const LocationRouter({List<_i3.PageRouteInfo>? children})
       : super(LocationRouter.name,
             path: '/location', initialChildren: children);
 
@@ -202,17 +254,17 @@ class LocationRouter extends _i2.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i1.ExploreScreen]
-class ExploreRoute extends _i2.PageRouteInfo<void> {
+/// [_i2.ExploreScreen]
+class ExploreRoute extends _i3.PageRouteInfo<void> {
   const ExploreRoute() : super(ExploreRoute.name, path: 'explore');
 
   static const String name = 'ExploreRoute';
 }
 
 /// generated route for
-/// [_i2.EmptyRouterPage]
-class LandmarksRouter extends _i2.PageRouteInfo<void> {
-  const LandmarksRouter({List<_i2.PageRouteInfo>? children})
+/// [_i3.EmptyRouterPage]
+class LandmarksRouter extends _i3.PageRouteInfo<void> {
+  const LandmarksRouter({List<_i3.PageRouteInfo>? children})
       : super(LandmarksRouter.name,
             path: 'categories', initialChildren: children);
 
@@ -220,9 +272,9 @@ class LandmarksRouter extends _i2.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i1.BookmarksScreen]
-class NotedLocationsRouter extends _i2.PageRouteInfo<void> {
-  const NotedLocationsRouter({List<_i2.PageRouteInfo>? children})
+/// [_i2.BookmarksScreen]
+class NotedLocationsRouter extends _i3.PageRouteInfo<void> {
+  const NotedLocationsRouter({List<_i3.PageRouteInfo>? children})
       : super(NotedLocationsRouter.name,
             path: 'bookmarks', initialChildren: children);
 
@@ -230,16 +282,16 @@ class NotedLocationsRouter extends _i2.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i1.UserProfileScreen]
-class UserProfileRoute extends _i2.PageRouteInfo<void> {
+/// [_i2.UserProfileScreen]
+class UserProfileRoute extends _i3.PageRouteInfo<void> {
   const UserProfileRoute() : super(UserProfileRoute.name, path: 'user');
 
   static const String name = 'UserProfileRoute';
 }
 
 /// generated route for
-/// [_i1.LandmarkCategoriesScreen]
-class LandmarkCategoriesRoute extends _i2.PageRouteInfo<void> {
+/// [_i2.LandmarkCategoriesScreen]
+class LandmarkCategoriesRoute extends _i3.PageRouteInfo<void> {
   const LandmarkCategoriesRoute()
       : super(LandmarkCategoriesRoute.name, path: '');
 
@@ -247,10 +299,10 @@ class LandmarkCategoriesRoute extends _i2.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i3.CategoryScreen]
-class CategoryRoute extends _i2.PageRouteInfo<CategoryRouteArgs> {
+/// [_i4.CategoryScreen]
+class CategoryRoute extends _i3.PageRouteInfo<CategoryRouteArgs> {
   CategoryRoute(
-      {_i10.Key? key, required String tag, _i11.CategoryModel? category})
+      {_i12.Key? key, required String tag, _i14.CategoryModel? category})
       : super(CategoryRoute.name,
             path: ':tag',
             args: CategoryRouteArgs(key: key, tag: tag, category: category),
@@ -262,11 +314,11 @@ class CategoryRoute extends _i2.PageRouteInfo<CategoryRouteArgs> {
 class CategoryRouteArgs {
   const CategoryRouteArgs({this.key, required this.tag, this.category});
 
-  final _i10.Key? key;
+  final _i12.Key? key;
 
   final String tag;
 
-  final _i11.CategoryModel? category;
+  final _i14.CategoryModel? category;
 
   @override
   String toString() {
@@ -275,10 +327,10 @@ class CategoryRouteArgs {
 }
 
 /// generated route for
-/// [_i4.CategoryFilterScreen]
-class CategoryFilterRoute extends _i2.PageRouteInfo<CategoryFilterRouteArgs> {
+/// [_i5.CategoryFilterScreen]
+class CategoryFilterRoute extends _i3.PageRouteInfo<CategoryFilterRouteArgs> {
   CategoryFilterRoute(
-      {_i10.Key? key, required String tag, required String name})
+      {_i12.Key? key, required String tag, required String name})
       : super(CategoryFilterRoute.name,
             path: ':tag/filters',
             args: CategoryFilterRouteArgs(key: key, tag: tag, name: name));
@@ -290,7 +342,7 @@ class CategoryFilterRouteArgs {
   const CategoryFilterRouteArgs(
       {this.key, required this.tag, required this.name});
 
-  final _i10.Key? key;
+  final _i12.Key? key;
 
   final String tag;
 
@@ -303,16 +355,16 @@ class CategoryFilterRouteArgs {
 }
 
 /// generated route for
-/// [_i5.LikedLocationsScreen]
-class LikedLocationsRoute extends _i2.PageRouteInfo<void> {
+/// [_i6.LikedLocationsScreen]
+class LikedLocationsRoute extends _i3.PageRouteInfo<void> {
   const LikedLocationsRoute() : super(LikedLocationsRoute.name, path: 'likes');
 
   static const String name = 'LikedLocationsRoute';
 }
 
 /// generated route for
-/// [_i6.BookmarkedLocationsScreen]
-class BookmarkedLocationsRoute extends _i2.PageRouteInfo<void> {
+/// [_i7.BookmarkedLocationsScreen]
+class BookmarkedLocationsRoute extends _i3.PageRouteInfo<void> {
   const BookmarkedLocationsRoute()
       : super(BookmarkedLocationsRoute.name, path: 'bookmarks');
 
@@ -320,17 +372,19 @@ class BookmarkedLocationsRoute extends _i2.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i7.PlaceDetailsScreen]
-class LocationRoute extends _i2.PageRouteInfo<LocationRouteArgs> {
+/// [_i8.PlaceDetailsScreen]
+class LocationRoute extends _i3.PageRouteInfo<LocationRouteArgs> {
   LocationRoute(
-      {_i10.Key? key,
-      required _i11.PlaceModel place,
-      _i10.Animation<double>? transitionAnimation})
+      {_i12.Key? key,
+      required _i14.PlaceModel place,
+      required String heroTag,
+      _i12.Animation<double>? transitionAnimation})
       : super(LocationRoute.name,
             path: '',
             args: LocationRouteArgs(
                 key: key,
                 place: place,
+                heroTag: heroTag,
                 transitionAnimation: transitionAnimation));
 
   static const String name = 'LocationRoute';
@@ -338,24 +392,29 @@ class LocationRoute extends _i2.PageRouteInfo<LocationRouteArgs> {
 
 class LocationRouteArgs {
   const LocationRouteArgs(
-      {this.key, required this.place, this.transitionAnimation});
+      {this.key,
+      required this.place,
+      required this.heroTag,
+      this.transitionAnimation});
 
-  final _i10.Key? key;
+  final _i12.Key? key;
 
-  final _i11.PlaceModel place;
+  final _i14.PlaceModel place;
 
-  final _i10.Animation<double>? transitionAnimation;
+  final String heroTag;
+
+  final _i12.Animation<double>? transitionAnimation;
 
   @override
   String toString() {
-    return 'LocationRouteArgs{key: $key, place: $place, transitionAnimation: $transitionAnimation}';
+    return 'LocationRouteArgs{key: $key, place: $place, heroTag: $heroTag, transitionAnimation: $transitionAnimation}';
   }
 }
 
 /// generated route for
-/// [_i2.EmptyRouterPage]
-class RestaurantsRouter extends _i2.PageRouteInfo<void> {
-  const RestaurantsRouter({List<_i2.PageRouteInfo>? children})
+/// [_i3.EmptyRouterPage]
+class RestaurantsRouter extends _i3.PageRouteInfo<void> {
+  const RestaurantsRouter({List<_i3.PageRouteInfo>? children})
       : super(RestaurantsRouter.name,
             path: 'restaurants', initialChildren: children);
 
@@ -363,9 +422,37 @@ class RestaurantsRouter extends _i2.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i8.RestaurantsScreen]
-class RestaurantsRoute extends _i2.PageRouteInfo<RestaurantsRouteArgs> {
-  RestaurantsRoute({required _i11.LocationModel location, _i10.Key? key})
+/// [_i9.GalleryScreen]
+class GalleryRoute extends _i3.PageRouteInfo<GalleryRouteArgs> {
+  GalleryRoute(
+      {_i12.Key? key, required _i14.GalleryModel gallery, int index = 0})
+      : super(GalleryRoute.name,
+            path: 'gallery/:index',
+            args: GalleryRouteArgs(key: key, gallery: gallery, index: index),
+            rawPathParams: {'index': index});
+
+  static const String name = 'GalleryRoute';
+}
+
+class GalleryRouteArgs {
+  const GalleryRouteArgs({this.key, required this.gallery, this.index = 0});
+
+  final _i12.Key? key;
+
+  final _i14.GalleryModel gallery;
+
+  final int index;
+
+  @override
+  String toString() {
+    return 'GalleryRouteArgs{key: $key, gallery: $gallery, index: $index}';
+  }
+}
+
+/// generated route for
+/// [_i10.RestaurantsScreen]
+class RestaurantsRoute extends _i3.PageRouteInfo<RestaurantsRouteArgs> {
+  RestaurantsRoute({required _i14.LocationModel location, _i12.Key? key})
       : super(RestaurantsRoute.name,
             path: '', args: RestaurantsRouteArgs(location: location, key: key));
 
@@ -375,9 +462,9 @@ class RestaurantsRoute extends _i2.PageRouteInfo<RestaurantsRouteArgs> {
 class RestaurantsRouteArgs {
   const RestaurantsRouteArgs({required this.location, this.key});
 
-  final _i11.LocationModel location;
+  final _i14.LocationModel location;
 
-  final _i10.Key? key;
+  final _i12.Key? key;
 
   @override
   String toString() {
@@ -386,17 +473,18 @@ class RestaurantsRouteArgs {
 }
 
 /// generated route for
-/// [_i9.RestaurantDetailsScreen]
+/// [_i11.RestaurantDetailsScreen]
 class RestaurantDetailsRoute
-    extends _i2.PageRouteInfo<RestaurantDetailsRouteArgs> {
+    extends _i3.PageRouteInfo<RestaurantDetailsRouteArgs> {
   RestaurantDetailsRoute(
-      {_i10.Key? key,
+      {_i12.Key? key,
       required String id,
-      required _i11.RestaurantModel restaurant})
+      required _i15.RestaurantModel restaurant,
+      required String heroTag})
       : super(RestaurantDetailsRoute.name,
             path: ':id',
             args: RestaurantDetailsRouteArgs(
-                key: key, id: id, restaurant: restaurant),
+                key: key, id: id, restaurant: restaurant, heroTag: heroTag),
             rawPathParams: {'id': id});
 
   static const String name = 'RestaurantDetailsRoute';
@@ -404,16 +492,21 @@ class RestaurantDetailsRoute
 
 class RestaurantDetailsRouteArgs {
   const RestaurantDetailsRouteArgs(
-      {this.key, required this.id, required this.restaurant});
+      {this.key,
+      required this.id,
+      required this.restaurant,
+      required this.heroTag});
 
-  final _i10.Key? key;
+  final _i12.Key? key;
 
   final String id;
 
-  final _i11.RestaurantModel restaurant;
+  final _i15.RestaurantModel restaurant;
+
+  final String heroTag;
 
   @override
   String toString() {
-    return 'RestaurantDetailsRouteArgs{key: $key, id: $id, restaurant: $restaurant}';
+    return 'RestaurantDetailsRouteArgs{key: $key, id: $id, restaurant: $restaurant, heroTag: $heroTag}';
   }
 }

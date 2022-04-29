@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:xplore_bg_v2/presentation/place/controllers/bookmarks.controller.dart';
+import 'package:xplore_bg_v2/presentation/place/controllers/note_action.controller.dart';
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
 
 class PlaceActionDialog extends ConsumerWidget {

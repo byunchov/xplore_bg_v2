@@ -7,7 +7,6 @@ abstract class  LocaleKeys {
   static const welcome_msg = 'welcome_msg';
   static const menu_home = 'menu_home';
   static const menu_landmarks = 'menu_landmarks';
-  static const menu_bookmarks = 'menu_bookmarks';
   static const menu_user_profile = 'menu_user_profile';
   static const tab_states = 'tab_states';
   static const tab_categories = 'tab_categories';
@@ -77,12 +76,17 @@ abstract class  LocaleKeys {
   static const criteria = 'criteria';
   static const tag_hotel = 'tag_hotel';
   static const tag_restaurant = 'tag_restaurant';
-  static const tag_activities = 'tag_activities';
   static const tag_similar = 'tag_similar';
   static const no_hotels = 'no_hotels';
   static const no_rest = 'no_rest';
   static const feautured_places = 'feautured_places';
   static const empty_search_history = 'empty_search_history';
   static const empty_search_history_hint = 'empty_search_history_hint';
+  static const section_activities = 'section_activities';
+  static const section_gallery = 'section_gallery';
+  static const section_description = 'section_description';
+  static const section_nearby = 'section_nearby';
+  static const author = 'author';
+  static const menu_noted = 'menu_noted';
 
 }

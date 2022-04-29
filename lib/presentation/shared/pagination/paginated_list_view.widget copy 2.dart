@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:xplore_bg_v2/models/place.model.dart';
+import 'package:xplore_bg_v2/models/location/place.model.dart';
 import 'package:xplore_bg_v2/presentation/bookmarks/controllers/bookmarks.controller.dart';
 
 class PaginatedListViewWidget extends ConsumerWidget {

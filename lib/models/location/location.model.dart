@@ -1,5 +1,5 @@
 import 'package:latlong2/latlong.dart';
-import 'package:xplore_bg_v2/models/image.model.dart';
+import 'package:xplore_bg_v2/models/models.dart';
 
 class LocationModel {
   String id;
@@ -13,7 +13,7 @@ class LocationModel {
   double rating;
   LatLng? coordinates;
   ImageModel thumbnail;
-  List<ImageModel>? gallery;
+  GalleryModel? gallery;
 
   LocationModel({
     required this.id,

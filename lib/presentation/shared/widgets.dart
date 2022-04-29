@@ -24,3 +24,4 @@ export 'package:xplore_bg_v2/presentation/shared/location/gallery_listview.widge
 
 // loading incatro widgets
 export 'package:xplore_bg_v2/presentation/shared/loading/place_listtile.loading.dart';
+export 'package:xplore_bg_v2/presentation/shared/location/gallery_section.widget.dart';

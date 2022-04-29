@@ -22,8 +22,9 @@ class PaginatedListViewWidget<T> extends HookConsumerWidget {
     scrollController.addListener(() {
       final maxScroll = scrollController.position.maxScrollExtent;
       final currentScroll = scrollController.position.pixels;
-      // final delta = MediaQuery.of(context).size.height * 0.20;
-      if (maxScroll == currentScroll) {
+      final delta = MediaQuery.of(context).size.height * 0.20;
+      // if (maxScroll == currentScroll) {
+      if ((maxScroll - currentScroll) <= delta) {
         ref.read(provider.notifier).fetchNextBatch();
       }
     });
@@ -164,12 +165,15 @@ class _ListBuilder<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          return builder.call(items[index]);
-        },
-        childCount: items.length,
+    return SliverPadding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+      sliver: SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (context, index) {
+            return builder.call(items[index]);
+          },
+          childCount: items.length,
+        ),
       ),
     );
   }
@@ -213,25 +217,22 @@ class _OnGoingBottomWidget<T> extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(provider);
-    return SliverPadding(
-      padding: const EdgeInsets.all(40),
-      sliver: SliverToBoxAdapter(
-        child: state.maybeWhen(
-          orElse: () => const SizedBox.shrink(),
-          onGoingLoading: (items) => const Center(child: CircularProgressIndicator()),
-          onGoingError: (items, e, _) => Center(
-            child: Column(
-              children: const [
-                Icon(Icons.info),
-                SizedBox(height: 20),
-                Text(
-                  "Something Went Wrong!",
-                  style: TextStyle(
-                    color: Colors.black,
-                  ),
+    return SliverToBoxAdapter(
+      child: state.maybeWhen(
+        orElse: () => const SizedBox.shrink(),
+        onGoingLoading: (items) => const Center(child: CircularProgressIndicator()),
+        onGoingError: (items, e, _) => Center(
+          child: Column(
+            children: const [
+              Icon(Icons.info),
+              SizedBox(height: 20),
+              Text(
+                "Something Went Wrong!",
+                style: TextStyle(
+                  color: Colors.black,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:xplore_bg_v2/domain/core/generated/locale_keys.g.dart';
 import 'package:xplore_bg_v2/infrastructure/routing/router.gr.dart';
 import 'package:xplore_bg_v2/presentation/home/controllers/home.controller.dart';
 import 'package:xplore_bg_v2/presentation/screens.dart';
@@ -16,6 +17,7 @@ class HomeScreen extends ConsumerWidget {
     final theme = Theme.of(context);
 
     return AutoTabsScaffold(
+      // navigatorObservers: () => [HeroController()],
       routes: const [
         ExploreRoute(),
         LandmarksRouter(),
@@ -43,22 +45,22 @@ class HomeScreen extends ConsumerWidget {
             items: [
               BottomBarItem(
                 icon: const Icon(Feather.home),
-                title: const Text('menu_home').tr(),
+                title: const Text(LocaleKeys.menu_home).tr(),
                 activeColor: theme.primaryColor,
               ),
               BottomBarItem(
                 icon: const Icon(Feather.compass),
-                title: const Text('menu_landmarks').tr(),
+                title: const Text(LocaleKeys.menu_landmarks).tr(),
                 activeColor: theme.primaryColor,
               ),
               BottomBarItem(
                 icon: const Icon(Feather.bookmark),
-                title: const Text('menu_bookmarks').tr(),
+                title: const Text(LocaleKeys.menu_noted).tr(),
                 activeColor: theme.primaryColor,
               ),
               BottomBarItem(
                 icon: const Icon(Feather.user),
-                title: const Text('menu_user_profile').tr(),
+                title: const Text(LocaleKeys.menu_user_profile).tr(),
                 activeColor: theme.primaryColor,
               ),
             ],

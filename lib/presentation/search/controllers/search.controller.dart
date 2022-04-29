@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:meilisearch/meilisearch.dart';
 import 'package:xplore_bg_v2/domain/core/constants/storage.constants.dart';
-import 'package:xplore_bg_v2/models/place.model.dart';
+import 'package:xplore_bg_v2/models/models.dart';
 
 final searchClientProvider = Provider<MeiliSearchClient>((ref) {
   return MeiliSearchClient(
@@ -26,7 +26,7 @@ final locationSearchProvider = FutureProvider.autoDispose<List<PlaceModel>>((ref
   return [];
 });
 
-class SearchResultNotifier extends StateNotifier<List<PlacePreview>> {
+class SearchResultNotifier extends StateNotifier<List<PlaceModel>> {
   SearchResultNotifier() : super([]);
 }
 

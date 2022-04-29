@@ -5,27 +5,26 @@ import 'package:expand_widget/expand_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:latlong2/latlong.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:xplore_bg_v2/domain/core/generated/locale_keys.g.dart';
 
-import 'package:xplore_bg_v2/domain/core/utils/config.util.dart';
-import 'package:xplore_bg_v2/infrastructure/routing/router.gr.dart';
-import 'package:xplore_bg_v2/models/place.model.dart';
+import 'package:xplore_bg_v2/models/models.dart';
 import 'package:xplore_bg_v2/presentation/location/location.screen.dart';
-import 'package:xplore_bg_v2/presentation/place/controllers/bookmarks.controller.dart';
-import 'package:xplore_bg_v2/presentation/place/widgets/activities.widget.dart';
+import 'package:xplore_bg_v2/presentation/place/controllers/note_action.controller.dart';
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
 
-import '../shared/places/action_icon_buttons.widget.dart';
-import '../shared/places/action_icons.dart';
+import 'controllers/place.provider.dart';
+import 'widgets/activities_body.widget.dart';
 
 class PlaceDetailsScreen extends HookConsumerWidget {
   final PlaceModel place;
   final Animation<double>? transitionAnimation;
+  final String heroTag;
+
   const PlaceDetailsScreen({
     Key? key,
     required this.place,
+    required this.heroTag,
     this.transitionAnimation,
   }) : super(key: key);
 
@@ -39,41 +38,20 @@ class PlaceDetailsScreen extends HookConsumerWidget {
     return LocationDetailsScreen(
       scrollController: scrollController,
       location: place,
+      heroTag: heroTag,
       slivers: [
         SliverToBoxAdapter(
-          child: SectionWithTitleWidget(
-            title: const SectionTitleWithDividerWidget("Gallery"),
-            child: GalleryListViewWidget(gallery: place.gallery!),
-          ),
+          child: LocationGallerySection(locationId: place.id, provider: placeDetailsProvider),
         ),
         SliverToBoxAdapter(
-          child: SectionWithTitleWidget(
-            title: const SectionTitleWithDividerWidget("Description"),
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: ExpandText(
-                // "kdmi eidemkmdieufeokmfeiof",
-                place.description ?? "",
-                maxLines: 8,
-                collapsedHint: tr("show_more"),
-                expandedHint: tr("show_less"),
-                style: theme.textTheme.bodyLarge?.copyWith(fontSize: 17),
-                textAlign: TextAlign.justify,
-                expandArrowStyle: ExpandArrowStyle.both,
-                arrowSize: 25,
-                arrowColor: Theme.of(context).primaryColor,
-                arrowPadding: const EdgeInsets.only(top: 5),
-                hintTextStyle: TextStyle(color: Theme.of(context).primaryColor),
-              ),
-            ),
-          ),
+          child: _DescriptionSection(locationId: place.id, provider: placeDetailsProvider),
         ),
         SliverToBoxAdapter(
           child: SectionWithTitleWidget(
             title: const SectionTitleWithDividerWidget("Activities"),
             child: Padding(
               padding: const EdgeInsets.all(12),
-              child: _PlaceActivitiesBody(
+              child: PlaceActivitiesBody(
                 coordinates: place.coordinates!,
                 place: place,
               ),
@@ -320,61 +298,53 @@ class PlaceDetailsScreen extends HookConsumerWidget {
 
 }
 
-class _PlaceActivitiesBody extends StatelessWidget {
-  final LatLng coordinates;
-  final PlaceModel place;
-  const _PlaceActivitiesBody({
+class _DescriptionSection<T> extends ConsumerWidget {
+  const _DescriptionSection({
     Key? key,
-    required this.coordinates,
-    required this.place,
+    required this.provider,
+    required this.locationId,
   }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    debugPrint(coordinates.toString());
-    String maptTile = "https://maps.googleapis.com/maps/api/staticmap?center=41.83458,23.48632"
-        "&zoom=14&size=600x200&scale=2&markers=color:red|${coordinates.latitude},${coordinates.longitude}"
-        "&language=bg&key=${AppConfig.mapsAPIKey}";
+  final String locationId;
+  final AutoDisposeFutureProviderFamily<T, String> provider;
 
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: PlaceActivitiyColorCard(
-                  text: LocaleKeys.nearby_rest.tr(),
-                  color: Colors.orange[300]!,
-                  icon: Icons.restaurant_menu,
-                  callback: () {
-                    // Navigator.of(context)
-                    //     .push(MaterialPageRoute(builder: (context) => RestaurantsScreen(place)));
-                    context.pushRoute(
-                        RestaurantsRouter(children: [RestaurantsRoute(location: place)]));
-                  },
-                ),
-              ),
-              const SizedBox(width: 15),
-              Expanded(
-                child: PlaceActivitiyColorCard(
-                  text: LocaleKeys.nearby_hotels.tr(),
-                  color: Colors.blueAccent[400]!,
-                  icon: Icons.hotel_rounded,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 15),
-          PlaceActivityImageCard(
-            text: "",
-            icon: Icons.navigation_rounded,
-            image: CustomCachedImage(
-              imageUrl: maptTile,
-              fit: BoxFit.cover,
-            ),
-          ),
-        ],
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+
+    final details = ref.watch(provider(locationId));
+
+    return SectionWithTitleWidget(
+      title: SectionTitleWithDividerWidget(LocaleKeys.section_description.tr()),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: details.when(
+          data: (data) {
+            if (data == null) {
+              return Container();
+            }
+            if (data is PlaceModel) {
+              return ExpandText(
+                data.description ?? "",
+                maxLines: 8,
+                collapsedHint: LocaleKeys.show_more.tr(),
+                expandedHint: LocaleKeys.show_less.tr(),
+                style: theme.textTheme.bodyLarge?.copyWith(fontSize: 17),
+                textAlign: TextAlign.justify,
+                expandArrowStyle: ExpandArrowStyle.both,
+                arrowSize: 25,
+                arrowColor: Theme.of(context).primaryColor,
+                arrowPadding: const EdgeInsets.only(top: 5),
+                hintTextStyle: TextStyle(color: Theme.of(context).primaryColor),
+              );
+            }
+            return Container();
+          },
+          error: (err, stack) {
+            return Container();
+          },
+          loading: () => const Center(child: CircularProgressIndicator()),
+        ),
       ),
     );
   }

@@ -6,8 +6,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:xplore_bg_v2/domain/core/constants/widget.constants.dart';
 import 'package:xplore_bg_v2/domain/core/utils/config.util.dart';
 import 'package:xplore_bg_v2/infrastructure/routing/router.gr.dart';
-import 'package:xplore_bg_v2/models/location.model.dart';
-import 'package:xplore_bg_v2/models/restaurant.model.dart';
+import 'package:xplore_bg_v2/models/location/location.model.dart';
+import 'package:xplore_bg_v2/models/location/restaurant.model.dart';
 import 'package:xplore_bg_v2/presentation/restaurants/restaurant_deatils.screen.dart';
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
 
@@ -85,6 +85,7 @@ class MapCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     const cardRadius = WidgetConstants.kCradBorderRadius;
     const double cardHeight = 220;
+    final heroTag = UniqueKey().toString();
 
     final theme = Theme.of(context);
 
@@ -95,7 +96,8 @@ class MapCardWidget extends StatelessWidget {
       child: InkWell(
         onTap: () {
           print(context.router.current.meta);
-          context.router.push(RestaurantDetailsRoute(id: location.id, restaurant: location));
+          context.router.push(
+              RestaurantDetailsRoute(id: location.id, restaurant: location, heroTag: heroTag));
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -103,13 +105,16 @@ class MapCardWidget extends StatelessWidget {
           children: [
             SizedBox(
               height: cardHeight * 0.6,
-              child: ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(cardRadius),
-                  topRight: Radius.circular(cardRadius),
-                ),
-                child: CustomCachedImage(
-                  imageUrl: location.thumbnail.url,
+              child: Hero(
+                tag: heroTag,
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(cardRadius),
+                    topRight: Radius.circular(cardRadius),
+                  ),
+                  child: CustomCachedImage(
+                    imageUrl: location.thumbnail.url,
+                  ),
                 ),
               ),
             ),
