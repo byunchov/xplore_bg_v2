@@ -1,14 +1,17 @@
 import 'package:auto_route/annotations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:xplore_bg_v2/models/models.dart';
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
 
-import 'widgets/gallery_stats.widget.dart';
+final galleryStateProvider = StateProvider<GalleryModel>((ref) {
+  return GalleryModel([]);
+});
 
-class GalleryScreen extends StatefulWidget {
+class GalleryScreen extends ConsumerStatefulWidget {
   // final PageController pageController;
   final GalleryModel gallery;
   final int index;
@@ -20,10 +23,10 @@ class GalleryScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<GalleryScreen> createState() => _GalleryScreenState();
+  ConsumerState<GalleryScreen> createState() => _GalleryScreenState();
 }
 
-class _GalleryScreenState extends State<GalleryScreen> {
+class _GalleryScreenState extends ConsumerState<GalleryScreen> {
   late int _index;
   late final PageController _pageController;
 
@@ -42,6 +45,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final gallery = ref.watch(galleryStateProvider);
     return Scaffold(
       body: Stack(
         alignment: Alignment.bottomLeft,

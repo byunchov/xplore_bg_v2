@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:latlong2/latlong.dart';
 import 'package:xplore_bg_v2/domain/core/generated/locale_keys.g.dart';
 import 'package:xplore_bg_v2/domain/core/utils/google_maps.util.dart';
 import 'package:xplore_bg_v2/infrastructure/routing/router.gr.dart';
@@ -10,18 +9,14 @@ import 'package:xplore_bg_v2/presentation/place/widgets/activity_cards.widget.da
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
 
 class PlaceActivitiesBody extends StatelessWidget {
-  final LatLng coordinates;
   final PlaceModel place;
   const PlaceActivitiesBody({
     Key? key,
-    required this.coordinates,
     required this.place,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    debugPrint(coordinates.toString());
-
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: Column(

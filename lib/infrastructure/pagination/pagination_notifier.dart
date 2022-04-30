@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:xplore_bg_v2/models/pagination/pagination_offset.model.dart';
 import 'package:xplore_bg_v2/models/pagination/pagination_state.model.dart';
 
 class PaginationNotifier<T> extends StateNotifier<PaginationState<T>> {
@@ -10,7 +11,7 @@ class PaginationNotifier<T> extends StateNotifier<PaginationState<T>> {
     this.itemsPerBatch = 20,
   }) : super(const PaginationState.loading());
 
-  final Future<List<T>> Function(T? item, {int? limit}) fetchNextItems;
+  final Future<List<T>> Function(PaginationOffset<T>? item, {int? limit}) fetchNextItems;
   final int itemsPerBatch;
 
   final List<T> _items = [];
@@ -40,9 +41,10 @@ class PaginationNotifier<T> extends StateNotifier<PaginationState<T>> {
     try {
       state = const PaginationState.loading();
 
-      final List<T> result = _items.isEmpty
-          ? await fetchNextItems(null, limit: itemsPerBatch)
-          : await fetchNextItems(_items.last, limit: itemsPerBatch);
+      final item =
+          _items.isEmpty ? null : PaginationOffset<T>(offset: _items.length, item: _items.last);
+
+      final List<T> result = await fetchNextItems(item, limit: itemsPerBatch);
       updateData(result);
     } catch (e, stk) {
       state = PaginationState.error(e, stk);
@@ -64,13 +66,14 @@ class PaginationNotifier<T> extends StateNotifier<PaginationState<T>> {
       return;
     }
 
-    log("Fetching next batch of items");
+    log("Fetching next batch of ${_items.runtimeType}");
 
     state = PaginationState.onGoingLoading(_items);
 
     try {
       await Future.delayed(const Duration(seconds: 1));
-      final result = await fetchNextItems(_items.last, limit: itemsPerBatch);
+      final item = PaginationOffset<T>(offset: _items.length, item: _items.last);
+      final result = await fetchNextItems(item, limit: itemsPerBatch);
       log(result.length.toString());
       updateData(result);
     } catch (error, stackTrace) {

@@ -88,7 +88,7 @@ final likedProvider =
       } else {
         final snapshot = await itemsCollectionRef
             .orderBy("id", descending: true)
-            .startAfter([item.id])
+            .startAfter([item.item.id])
             .limit(itemsPerBatch)
             .get();
 

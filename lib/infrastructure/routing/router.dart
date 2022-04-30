@@ -59,10 +59,11 @@ import 'package:xplore_bg_v2/presentation/screens.dart';
   replaceInRouteName: 'Screen,Route',
   routes: [
     AutoRoute(
-      initial: true,
+      // initial: true,
       page: AuthCheckerScreen,
     ),
     AutoRoute(
+      initial: true,
       path: "/home",
       page: HomeScreen,
       children: [

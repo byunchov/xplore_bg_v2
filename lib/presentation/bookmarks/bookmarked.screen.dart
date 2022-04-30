@@ -35,7 +35,7 @@ class BookmarkedLocationsScreen extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             itemCount: 5,
             itemBuilder: (contex, index) {
-              return const PLaceTileLoadingWidget();
+              return const PlaceTileLoadingWidget();
             },
             separatorBuilder: (context, index) {
               return const SizedBox(height: 15);

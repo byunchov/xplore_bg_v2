@@ -13,7 +13,6 @@
 import 'package:auto_route/auto_route.dart' as _i3;
 import 'package:firebase_auth/firebase_auth.dart' as _i13;
 import 'package:flutter/material.dart' as _i12;
-import 'package:xplore_bg_v2/models/location/restaurant.model.dart' as _i15;
 import 'package:xplore_bg_v2/models/models.dart' as _i14;
 import 'package:xplore_bg_v2/presentation/bookmarks/bookmarked.screen.dart'
     as _i7;
@@ -145,7 +144,9 @@ class AppRouter extends _i3.RootStackRouter {
 
   @override
   List<_i3.RouteConfig> get routes => [
-        _i3.RouteConfig(AuthCheckerRoute.name, path: '/'),
+        _i3.RouteConfig('/#redirect',
+            path: '/', redirectTo: '/home', fullMatch: true),
+        _i3.RouteConfig(AuthCheckerRoute.name, path: '/auth-checker-screen'),
         _i3.RouteConfig(HomeRoute.name, path: '/home', children: [
           _i3.RouteConfig(ExploreRoute.name,
               path: 'explore', parent: HomeRoute.name),
@@ -195,7 +196,8 @@ class AppRouter extends _i3.RootStackRouter {
 /// generated route for
 /// [_i1.AuthCheckerScreen]
 class AuthCheckerRoute extends _i3.PageRouteInfo<void> {
-  const AuthCheckerRoute() : super(AuthCheckerRoute.name, path: '/');
+  const AuthCheckerRoute()
+      : super(AuthCheckerRoute.name, path: '/auth-checker-screen');
 
   static const String name = 'AuthCheckerRoute';
 }
@@ -479,7 +481,7 @@ class RestaurantDetailsRoute
   RestaurantDetailsRoute(
       {_i12.Key? key,
       required String id,
-      required _i15.RestaurantModel restaurant,
+      required _i14.RestaurantModel restaurant,
       required String heroTag})
       : super(RestaurantDetailsRoute.name,
             path: ':id',
@@ -501,7 +503,7 @@ class RestaurantDetailsRouteArgs {
 
   final String id;
 
-  final _i15.RestaurantModel restaurant;
+  final _i14.RestaurantModel restaurant;
 
   final String heroTag;
 

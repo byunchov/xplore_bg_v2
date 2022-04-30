@@ -16,12 +16,16 @@ export 'package:xplore_bg_v2/presentation/shared/places/swipe_list_tile.widget.d
 export 'package:xplore_bg_v2/presentation/shared/places/action_icons.dart';
 export 'package:xplore_bg_v2/presentation/shared/places/action_icon_buttons.widget.dart';
 export 'package:xplore_bg_v2/presentation/shared/places/place_action_dialog.widget.dart';
+export 'package:xplore_bg_v2/presentation/shared/places/nearby/nearby_card.widget.dart';
+export 'package:xplore_bg_v2/presentation/shared/places/nearby/show_more_nearby.widget.dart';
+export 'package:xplore_bg_v2/presentation/shared/places/nearby/nearby_list_builder.dart';
 
 export 'package:xplore_bg_v2/presentation/shared/widgets/carousel_slider.widget.dart';
 export 'package:xplore_bg_v2/presentation/shared/widgets/marquee.widget.dart';
 
 export 'package:xplore_bg_v2/presentation/shared/location/gallery_listview.widget.dart';
 
-// loading incatro widgets
+// loading animated widgets
 export 'package:xplore_bg_v2/presentation/shared/loading/place_listtile.loading.dart';
 export 'package:xplore_bg_v2/presentation/shared/location/gallery_section.widget.dart';
+export 'package:xplore_bg_v2/presentation/shared/loading/nearby_card.widget.dart';

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:skeleton_text/skeleton_text.dart';
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
 
-class PLaceTileLoadingWidget extends StatelessWidget {
+class PlaceTileLoadingWidget extends StatelessWidget {
   final double cardHeight;
   final double cardBorderRadius;
 
-  const PLaceTileLoadingWidget({
+  const PlaceTileLoadingWidget({
     Key? key,
     this.cardHeight = 140,
     this.cardBorderRadius = 15,

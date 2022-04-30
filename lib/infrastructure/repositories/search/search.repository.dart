@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -115,6 +117,7 @@ class SearchRepository implements ISearchRepository {
       'matches': matches,
     };
     data.removeWhere((k, v) => v == null);
+    log(data.toString(), name: runtimeType.toString());
     try {
       final response = await client.post(
         '/indexes/$indexUid/search',

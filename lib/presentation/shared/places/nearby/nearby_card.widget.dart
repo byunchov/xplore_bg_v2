@@ -22,7 +22,7 @@ class NearbyCardWidget extends StatelessWidget {
     final currentLocation = LatLng(41.84126118480892, 23.48859392410678);
     final int distFromMe = const Distance().distance(currentLocation, place.coordinates!).toInt();
 
-    final heroTag = "nearby@${place.id}";
+    final heroTag = UniqueKey().toString();
 
     return LayoutBuilder(builder: (context, constraints) {
       return Material(

@@ -85,5 +85,9 @@
   "section_description": "Description",
   "section_nearby": "Nearby",
   "author": "Author",
-  "menu_noted": "Noted"
+  "menu_noted": "Noted",
+  "bookmark_added": "\"{name}\" was added to \"Bookmarks\".",
+  "bookmark_removed": "\"{name}\" was removed from \"Bookmarks\".",
+  "favourite_added": "\"{name}\" was added to \"Favourites\".",
+  "favourite_removed": "\"{name}\" was removed from \"Favourites\"."
 }

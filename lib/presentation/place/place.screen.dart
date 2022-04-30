@@ -9,6 +9,7 @@ import 'package:line_icons/line_icons.dart';
 import 'package:xplore_bg_v2/domain/core/generated/locale_keys.g.dart';
 
 import 'package:xplore_bg_v2/models/models.dart';
+import 'package:xplore_bg_v2/presentation/bookmarks/controllers/bookmarks.controller.dart';
 import 'package:xplore_bg_v2/presentation/location/location.screen.dart';
 import 'package:xplore_bg_v2/presentation/place/controllers/note_action.controller.dart';
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
@@ -31,9 +32,6 @@ class PlaceDetailsScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final scrollController = useScrollController();
-    final theme = Theme.of(context);
-
-    print(context.router.routeData.path);
 
     return LocationDetailsScreen(
       scrollController: scrollController,
@@ -47,255 +45,63 @@ class PlaceDetailsScreen extends HookConsumerWidget {
           child: _DescriptionSection(locationId: place.id, provider: placeDetailsProvider),
         ),
         SliverToBoxAdapter(
-          child: SectionWithTitleWidget(
-            title: const SectionTitleWithDividerWidget("Activities"),
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: PlaceActivitiesBody(
-                coordinates: place.coordinates!,
-                place: place,
-              ),
-            ),
-          ),
+          child: _ActivitySection(place: place),
         ),
-        SliverToBoxAdapter(
-          child: SectionWithTitleWidget(
-            title: const SectionTitleWithDividerWidget("Nearby"),
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: SizedBox(
-                height: 200,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 10,
-                  itemBuilder: (context, index) => Container(
-                    width: 100,
-                    color: Colors.green,
-                  ),
-                  separatorBuilder: (BuildContext context, int index) => const SizedBox(width: 10),
-                ),
-              ),
-            ),
-          ),
+        const SliverToBoxAdapter(
+          child: _NearbySection(),
         ),
       ],
-      bottomNavigationBar: ScrollToHideWidget(
-        controller: scrollController,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            NotedActionIconButton(
-              id: place.id,
-              field: 'like_count',
-              iconStyle: LikeIcon(),
-              onPressed: () async {
-                await ref.read(bookmarkLocationProvider).likeLocation(place.id);
-              },
-            ),
-            NotedActionIconButton(
-              id: place.id,
-              field: 'bookmark_count',
-              iconStyle: BookmarkIcon(),
-              onPressed: () async {
-                await ref.read(bookmarkLocationProvider).bookmarkLocation(place.id);
-              },
-            ),
-            NotedActionIconButton(
-              id: place.id,
-              field: 'review_count',
-              iconStyle: const Icon(LineIcons.comments),
-              onPressed: () async {},
-            ),
-          ],
-        ),
+      bottomNavigationBar: _AutoHideBottomActionBar(
+        id: place.id,
+        scrollController: scrollController,
       ),
     );
   }
+}
 
-/* 
+class _AutoHideBottomActionBar extends ConsumerWidget {
+  const _AutoHideBottomActionBar({
+    Key? key,
+    required this.scrollController,
+    required this.id,
+  }) : super(key: key);
+
+  final ScrollController scrollController;
+  final String id;
+
   @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Scaffold(
-      body: CustomScrollView(
-        controller: _scrollController,
-        slivers: <Widget>[
-          SliverToBoxAdapter(
-            child: Stack(
-              children: [
-                Hero(
-                  tag: place.id,
-                  child: SizedBox(
-                    height: 300,
-                    child: GestureDetector(
-                      child: CustomCachedImage(imageUrl: place.thumbnail.url),
-                      onTap: () => openGallery(0),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 20,
-                  left: 20,
-                  child: SafeArea(
-                    child: AnimatedBuilder(
-                      animation: transitionAnimation,
-                      builder: (context, child) {
-                        return SlideTransition(
-                          position: Tween<Offset>(
-                            begin: const Offset(0, -4),
-                            end: const Offset(0, 0),
-                          ).animate(
-                            CurvedAnimation(
-                              curve: const Interval(0.7, 1, curve: Curves.easeInCubic),
-                              parent: transitionAnimation,
-                            ),
-                          ),
-                          child: child,
-                        );
-                      },
-                      child: AppbarActionWidget(
-                        iconData: Icons.arrow_back,
-                        buttonSize: 42,
-                        onTap: () => Navigator.pop(context),
-                      ),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  left: 16,
-                  right: 16,
-                  bottom: 16,
-                  child: GalleryStatsWidget(
-                    currentIndex: 1,
-                    totalItems: place.gallery!.length,
-                    showCurrentPosition: false,
-                  ),
-                ),
-              ],
-            ),
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ScrollToHideWidget(
+      controller: scrollController,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          NotedActionIconButton(
+            id: id,
+            field: 'like_count',
+            iconStyle: LikeIcon(),
+            onPressed: () async {
+              await ref.read(bookmarkLocationProvider).likeLocation(id);
+            },
           ),
-          SliverPinnedHeader(
-            child: LocationHeaderWidget(controller: _scrollController, location: place),
+          NotedActionIconButton(
+            id: id,
+            field: 'bookmark_count',
+            iconStyle: BookmarkIcon(),
+            onPressed: () async {
+              await ref.read(bookmarkLocationProvider).bookmarkLocation(id);
+            },
           ),
-          SliverToBoxAdapter(
-            child: SectionWithTitleWidget(
-              title: _sectionTitle("Gallery", theme),
-              child: SizedBox(
-                height: 150,
-                child: ListView.separated(
-                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                  scrollDirection: Axis.horizontal,
-                  itemCount: place.gallery!.length,
-                  itemBuilder: (ctx, index) => LayoutBuilder(builder: (ctx, constraints) {
-                    final imgUrl = place.gallery![index].url;
-                    return Material(
-                      elevation: 4,
-                      borderRadius: BorderRadius.circular(WidgetConstants.kCradBorderRadius),
-                      child: InkWell(
-                        onTap: () => openGallery(index),
-                        borderRadius: BorderRadius.circular(WidgetConstants.kCradBorderRadius),
-                        child: Hero(
-                          tag: imgUrl,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(WidgetConstants.kCradBorderRadius),
-                            child: CustomCachedImage(
-                              imageUrl: imgUrl,
-                              width: constraints.maxHeight,
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  }),
-                  separatorBuilder: (BuildContext context, int index) => const SizedBox(width: 12),
-                ),
-              ),
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: SectionWithTitleWidget(
-              title: _sectionTitle("Description", theme),
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: ExpandText(
-                  // "kdmi eidemkmdieufeokmfeiof",
-                  place.description ?? "",
-                  maxLines: 8,
-                  collapsedHint: "show_more",
-                  expandedHint: "show_less",
-                  style: theme.textTheme.bodyLarge?.copyWith(fontSize: 17),
-                  textAlign: TextAlign.justify,
-                  expandArrowStyle: ExpandArrowStyle.both,
-                  arrowSize: 25,
-                  arrowColor: Theme.of(context).primaryColor,
-                  arrowPadding: const EdgeInsets.only(top: 5),
-                  hintTextStyle: TextStyle(color: Theme.of(context).primaryColor),
-                ),
-              ),
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: SectionWithTitleWidget(
-              title: _sectionTitle("Activities", theme),
-              child: const Padding(
-                padding: EdgeInsets.all(12),
-                child: _PlaceActivitiesBody(),
-              ),
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: SectionWithTitleWidget(
-              title: _sectionTitle("Nearby", theme),
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: SizedBox(
-                  height: 200,
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 10,
-                    itemBuilder: (context, index) => Container(
-                      width: 100,
-                      color: Colors.green,
-                    ),
-                    separatorBuilder: (BuildContext context, int index) =>
-                        const SizedBox(width: 10),
-                  ),
-                ),
-              ),
-            ),
+          NotedActionIconButton(
+            id: id,
+            field: 'review_count',
+            iconStyle: const Icon(LineIcons.comments),
+            onPressed: () async {},
           ),
         ],
       ),
-      bottomNavigationBar: ScrollToHideWidget(
-        controller: _scrollController,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Column(
-              children: const [
-                Icon(Icons.heart_broken),
-                Text("Likes"),
-              ],
-            ),
-            Column(
-              children: const [
-                Icon(Icons.bookmarks),
-                Text("Bookmarks"),
-              ],
-            ),
-            Column(
-              children: const [
-                Icon(Icons.reviews_outlined),
-                Text("Reviews"),
-              ],
-            ),
-          ],
-        ),
-      ),
     );
   }
- */
-
 }
 
 class _DescriptionSection<T> extends ConsumerWidget {
@@ -344,6 +150,51 @@ class _DescriptionSection<T> extends ConsumerWidget {
             return Container();
           },
           loading: () => const Center(child: CircularProgressIndicator()),
+        ),
+      ),
+    );
+  }
+}
+
+class _ActivitySection extends StatelessWidget {
+  const _ActivitySection({
+    Key? key,
+    required this.place,
+  }) : super(key: key);
+
+  final PlaceModel place;
+
+  @override
+  Widget build(BuildContext context) {
+    return SectionWithTitleWidget(
+      title: SectionTitleWithDividerWidget(LocaleKeys.section_activities.tr()),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: PlaceActivitiesBody(place: place),
+      ),
+    );
+  }
+}
+
+class _NearbySection extends ConsumerWidget {
+  const _NearbySection({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SectionWithTitleWidget(
+      title: SectionTitleWithDividerWidget(LocaleKeys.section_nearby.tr()),
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 12),
+        child: SizedBox(
+          width: double.infinity,
+          height: 215,
+          // color: Colors.blue,
+          child: ref.watch(likedProvider).maybeWhen(
+                data: (data) => NearbyListViewBuilder(items: data),
+                error: (error, stackTrace) => Text("Error: $error"),
+                loading: () => const NearbyListViewBuilder(),
+                orElse: () => const Text("Or else clause"),
+              ),
         ),
       ),
     );

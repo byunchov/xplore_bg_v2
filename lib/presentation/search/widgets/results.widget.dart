@@ -93,7 +93,7 @@ class SearchResultsWidget extends ConsumerWidget {
 
   Widget _loadingState(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    const item = PLaceTileLoadingWidget();
+    const item = PlaceTileLoadingWidget();
     final itemCount = (size.height - kToolbarHeight) / item.cardHeight;
 
     return ListView.separated(

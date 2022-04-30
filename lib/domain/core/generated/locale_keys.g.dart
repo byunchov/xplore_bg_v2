@@ -88,5 +88,9 @@ abstract class  LocaleKeys {
   static const section_nearby = 'section_nearby';
   static const author = 'author';
   static const menu_noted = 'menu_noted';
+  static const bookmark_added = 'bookmark_added';
+  static const bookmark_removed = 'bookmark_removed';
+  static const favourite_added = 'favourite_added';
+  static const favourite_removed = 'favourite_removed';
 
 }
