@@ -52,11 +52,13 @@ final likedLocationsProvider = FutureProvider.autoDispose<List<PlaceModel>>((ref
 });
 
 final likedProvider =
-    StateNotifierProvider<PaginationNotifier<PlaceModel>, PaginationState<PlaceModel>>((ref) {
+    StateNotifierProvider.autoDispose<PaginationNotifier<PlaceModel>, PaginationState<PlaceModel>>(
+        (ref) {
   return PaginationNotifier(
     itemsPerBatch: 5,
     fetchNextItems: (item, {limit}) async {
       final user = ref.watch(authControllerProvider);
+      // return [];
 
       if (user == null) return [];
 

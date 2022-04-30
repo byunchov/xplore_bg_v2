@@ -1,6 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:xplore_bg_v2/domain/core/generated/locale_keys.g.dart';
 import 'package:xplore_bg_v2/infrastructure/pagination/pagination_notifier.dart';
 import 'package:xplore_bg_v2/models/pagination/pagination_state.model.dart';
 import 'package:xplore_bg_v2/models/location/place.model.dart';
@@ -28,14 +29,28 @@ class LikedLocationsScreen extends HookConsumerWidget {
       },
       child: PaginatedListViewWidget<PlaceModel>(
         provider: likedProvider,
+        loadingPlaceholder: const Center(child: CircularProgressIndicator()),
+        emptyResultPlaceholder: BlankPage(
+          heading: LocaleKeys.no_bookmarks.tr(),
+          shortText: LocaleKeys.no_bookmarks_desc.tr(),
+          icon: Icons.bookmark_remove_rounded,
+        ),
+        errorPlaceholderBuilder: (err) => Text(err.toString()),
         builder: (item) {
           return PlaceListTile(placePreview: item);
         },
       ),
     );
 
-    // return const CustomScrollView(slivers: [
-    //   SliverToBoxAdapter(child: Center(child: CircularProgressIndicator())),
+    // return CustomScrollView(slivers: [
+    //   const SliverToBoxAdapter(child: Center(child: CircularProgressIndicator())),
+    //   SliverFillRemaining(
+    //     child: BlankPage(
+    //       heading: LocaleKeys.no_bookmarks.tr(),
+    //       shortText: LocaleKeys.no_bookmarks_desc.tr(),
+    //       icon: Icons.bookmark_remove_rounded,
+    //     ),
+    //   )
     // ]);
 
     /* final state = ref.watch(likedProvider);

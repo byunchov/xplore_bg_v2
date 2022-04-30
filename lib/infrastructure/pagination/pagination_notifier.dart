@@ -18,6 +18,7 @@ class PaginationNotifier<T> extends StateNotifier<PaginationState<T>> {
   Timer _timer = Timer(const Duration(milliseconds: 0), () {});
 
   bool noMoreItems = false;
+  bool get hasData => _items.isNotEmpty;
 
   void init() {
     if (_items.isEmpty) {

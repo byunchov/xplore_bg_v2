@@ -14,6 +14,7 @@ class LocationGallerySection<T> extends ConsumerWidget {
   }) : super(key: key);
 
   final String locationId;
+  // final dynamic provider;
   final AutoDisposeFutureProviderFamily<T, String> provider;
 
   @override
