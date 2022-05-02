@@ -1,24 +1,22 @@
+import 'package:flutter/foundation.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:xplore_bg_v2/domain/core/generated/locale_keys.g.dart';
 import 'package:xplore_bg_v2/domain/core/utils/google_maps.util.dart';
 import 'package:xplore_bg_v2/domain/core/utils/typedef.util.dart';
 import 'package:xplore_bg_v2/models/models.dart';
 
-class RestaurantModel extends LocationModel {
+class GMapsPlaceModel extends LocationModel {
   final String? mapsUrl;
   final String? phoneNumber;
   final List<String>? openingHours;
   final String? website;
   final List<ReviewModel>? reviews;
 
-  RestaurantModel({
+  GMapsPlaceModel({
     required String id,
     required String name,
     String? category,
-    String? subcategory = LocaleKeys.tag_restaurant,
-    String? region,
+    String? subcategory,
     String? residence,
-    int? likesCount,
     required int reviewsCount,
     required double rating,
     LatLng? coordinates,
@@ -34,18 +32,41 @@ class RestaurantModel extends LocationModel {
           name: name,
           category: category,
           subcategory: subcategory,
-          region: region,
           residence: residence,
-          likesCount: likesCount,
           reviewsCount: reviewsCount,
           rating: rating,
           coordinates: coordinates,
           thumbnail: thumbnail,
-          gallery: gallery,
         );
 
-  factory RestaurantModel.previewFromJson(Map<String, dynamic> snapshot) {
-    return RestaurantModel(
+  GMapsPlaceModel copyWith({
+    String? id,
+    String? name,
+    double? rating,
+    int? reviewsCount,
+    ImageModel? thumbnail,
+    String? mapsUrl,
+    String? phoneNumber,
+    List<String>? openingHours,
+    String? website,
+    List<ReviewModel>? reviews,
+  }) {
+    return GMapsPlaceModel(
+      id: id ?? this.id,
+      name: '',
+      rating: rating ?? this.rating,
+      reviewsCount: reviewsCount ?? this.reviewsCount,
+      thumbnail: thumbnail ?? this.thumbnail,
+      mapsUrl: mapsUrl ?? this.mapsUrl,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      openingHours: openingHours ?? this.openingHours,
+      website: website ?? this.website,
+      reviews: reviews ?? this.reviews,
+    );
+  }
+
+  factory GMapsPlaceModel.previewFromJson(Map<String, dynamic> snapshot) {
+    return GMapsPlaceModel(
       id: snapshot['place_id'] as String,
       name: snapshot['name'] as String,
       category: GMapsUtils.getPriceLevel(snapshot['price_level']),
@@ -58,10 +79,10 @@ class RestaurantModel extends LocationModel {
     );
   }
 
-  factory RestaurantModel.formJson(JsonMap snapshot, String id) {
+  factory GMapsPlaceModel.formJson(JsonMap snapshot, String id) {
     // debugPrint(snapshot.toString());
     final _id = snapshot['place_id']?.toString() ?? id;
-    return RestaurantModel(
+    return GMapsPlaceModel(
       id: _id,
       name: snapshot['name'] as String,
       category: GMapsUtils.getPriceLevel(snapshot['price_level']),
@@ -84,5 +105,31 @@ class RestaurantModel extends LocationModel {
         ..sort((a, b) => a.rating.compareTo(b.rating))
         ..reversed.toList(),
     );
+  }
+
+  @override
+  String toString() {
+    return 'GMapsPlaceModel(mapsUrl: $mapsUrl, phoneNumber: $phoneNumber, openingHours: $openingHours, website: $website, reviews: $reviews)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is GMapsPlaceModel &&
+        other.mapsUrl == mapsUrl &&
+        other.phoneNumber == phoneNumber &&
+        listEquals(other.openingHours, openingHours) &&
+        other.website == website &&
+        listEquals(other.reviews, reviews);
+  }
+
+  @override
+  int get hashCode {
+    return mapsUrl.hashCode ^
+        phoneNumber.hashCode ^
+        openingHours.hashCode ^
+        website.hashCode ^
+        reviews.hashCode;
   }
 }

@@ -3,13 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:xplore_bg_v2/domain/core/utils/config.util.dart';
+import 'package:xplore_bg_v2/domain/core/utils/google_maps.util.dart';
 import 'package:xplore_bg_v2/infrastructure/routing/router.gr.dart';
 import 'package:xplore_bg_v2/infrastructure/theme/apptheme.provider.dart';
 import 'package:xplore_bg_v2/infrastructure/theme/themes.dart';
 import 'package:xplore_bg_v2/initializer.dart';
+import 'package:xplore_bg_v2/presentation/location/controllers/gmaps.provider.dart';
 
 void main() async {
   await Initializer.init();
+
+  final restaurantPinBitmapArray =
+      await GMapsUtils.getBytesFromAsset(AppConfig.restaurantPinIcon, 95);
+  final lodgingPinBitmapArray = await GMapsUtils.getBytesFromAsset(AppConfig.hotelPinIcon, 95);
+
+  print(restaurantPinBitmapArray);
 
   runApp(
     EasyLocalization(
@@ -18,7 +26,13 @@ void main() async {
       fallbackLocale: const Locale("bg"),
       startLocale: const Locale("bg"),
       useOnlyLangCode: true,
-      child: ProviderScope(child: MainApplication()),
+      child: ProviderScope(
+        child: MainApplication(),
+        overrides: [
+          restaurantPinBitmapProvider.overrideWithValue(restaurantPinBitmapArray),
+          lodgingPinBitmapProvider.overrideWithValue(lodgingPinBitmapArray),
+        ],
+      ),
     ),
   );
 }

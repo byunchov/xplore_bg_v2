@@ -49,8 +49,9 @@ class PlaceModel extends LocationModel {
   }
 
   factory PlaceModel.formJson(Map<String, dynamic> snapshot) {
+    final id = snapshot['loc_id'] as String;
     return PlaceModel(
-      id: snapshot['loc_id'] as String,
+      id: id,
       name: snapshot['name'] as String,
       category: snapshot['category'] as String,
       subcategory: snapshot['subcategory'] as String,
@@ -62,7 +63,7 @@ class PlaceModel extends LocationModel {
       reviewsCount: snapshot['review_count'] as int,
       rating: snapshot['rating'].toDouble(),
       coordinates: LatLng(snapshot['_geo']["lat"], snapshot['_geo']["lng"]),
-      gallery: GalleryModel.formJson(List<Map<String, dynamic>>.from(snapshot['gallery'])),
+      gallery: GalleryModel.formJson(List<Map<String, dynamic>>.from(snapshot['gallery']), id),
     );
   }
 }

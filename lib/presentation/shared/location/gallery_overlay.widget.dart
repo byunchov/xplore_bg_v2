@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:xplore_bg_v2/infrastructure/theme/themes.dart';
 import 'package:xplore_bg_v2/presentation/gallery/widgets/gallery_stats.widget.dart';
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
 
@@ -40,6 +41,11 @@ class GalleryOverlayWidgets {
 
   static Widget backButtonAndTitleOverlay(BuildContext context, String heading) {
     final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
+
+    final headerColor = isDarkMode ? Colors.grey[700] : Colors.grey[200];
+    final headerBorderColor = isDarkMode ? Colors.grey[500]! : Colors.grey;
+
     return Positioned(
       top: 20,
       left: 20,
@@ -56,16 +62,16 @@ class GalleryOverlayWidgets {
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
-                  // color: AppThemes.xploreAppbarColor(Theme.of(context).brightness),
-                  color: theme.navigationBarTheme.backgroundColor,
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: Colors.grey, width: 0.8),
+                  color: headerColor,
+                  borderRadius: BorderRadius.circular(50),
+                  border: Border.all(color: headerBorderColor, width: 1.4),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 15, top: 10, bottom: 10, right: 15),
+                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                   child: Text(
                     heading,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
+                    // style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                 ),
               ),

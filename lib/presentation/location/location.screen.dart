@@ -39,8 +39,7 @@ class LocationDetailsScreen extends StatelessWidget {
                     height: 300,
                     child: GestureDetector(
                       child: CustomCachedImage(imageUrl: location.thumbnail.url),
-                      onTap: () =>
-                          context.router.navigate(GalleryRoute(gallery: location.gallery!)),
+                      onTap: () => context.router.navigate(GalleryRoute(id: location.id)),
                     ),
                   ),
                 ),

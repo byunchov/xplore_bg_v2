@@ -99,7 +99,7 @@ class PlaceActivityImageCard extends StatelessWidget {
     required this.text,
     required this.icon,
     required this.image,
-    this.cardHeight = 150,
+    this.cardHeight = 160,
     this.cardRadius = 10,
     this.callback,
   }) : super(key: key);

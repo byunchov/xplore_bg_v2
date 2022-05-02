@@ -20,10 +20,9 @@ class AppbarActionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-
     final theme = Theme.of(context);
     final double effectiveIconSize = iconSize ?? buttonSize * 0.55;
+    final isDarkMode = theme.brightness == Brightness.dark;
 
     return SizedBox.square(
       dimension: buttonSize,

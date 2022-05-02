@@ -48,27 +48,30 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          title: AppbarTitleWidget(
-            title: _searchBar(theme),
-            leadingSpaceAfter: 16,
-            leading: AppbarActionWidget(
-              iconData: Icons.adaptive.arrow_back,
-              buttonSize: 42,
-              onTap: () {
-                context.router.pop();
-              },
-            ),
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.backspace_outlined),
-                color: theme.iconTheme.color,
-                onPressed: () {
-                  _searchController.clear();
-                  controller.state = "";
-                  _searchFocusNode.requestFocus();
+          title: Hero(
+            tag: "@searchWidget",
+            child: AppbarTitleWidget(
+              title: _searchBar(theme),
+              leadingSpaceAfter: 16,
+              leading: AppbarActionWidget(
+                iconData: Icons.adaptive.arrow_back,
+                buttonSize: 42,
+                onTap: () {
+                  context.router.pop();
                 },
               ),
-            ],
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.backspace_outlined),
+                  color: theme.iconTheme.color,
+                  onPressed: () {
+                    _searchController.clear();
+                    controller.state = "";
+                    _searchFocusNode.requestFocus();
+                  },
+                ),
+              ],
+            ),
           ),
         ),
         body: Visibility(

@@ -259,39 +259,43 @@ class _NearbySection extends ConsumerWidget {
 }
 
 class SearchBarWidget extends StatelessWidget {
-  const SearchBarWidget({Key? key}) : super(key: key);
+  const SearchBarWidget({Key? key, this.radius = 8}) : super(key: key);
+  final double radius;
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      // onTap: () => Get.to(() => const SearchScreen()),
-      onTap: (() => context.router.navigate(const SearchRoute())),
-      child: Container(
-        height: 45,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey, width: 0.7),
-          borderRadius: BorderRadius.circular(8),
-          color: Colors.white,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            // crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(width: 10),
-              Icon(
-                LineIcons.search,
-                size: 20,
-                color: Colors.grey[600],
-              ),
-              const SizedBox(width: 10),
-              Text(
-                "search_places",
-                style: TextStyle(color: Colors.grey[700], fontSize: 15),
-              ).tr(),
-            ],
+    return Hero(
+      tag: "@searchWidget",
+      child: InkWell(
+        onTap: (() => context.router.navigate(const SearchRoute())),
+        borderRadius: BorderRadius.circular(radius),
+        child: Container(
+          height: 45,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey, width: 0.7),
+            borderRadius: BorderRadius.circular(radius),
+            color: Colors.white,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              // crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(width: 10),
+                Icon(
+                  LineIcons.search,
+                  size: 20,
+                  color: Colors.grey[600],
+                ),
+                const SizedBox(width: 10),
+                Text(
+                  LocaleKeys.search_places,
+                  style: TextStyle(color: Colors.grey[700], fontSize: 15),
+                ).tr(),
+              ],
+            ),
           ),
         ),
       ),

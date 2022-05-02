@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class CarouselSliderWidget extends StatefulWidget {
@@ -12,17 +13,21 @@ class CarouselSliderWidget extends StatefulWidget {
   final Duration animationDuration;
   final bool showIndicator;
   final EdgeInsets padding;
+  final void Function(int index)? onPageChanged;
+  final PageController? controller;
 
   const CarouselSliderWidget({
     Key? key,
     required this.children,
     this.initialPage = 0,
     this.viewportFraction = 1,
-    this.autoPlay = true,
-    this.autoPlayInterval = const Duration(seconds: 5),
+    this.autoPlay = false,
+    this.autoPlayInterval = const Duration(seconds: 6),
     this.animationDuration = const Duration(milliseconds: 1100),
-    this.showIndicator = true,
+    this.showIndicator = false,
     this.padding = const EdgeInsets.all(12),
+    this.onPageChanged,
+    this.controller,
   }) : super(key: key);
 
   @override
@@ -60,7 +65,7 @@ class _CarouselSliderWidgetState extends State<CarouselSliderWidget> {
 
   @override
   void initState() {
-    pageController =
+    pageController = widget.controller ??
         PageController(initialPage: widget.initialPage, viewportFraction: widget.viewportFraction);
     if (widget.autoPlay) _carosuelTmer = getTimer();
     super.initState();
@@ -85,6 +90,7 @@ class _CarouselSliderWidgetState extends State<CarouselSliderWidget> {
                   currentPage = index;
                 });
               }
+              widget.onPageChanged?.call(index);
             },
             itemBuilder: (_, index) {
               return AnimatedBuilder(

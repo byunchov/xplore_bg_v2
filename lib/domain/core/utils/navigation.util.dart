@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+/* import 'package:flutter/material.dart';
 import 'package:xplore_bg_v2/models/models.dart';
 import 'package:xplore_bg_v2/presentation/gallery/gallery.screen.dart';
 import 'package:xplore_bg_v2/presentation/place/place.screen.dart';
@@ -62,3 +62,4 @@ void openPhotoViewGallery(BuildContext context, int index, GalleryModel gallery)
     ),
   );
 }
+ */

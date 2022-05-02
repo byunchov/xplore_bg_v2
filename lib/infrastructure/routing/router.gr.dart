@@ -11,9 +11,9 @@
 // ignore_for_file: type=lint
 
 import 'package:auto_route/auto_route.dart' as _i3;
-import 'package:firebase_auth/firebase_auth.dart' as _i13;
-import 'package:flutter/material.dart' as _i12;
-import 'package:xplore_bg_v2/models/models.dart' as _i14;
+import 'package:firebase_auth/firebase_auth.dart' as _i15;
+import 'package:flutter/material.dart' as _i14;
+import 'package:xplore_bg_v2/models/models.dart' as _i16;
 import 'package:xplore_bg_v2/presentation/bookmarks/bookmarked.screen.dart'
     as _i7;
 import 'package:xplore_bg_v2/presentation/bookmarks/liked.screen.dart' as _i6;
@@ -24,6 +24,10 @@ import 'package:xplore_bg_v2/presentation/gallery/gallery.screen.dart' as _i9;
 import 'package:xplore_bg_v2/presentation/launcher/auth_checker.screen.dart'
     as _i1;
 import 'package:xplore_bg_v2/presentation/place/place.screen.dart' as _i8;
+import 'package:xplore_bg_v2/presentation/restaurants/lodging.screen.dart'
+    as _i12;
+import 'package:xplore_bg_v2/presentation/restaurants/lodging_deatils.screen.dart'
+    as _i13;
 import 'package:xplore_bg_v2/presentation/restaurants/restaurant_deatils.screen.dart'
     as _i11;
 import 'package:xplore_bg_v2/presentation/restaurants/restaurants.screen.dart'
@@ -31,7 +35,7 @@ import 'package:xplore_bg_v2/presentation/restaurants/restaurants.screen.dart'
 import 'package:xplore_bg_v2/presentation/screens.dart' as _i2;
 
 class AppRouter extends _i3.RootStackRouter {
-  AppRouter([_i12.GlobalKey<_i12.NavigatorState>? navigatorKey])
+  AppRouter([_i14.GlobalKey<_i14.NavigatorState>? navigatorKey])
       : super(navigatorKey);
 
   @override
@@ -118,11 +122,19 @@ class AppRouter extends _i3.RootStackRouter {
           routeData: routeData, child: const _i3.EmptyRouterPage());
     },
     GalleryRoute.name: (routeData) {
-      final args = routeData.argsAs<GalleryRouteArgs>();
+      final pathParams = routeData.inheritedPathParams;
+      final args = routeData.argsAs<GalleryRouteArgs>(
+          orElse: () => GalleryRouteArgs(
+              id: pathParams.getString('id'),
+              index: pathParams.getInt('index', 0)));
       return _i3.AdaptivePage<dynamic>(
           routeData: routeData,
-          child: _i9.GalleryScreen(
-              key: args.key, gallery: args.gallery, index: args.index));
+          child:
+              _i9.GalleryScreen(key: args.key, id: args.id, index: args.index));
+    },
+    LodgingRouter.name: (routeData) {
+      return _i3.AdaptivePage<dynamic>(
+          routeData: routeData, child: const _i3.EmptyRouterPage());
     },
     RestaurantsRoute.name: (routeData) {
       final args = routeData.argsAs<RestaurantsRouteArgs>();
@@ -138,6 +150,22 @@ class AppRouter extends _i3.RootStackRouter {
               key: args.key,
               id: args.id,
               restaurant: args.restaurant,
+              heroTag: args.heroTag));
+    },
+    LodgingRoute.name: (routeData) {
+      final args = routeData.argsAs<LodgingRouteArgs>();
+      return _i3.AdaptivePage<dynamic>(
+          routeData: routeData,
+          child: _i12.LodgingScreen(args.locId, key: args.key));
+    },
+    LodgingDetailsRoute.name: (routeData) {
+      final args = routeData.argsAs<LodgingDetailsRouteArgs>();
+      return _i3.AdaptivePage<dynamic>(
+          routeData: routeData,
+          child: _i13.LodgingDetailsScreen(
+              key: args.key,
+              id: args.id,
+              lodging: args.lodging,
               heroTag: args.heroTag));
     }
   };
@@ -188,7 +216,16 @@ class AppRouter extends _i3.RootStackRouter {
                     path: ':id', parent: RestaurantsRouter.name)
               ]),
           _i3.RouteConfig(GalleryRoute.name,
-              path: 'gallery/:index', parent: LocationRouter.name)
+              path: 'gallery/:index', parent: LocationRouter.name),
+          _i3.RouteConfig(LodgingRouter.name,
+              path: 'lodging',
+              parent: LocationRouter.name,
+              children: [
+                _i3.RouteConfig(LodgingRoute.name,
+                    path: '', parent: LodgingRouter.name),
+                _i3.RouteConfig(LodgingDetailsRoute.name,
+                    path: ':id', parent: LodgingRouter.name)
+              ])
         ])
       ];
 }
@@ -215,7 +252,7 @@ class HomeRoute extends _i3.PageRouteInfo<void> {
 /// [_i2.SignInScreen]
 class SigninRoute extends _i3.PageRouteInfo<SigninRouteArgs> {
   SigninRoute(
-      {_i12.Key? key, required void Function(_i13.User) onSignInCallback})
+      {_i14.Key? key, required void Function(_i15.User) onSignInCallback})
       : super(SigninRoute.name,
             path: '/signin',
             args:
@@ -227,9 +264,9 @@ class SigninRoute extends _i3.PageRouteInfo<SigninRouteArgs> {
 class SigninRouteArgs {
   const SigninRouteArgs({this.key, required this.onSignInCallback});
 
-  final _i12.Key? key;
+  final _i14.Key? key;
 
-  final void Function(_i13.User) onSignInCallback;
+  final void Function(_i15.User) onSignInCallback;
 
   @override
   String toString() {
@@ -304,7 +341,7 @@ class LandmarkCategoriesRoute extends _i3.PageRouteInfo<void> {
 /// [_i4.CategoryScreen]
 class CategoryRoute extends _i3.PageRouteInfo<CategoryRouteArgs> {
   CategoryRoute(
-      {_i12.Key? key, required String tag, _i14.CategoryModel? category})
+      {_i14.Key? key, required String tag, _i16.CategoryModel? category})
       : super(CategoryRoute.name,
             path: ':tag',
             args: CategoryRouteArgs(key: key, tag: tag, category: category),
@@ -316,11 +353,11 @@ class CategoryRoute extends _i3.PageRouteInfo<CategoryRouteArgs> {
 class CategoryRouteArgs {
   const CategoryRouteArgs({this.key, required this.tag, this.category});
 
-  final _i12.Key? key;
+  final _i14.Key? key;
 
   final String tag;
 
-  final _i14.CategoryModel? category;
+  final _i16.CategoryModel? category;
 
   @override
   String toString() {
@@ -332,7 +369,7 @@ class CategoryRouteArgs {
 /// [_i5.CategoryFilterScreen]
 class CategoryFilterRoute extends _i3.PageRouteInfo<CategoryFilterRouteArgs> {
   CategoryFilterRoute(
-      {_i12.Key? key, required String tag, required String name})
+      {_i14.Key? key, required String tag, required String name})
       : super(CategoryFilterRoute.name,
             path: ':tag/filters',
             args: CategoryFilterRouteArgs(key: key, tag: tag, name: name));
@@ -344,7 +381,7 @@ class CategoryFilterRouteArgs {
   const CategoryFilterRouteArgs(
       {this.key, required this.tag, required this.name});
 
-  final _i12.Key? key;
+  final _i14.Key? key;
 
   final String tag;
 
@@ -377,10 +414,10 @@ class BookmarkedLocationsRoute extends _i3.PageRouteInfo<void> {
 /// [_i8.PlaceDetailsScreen]
 class LocationRoute extends _i3.PageRouteInfo<LocationRouteArgs> {
   LocationRoute(
-      {_i12.Key? key,
-      required _i14.PlaceModel place,
+      {_i14.Key? key,
+      required _i16.PlaceModel place,
       required String heroTag,
-      _i12.Animation<double>? transitionAnimation})
+      _i14.Animation<double>? transitionAnimation})
       : super(LocationRoute.name,
             path: '',
             args: LocationRouteArgs(
@@ -399,13 +436,13 @@ class LocationRouteArgs {
       required this.heroTag,
       this.transitionAnimation});
 
-  final _i12.Key? key;
+  final _i14.Key? key;
 
-  final _i14.PlaceModel place;
+  final _i16.PlaceModel place;
 
   final String heroTag;
 
-  final _i12.Animation<double>? transitionAnimation;
+  final _i14.Animation<double>? transitionAnimation;
 
   @override
   String toString() {
@@ -426,35 +463,43 @@ class RestaurantsRouter extends _i3.PageRouteInfo<void> {
 /// generated route for
 /// [_i9.GalleryScreen]
 class GalleryRoute extends _i3.PageRouteInfo<GalleryRouteArgs> {
-  GalleryRoute(
-      {_i12.Key? key, required _i14.GalleryModel gallery, int index = 0})
+  GalleryRoute({_i14.Key? key, required String id, int index = 0})
       : super(GalleryRoute.name,
             path: 'gallery/:index',
-            args: GalleryRouteArgs(key: key, gallery: gallery, index: index),
-            rawPathParams: {'index': index});
+            args: GalleryRouteArgs(key: key, id: id, index: index),
+            rawPathParams: {'id': id, 'index': index});
 
   static const String name = 'GalleryRoute';
 }
 
 class GalleryRouteArgs {
-  const GalleryRouteArgs({this.key, required this.gallery, this.index = 0});
+  const GalleryRouteArgs({this.key, required this.id, this.index = 0});
 
-  final _i12.Key? key;
+  final _i14.Key? key;
 
-  final _i14.GalleryModel gallery;
+  final String id;
 
   final int index;
 
   @override
   String toString() {
-    return 'GalleryRouteArgs{key: $key, gallery: $gallery, index: $index}';
+    return 'GalleryRouteArgs{key: $key, id: $id, index: $index}';
   }
+}
+
+/// generated route for
+/// [_i3.EmptyRouterPage]
+class LodgingRouter extends _i3.PageRouteInfo<void> {
+  const LodgingRouter({List<_i3.PageRouteInfo>? children})
+      : super(LodgingRouter.name, path: 'lodging', initialChildren: children);
+
+  static const String name = 'LodgingRouter';
 }
 
 /// generated route for
 /// [_i10.RestaurantsScreen]
 class RestaurantsRoute extends _i3.PageRouteInfo<RestaurantsRouteArgs> {
-  RestaurantsRoute({required _i14.LocationModel location, _i12.Key? key})
+  RestaurantsRoute({required _i16.LocationModel location, _i14.Key? key})
       : super(RestaurantsRoute.name,
             path: '', args: RestaurantsRouteArgs(location: location, key: key));
 
@@ -464,9 +509,9 @@ class RestaurantsRoute extends _i3.PageRouteInfo<RestaurantsRouteArgs> {
 class RestaurantsRouteArgs {
   const RestaurantsRouteArgs({required this.location, this.key});
 
-  final _i14.LocationModel location;
+  final _i16.LocationModel location;
 
-  final _i12.Key? key;
+  final _i14.Key? key;
 
   @override
   String toString() {
@@ -479,9 +524,9 @@ class RestaurantsRouteArgs {
 class RestaurantDetailsRoute
     extends _i3.PageRouteInfo<RestaurantDetailsRouteArgs> {
   RestaurantDetailsRoute(
-      {_i12.Key? key,
+      {_i14.Key? key,
       required String id,
-      required _i14.RestaurantModel restaurant,
+      required _i16.RestaurantModel restaurant,
       required String heroTag})
       : super(RestaurantDetailsRoute.name,
             path: ':id',
@@ -499,16 +544,77 @@ class RestaurantDetailsRouteArgs {
       required this.restaurant,
       required this.heroTag});
 
-  final _i12.Key? key;
+  final _i14.Key? key;
 
   final String id;
 
-  final _i14.RestaurantModel restaurant;
+  final _i16.RestaurantModel restaurant;
 
   final String heroTag;
 
   @override
   String toString() {
     return 'RestaurantDetailsRouteArgs{key: $key, id: $id, restaurant: $restaurant, heroTag: $heroTag}';
+  }
+}
+
+/// generated route for
+/// [_i12.LodgingScreen]
+class LodgingRoute extends _i3.PageRouteInfo<LodgingRouteArgs> {
+  LodgingRoute({required String locId, _i14.Key? key})
+      : super(LodgingRoute.name,
+            path: '', args: LodgingRouteArgs(locId: locId, key: key));
+
+  static const String name = 'LodgingRoute';
+}
+
+class LodgingRouteArgs {
+  const LodgingRouteArgs({required this.locId, this.key});
+
+  final String locId;
+
+  final _i14.Key? key;
+
+  @override
+  String toString() {
+    return 'LodgingRouteArgs{locId: $locId, key: $key}';
+  }
+}
+
+/// generated route for
+/// [_i13.LodgingDetailsScreen]
+class LodgingDetailsRoute extends _i3.PageRouteInfo<LodgingDetailsRouteArgs> {
+  LodgingDetailsRoute(
+      {_i14.Key? key,
+      required String id,
+      required _i16.GMapsPlaceModel lodging,
+      required String heroTag})
+      : super(LodgingDetailsRoute.name,
+            path: ':id',
+            args: LodgingDetailsRouteArgs(
+                key: key, id: id, lodging: lodging, heroTag: heroTag),
+            rawPathParams: {'id': id});
+
+  static const String name = 'LodgingDetailsRoute';
+}
+
+class LodgingDetailsRouteArgs {
+  const LodgingDetailsRouteArgs(
+      {this.key,
+      required this.id,
+      required this.lodging,
+      required this.heroTag});
+
+  final _i14.Key? key;
+
+  final String id;
+
+  final _i16.GMapsPlaceModel lodging;
+
+  final String heroTag;
+
+  @override
+  String toString() {
+    return 'LodgingDetailsRouteArgs{key: $key, id: $id, lodging: $lodging, heroTag: $heroTag}';
   }
 }

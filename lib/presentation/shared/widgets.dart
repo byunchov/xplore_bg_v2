@@ -29,3 +29,4 @@ export 'package:xplore_bg_v2/presentation/shared/location/gallery_listview.widge
 export 'package:xplore_bg_v2/presentation/shared/loading/place_listtile.loading.dart';
 export 'package:xplore_bg_v2/presentation/shared/location/gallery_section.widget.dart';
 export 'package:xplore_bg_v2/presentation/shared/loading/nearby_card.widget.dart';
+export 'package:xplore_bg_v2/presentation/shared/loading/gallery_listview.widget.dart';

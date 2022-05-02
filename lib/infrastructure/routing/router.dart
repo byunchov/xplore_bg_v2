@@ -6,6 +6,8 @@ import 'package:xplore_bg_v2/presentation/category/category_filters.screen.dart'
 import 'package:xplore_bg_v2/presentation/gallery/gallery.screen.dart';
 import 'package:xplore_bg_v2/presentation/launcher/auth_checker.screen.dart';
 import 'package:xplore_bg_v2/presentation/place/place.screen.dart';
+import 'package:xplore_bg_v2/presentation/restaurants/lodging.screen.dart';
+import 'package:xplore_bg_v2/presentation/restaurants/lodging_deatils.screen.dart';
 import 'package:xplore_bg_v2/presentation/restaurants/restaurant_deatils.screen.dart';
 import 'package:xplore_bg_v2/presentation/restaurants/restaurants.screen.dart';
 import 'package:xplore_bg_v2/presentation/screens.dart';
@@ -109,9 +111,15 @@ import 'package:xplore_bg_v2/presentation/screens.dart';
           ],
         ),
         AutoRoute(path: 'gallery/:index', page: GalleryScreen),
-        // AutoRoute(path: 'hotels', page: RestaurantsScreen, children: [
-        //   AutoRoute(path: ":id", page: RestaurantDetailsScreen),
-        // ]),
+        AutoRoute(
+          path: 'lodging',
+          name: "LodgingRouter",
+          page: EmptyRouterPage,
+          children: [
+            AutoRoute(path: '', page: LodgingScreen),
+            AutoRoute(path: ":id", page: LodgingDetailsScreen),
+          ],
+        ),
       ],
     ),
   ],

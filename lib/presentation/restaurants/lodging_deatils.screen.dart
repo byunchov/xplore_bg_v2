@@ -6,32 +6,33 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:xplore_bg_v2/domain/core/generated/locale_keys.g.dart';
 import 'package:xplore_bg_v2/models/models.dart';
-import 'package:xplore_bg_v2/presentation/location/controllers/restaurants.provider.dart';
+import 'package:xplore_bg_v2/presentation/location/controllers/gmaps.provider.dart';
+import 'package:xplore_bg_v2/presentation/location/controllers/lodging.provider.dart';
 import 'package:xplore_bg_v2/presentation/location/location.screen.dart';
 import 'package:xplore_bg_v2/presentation/shared/location/review_card.widget.dart';
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
 
-class RestaurantDetailsScreen extends HookConsumerWidget {
-  final RestaurantModel restaurant;
+class LodgingDetailsScreen extends HookConsumerWidget {
+  final GMapsPlaceModel lodging;
   final String id;
   final String heroTag;
 
-  const RestaurantDetailsScreen({
+  const LodgingDetailsScreen({
     Key? key,
     @PathParam() required this.id,
-    required this.restaurant,
+    required this.lodging,
     required this.heroTag,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final details = ref.watch(restaurantDetailsProvider(restaurant.id));
+    // final details = ref.watch(lodgingDetailsProvider(restaurant.id));
 
     final scrollController = useScrollController();
 
     return LocationDetailsScreen(
       scrollController: scrollController,
-      location: restaurant,
+      location: lodging,
       heroTag: heroTag,
       slivers: [
         SliverToBoxAdapter(
@@ -44,32 +45,6 @@ class RestaurantDetailsScreen extends HookConsumerWidget {
           child: _ReviewSection(id),
         ),
       ],
-      bottomNavigationBar: ScrollToHideWidget(
-        controller: scrollController,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Column(
-              children: const [
-                Icon(Icons.heart_broken),
-                Text("Likes"),
-              ],
-            ),
-            Column(
-              children: const [
-                Icon(Icons.bookmarks),
-                Text("Bookmarks"),
-              ],
-            ),
-            Column(
-              children: const [
-                Icon(Icons.reviews_outlined),
-                Text("Reviews"),
-              ],
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
@@ -80,7 +55,7 @@ class _DetailSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final details = ref.watch(restaurantDetailsProvider(locId));
+    final details = ref.watch(gmapsPlaceDetailsProvider(locId));
     final theme = Theme.of(context);
     return Theme(
       data: theme.copyWith(
@@ -117,7 +92,7 @@ class _DetailSection extends ConsumerWidget {
     );
   }
 
-  List<Widget> _infoList(RestaurantModel data) {
+  List<Widget> _infoList(GMapsPlaceModel data) {
     return [
       // add location details ?
       if (data.residence != null && data.residence!.isNotEmpty)
@@ -173,7 +148,7 @@ class _ReviewSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final details = ref.watch(restaurantDetailsProvider(locId));
+    final details = ref.watch(gmapsPlaceDetailsProvider(locId));
 
     return SectionWithTitleWidget(
       title: SectionTitleWithDividerWidget(LocaleKeys.reviews.tr()),
@@ -181,7 +156,11 @@ class _ReviewSection extends ConsumerWidget {
         loading: () => const Center(child: CircularProgressIndicator()),
         data: (data) {
           if (data.reviews == null || data.reviews!.isEmpty) {
-            return const Center(child: Text("No reviews"));
+            return const SizedBox(
+              width: double.infinity,
+              height: 150,
+              child: Center(child: Text("No reviews")),
+            );
           }
           return ListView.separated(
             shrinkWrap: true,

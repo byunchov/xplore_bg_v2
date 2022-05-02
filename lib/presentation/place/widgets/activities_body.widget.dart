@@ -36,12 +36,15 @@ class PlaceActivitiesBody extends StatelessWidget {
                   },
                 ),
               ),
-              const SizedBox(width: 15),
+              const SizedBox(width: 16),
               Expanded(
                 child: PlaceActivitiyColorCard(
                   text: LocaleKeys.nearby_hotels.tr(),
                   color: Colors.blueAccent[400]!,
                   icon: Icons.hotel_rounded,
+                  callback: () {
+                    context.pushRoute(LodgingRouter(children: [LodgingRoute(locId: place.id)]));
+                  },
                 ),
               ),
             ],

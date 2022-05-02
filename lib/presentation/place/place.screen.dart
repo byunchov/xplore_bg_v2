@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:auto_route/auto_route.dart';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -10,6 +12,7 @@ import 'package:xplore_bg_v2/domain/core/generated/locale_keys.g.dart';
 
 import 'package:xplore_bg_v2/models/models.dart';
 import 'package:xplore_bg_v2/presentation/bookmarks/controllers/bookmarks.controller.dart';
+import 'package:xplore_bg_v2/presentation/gallery/controllers/gallery.provider.dart';
 import 'package:xplore_bg_v2/presentation/location/location.screen.dart';
 import 'package:xplore_bg_v2/presentation/place/controllers/note_action.controller.dart';
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
@@ -33,16 +36,18 @@ class PlaceDetailsScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final scrollController = useScrollController();
 
+    log(place.id, name: runtimeType.toString());
+
     return LocationDetailsScreen(
       scrollController: scrollController,
       location: place,
       heroTag: heroTag,
       slivers: [
         SliverToBoxAdapter(
-          child: LocationGallerySection(locationId: place.id, provider: placeDetailsProvider),
+          child: LocationGallerySection(locationId: place.id),
         ),
         SliverToBoxAdapter(
-          child: _DescriptionSection(locationId: place.id, provider: placeDetailsProvider),
+          child: _DescriptionSection(locationId: place.id),
         ),
         SliverToBoxAdapter(
           child: _ActivitySection(place: place),
@@ -104,21 +109,19 @@ class _AutoHideBottomActionBar extends ConsumerWidget {
   }
 }
 
-class _DescriptionSection<T> extends ConsumerWidget {
+class _DescriptionSection extends ConsumerWidget {
   const _DescriptionSection({
     Key? key,
-    required this.provider,
     required this.locationId,
   }) : super(key: key);
 
   final String locationId;
-  final AutoDisposeFutureProviderFamily<T, String> provider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
 
-    final details = ref.watch(provider(locationId));
+    final details = ref.watch(placeDetailsProvider(locationId));
 
     return SectionWithTitleWidget(
       title: SectionTitleWithDividerWidget(LocaleKeys.section_description.tr()),
@@ -127,24 +130,21 @@ class _DescriptionSection<T> extends ConsumerWidget {
         child: details.when(
           data: (data) {
             if (data == null) {
-              return Container();
+              return const Text("No description found.");
             }
-            if (data is PlaceModel) {
-              return ExpandText(
-                data.description ?? "",
-                maxLines: 8,
-                collapsedHint: LocaleKeys.show_more.tr(),
-                expandedHint: LocaleKeys.show_less.tr(),
-                style: theme.textTheme.bodyLarge?.copyWith(fontSize: 17),
-                textAlign: TextAlign.justify,
-                expandArrowStyle: ExpandArrowStyle.both,
-                arrowSize: 25,
-                arrowColor: Theme.of(context).primaryColor,
-                arrowPadding: const EdgeInsets.only(top: 5),
-                hintTextStyle: TextStyle(color: Theme.of(context).primaryColor),
-              );
-            }
-            return Container();
+            return ExpandText(
+              data.description ?? "",
+              maxLines: 8,
+              collapsedHint: LocaleKeys.show_more.tr(),
+              expandedHint: LocaleKeys.show_less.tr(),
+              style: theme.textTheme.bodyLarge?.copyWith(fontSize: 17),
+              textAlign: TextAlign.justify,
+              expandArrowStyle: ExpandArrowStyle.both,
+              arrowSize: 25,
+              arrowColor: Theme.of(context).primaryColor,
+              arrowPadding: const EdgeInsets.only(top: 5),
+              hintTextStyle: TextStyle(color: theme.primaryColor),
+            );
           },
           error: (err, stack) {
             return Container();

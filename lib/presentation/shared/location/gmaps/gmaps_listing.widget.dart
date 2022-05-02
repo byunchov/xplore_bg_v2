@@ -1,45 +1,64 @@
-import 'dart:developer';
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loading_indicator/loading_indicator.dart';
-import 'package:xplore_bg_v2/domain/core/constants/widget.constants.dart';
-import 'package:xplore_bg_v2/domain/core/utils/config.util.dart';
-import 'package:xplore_bg_v2/domain/core/utils/google_maps.util.dart';
-import 'package:xplore_bg_v2/infrastructure/routing/router.gr.dart';
-import 'package:xplore_bg_v2/models/location/location.model.dart';
-import 'package:xplore_bg_v2/models/location/restaurant.model.dart';
-import 'package:xplore_bg_v2/presentation/location/controllers/restaurants.provider.dart';
-import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class RestaurantsScreen extends ConsumerStatefulWidget {
-  final LocationModel location;
-  const RestaurantsScreen(this.location, {Key? key}) : super(key: key);
+import 'package:xplore_bg_v2/domain/core/constants/widget.constants.dart';
+import 'package:xplore_bg_v2/infrastructure/routing/router.gr.dart';
+import 'package:xplore_bg_v2/models/models.dart';
+import 'package:xplore_bg_v2/presentation/location/controllers/gmaps.provider.dart';
+import 'package:xplore_bg_v2/presentation/place/controllers/place.provider.dart';
+import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
+
+class GMapsLisitngWidget extends ConsumerStatefulWidget {
+  final LocationIdentifierModel locId;
+  final String heading;
+
+  const GMapsLisitngWidget({
+    Key? key,
+    required this.locId,
+    required this.heading,
+  }) : super(key: key);
 
   @override
-  ConsumerState<RestaurantsScreen> createState() => _RestaurantsScreenState();
+  ConsumerState<GMapsLisitngWidget> createState() => _GMapsLisitngWidgetState();
 }
 
-class _RestaurantsScreenState extends ConsumerState<RestaurantsScreen> {
-  GoogleMapController? controller;
+class _GMapsLisitngWidgetState extends ConsumerState<GMapsLisitngWidget> {
+  final PageController _carouselController = PageController(viewportFraction: 0.9);
+  GoogleMapController? _mapsController;
   BitmapDescriptor? _markerIcon;
-  List<Marker> _markers = [];
+  final Set<Marker> _markers = {};
+
+  late PlaceModel _location;
 
   @override
   void initState() {
-    // Future.delayed(const Duration(milliseconds: 0), _markerFromAsset);
-    // _markerFromAsset();
+    setState(() {
+      _location = ref.read(placeDetailsProvider(widget.locId.id)).value!;
+    });
+
+    final bitmap = ref.read(lodgingPinBitmapProvider);
+    _markerFromBitmap(bitmap);
+    _addLocationMarker();
+
     super.initState();
   }
 
   @override
+  void dispose() {
+    _mapsController?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final restaurantList = ref.watch(restaurantsListProvider(widget.location.coordinates!));
-    // _createMarkerImageFromAsset(context);
+    final restaurantList = ref.watch(gmapsPlaceListProvider(widget.locId));
 
     return Scaffold(
       body: Stack(
@@ -51,16 +70,16 @@ class _RestaurantsScreenState extends ConsumerState<RestaurantsScreen> {
               myLocationButtonEnabled: false,
               initialCameraPosition: CameraPosition(
                 target: LatLng(
-                  widget.location.coordinates!.latitude,
-                  widget.location.coordinates!.longitude,
+                  _location.coordinates!.latitude,
+                  _location.coordinates!.longitude,
                 ),
-                zoom: 14,
+                zoom: 14.3,
               ),
-              markers: Set.from(_markers),
+              markers: _markers,
               onMapCreated: _onMapCreated,
             ),
           ),
-          GalleryOverlayWidgets.backButtonAndTitleOverlay(context, "Restaurants"),
+          GalleryOverlayWidgets.backButtonAndTitleOverlay(context, widget.heading),
           restaurantList.when(
             loading: () {
               return Align(
@@ -84,10 +103,9 @@ class _RestaurantsScreenState extends ConsumerState<RestaurantsScreen> {
                   height: 250.0,
                   width: MediaQuery.of(context).size.width,
                   child: CarouselSliderWidget(
-                    autoPlay: false,
-                    showIndicator: false,
-                    viewportFraction: 0.9,
-                    children: data.map((e) => MapCardWidget(location: e)).toList(),
+                    controller: _carouselController,
+                    children: data.map((e) => MapCardWidget(place: e)).toList(),
+                    onPageChanged: _animateCameraToPosition,
                   ),
                 ),
               );
@@ -98,61 +116,89 @@ class _RestaurantsScreenState extends ConsumerState<RestaurantsScreen> {
     );
   }
 
-  void _createMarkerImageFromAsset(BuildContext context) {
-    final ImageConfiguration imageConfiguration =
-        createLocalImageConfiguration(context, size: const Size.square(48));
-    BitmapDescriptor.fromAssetImage(imageConfiguration, AppConfig.restaurantPinIcon)
-        .then(_updateBitmap);
-  }
-
-  void _markerFromAsset() async {
-    final marker = await GMapsUtils.getBytesFromAsset(AppConfig.restaurantPinIcon, 95);
-    setState(() {
-      _markerIcon = BitmapDescriptor.fromBytes(marker);
-    });
-  }
-
   void _onMapCreated(GoogleMapController controllerParam) {
     setState(() {
-      controller = controllerParam;
+      _mapsController = controllerParam;
     });
   }
 
-  void _updateBitmap(BitmapDescriptor bitmap) {
+  void _markerFromBitmap(Uint8List bitmap) {
     setState(() {
-      _markerIcon = bitmap;
+      _markerIcon = BitmapDescriptor.fromBytes(bitmap);
     });
   }
 
-  void _addMarkers(List<LocationModel> data) {
+  void _addLocationMarker() {
+    setState(() {
+      _markers.add(
+        Marker(
+          markerId: MarkerId(_location.id),
+          position: LatLng(_location.coordinates!.latitude, _location.coordinates!.longitude),
+          icon: BitmapDescriptor.defaultMarker,
+          onTap: () {},
+        ),
+      );
+    });
+  }
+
+  void _addMarkers(List<GMapsPlaceModel> data) {
     final markers = data.map<Marker>((location) {
+      final position = LatLng(location.coordinates!.latitude, location.coordinates!.longitude);
       return Marker(
         markerId: MarkerId(location.id),
-        position: LatLng(location.coordinates!.latitude, location.coordinates!.longitude),
-        infoWindow: InfoWindow(title: location.name, snippet: location.residence),
+        position: position,
+        infoWindow: InfoWindow(
+          title: location.name,
+          snippet: location.residence,
+          onTap: () {
+            context.router.push(LodgingDetailsRoute(
+              id: location.id,
+              lodging: location,
+              heroTag: location.id,
+            ));
+          },
+        ),
         icon: _markerIcon ?? BitmapDescriptor.defaultMarker,
-        onTap: () {},
+        onTap: () {
+          final index = _markers.toList().indexWhere((element) => element.position == position);
+          _carouselController.jumpToPage(index - 1);
+        },
       );
-    }).toList();
+    });
 
     setState(() {
-      _markers = markers;
+      _markers.addAll(markers);
     });
+  }
+
+  void _animateCameraToPosition(int index) {
+    final marker = _markers.elementAt(index + 1);
+    _mapsController?.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: marker.position,
+          zoom: 20,
+          bearing: 45.0,
+          tilt: 45.0,
+        ),
+      ),
+    );
   }
 }
 
 class MapCardWidget extends StatelessWidget {
-  final RestaurantModel location;
+  final GMapsPlaceModel place;
   const MapCardWidget({
     Key? key,
-    required this.location,
+    required this.place,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     const cardRadius = WidgetConstants.kCradBorderRadius;
     const double cardHeight = 220;
-    final heroTag = UniqueKey().toString();
+    // final heroTag = UniqueKey().toString();
+    final heroTag = place.id;
 
     final theme = Theme.of(context);
 
@@ -163,8 +209,7 @@ class MapCardWidget extends StatelessWidget {
       child: InkWell(
         onTap: () {
           print(context.router.current.meta);
-          context.router.push(
-              RestaurantDetailsRoute(id: location.id, restaurant: location, heroTag: heroTag));
+          context.router.push(LodgingDetailsRoute(id: place.id, heroTag: heroTag, lodging: place));
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -180,7 +225,7 @@ class MapCardWidget extends StatelessWidget {
                     topRight: Radius.circular(cardRadius),
                   ),
                   child: CustomCachedImage(
-                    imageUrl: location.thumbnail.url,
+                    imageUrl: place.thumbnail.url,
                   ),
                 ),
               ),
@@ -193,7 +238,7 @@ class MapCardWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      location.name,
+                      place.name,
                       maxLines: 1,
                       textAlign: TextAlign.left,
                       overflow: TextOverflow.ellipsis,
@@ -213,7 +258,7 @@ class MapCardWidget extends StatelessWidget {
                         const SizedBox(width: 2),
                         Expanded(
                           child: Text(
-                            location.residence!,
+                            place.residence!,
                             maxLines: 1,
                             textAlign: TextAlign.left,
                             overflow: TextOverflow.ellipsis,
@@ -234,7 +279,7 @@ class MapCardWidget extends StatelessWidget {
                     Row(
                       children: [
                         RatingBar.builder(
-                          initialRating: location.rating,
+                          initialRating: place.rating,
                           minRating: 0,
                           direction: Axis.horizontal,
                           allowHalfRating: true,
@@ -250,7 +295,7 @@ class MapCardWidget extends StatelessWidget {
                         ),
                         Container(width: 5),
                         Text(
-                          '${location.rating} (${location.reviewsCount}) ${location.category}',
+                          '${place.rating} (${place.reviewsCount}) ${place.category}',
                           // style: TextStyle(fontWeight: FontWeight.w500, fontSize: 13),
                           style: theme.textTheme.labelMedium,
                         ),

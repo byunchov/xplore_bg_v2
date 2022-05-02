@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:auto_route/annotations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -7,18 +9,16 @@ import 'package:photo_view/photo_view_gallery.dart';
 import 'package:xplore_bg_v2/models/models.dart';
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
 
-final galleryStateProvider = StateProvider<GalleryModel>((ref) {
-  return GalleryModel([]);
-});
+import 'controllers/gallery.provider.dart';
 
 class GalleryScreen extends ConsumerStatefulWidget {
   // final PageController pageController;
-  final GalleryModel gallery;
   final int index;
+  final String id;
 
   const GalleryScreen({
     Key? key,
-    required this.gallery,
+    @PathParam() required this.id,
     @PathParam() this.index = 0,
   }) : super(key: key);
 
@@ -45,38 +45,52 @@ class _GalleryScreenState extends ConsumerState<GalleryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final gallery = ref.watch(galleryStateProvider);
+    final gallery = ref.watch(galleryStateProvider(widget.id));
+    log(widget.id, name: runtimeType.toString());
+
+    // final gallery = widget.gallery;
+
     return Scaffold(
-      body: Stack(
-        alignment: Alignment.bottomLeft,
-        children: [
-          PhotoViewGallery.builder(
-            pageController: _pageController,
-            itemCount: widget.gallery.itemCount,
-            scrollPhysics: const BouncingScrollPhysics(),
-            builder: (ctx, index) {
-              final imgUrl = widget.gallery.items[index].url;
-              return PhotoViewGalleryPageOptions(
-                imageProvider: CachedNetworkImageProvider(imgUrl),
-                minScale: PhotoViewComputedScale.contained,
-                maxScale: PhotoViewComputedScale.contained * 3,
-                heroAttributes: PhotoViewHeroAttributes(tag: imgUrl),
-              );
-            },
-            onPageChanged: (index) {
-              setState(() {
-                _index = index;
-              });
-            },
-          ),
-          ...GalleryOverlayWidgets.backButtonAndGalleryStatsOverlay(
-            context,
-            currentIndex: _index + 1,
-            totalItems: widget.gallery.itemCount,
-            author: widget.gallery.items[_index].author,
-            showCurrentPosition: true,
-          ),
-        ],
+      body: gallery.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        data: (data) {
+          return Stack(
+            alignment: Alignment.bottomLeft,
+            children: [
+              PhotoViewGallery.builder(
+                pageController: _pageController,
+                itemCount: data.itemCount,
+                scrollPhysics: const BouncingScrollPhysics(),
+                builder: (ctx, index) {
+                  final imgUrl = data.items[index].url;
+                  return PhotoViewGalleryPageOptions(
+                    imageProvider: CachedNetworkImageProvider(imgUrl),
+                    minScale: PhotoViewComputedScale.contained,
+                    maxScale: PhotoViewComputedScale.contained * 3,
+                    heroAttributes: PhotoViewHeroAttributes(tag: imgUrl),
+                  );
+                },
+                onPageChanged: (index) {
+                  setState(() {
+                    _index = index;
+                  });
+                },
+              ),
+              ...GalleryOverlayWidgets.backButtonAndGalleryStatsOverlay(
+                context,
+                currentIndex: _index + 1,
+                totalItems: data.itemCount,
+                author: data.items[_index].author,
+                showCurrentPosition: true,
+              ),
+            ],
+          );
+        },
+        error: (e, stk) => BlankPage(
+          icon: Icons.error_outline_rounded,
+          heading: "Error",
+          shortText: e.toString(),
+        ),
       ),
     );
   }
