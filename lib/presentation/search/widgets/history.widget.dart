@@ -54,6 +54,7 @@ class SearchHistoryWidget extends ConsumerWidget {
 
     final history = ref.watch(searchHistoryProvider);
     final controller = ref.watch(searchHistoryProvider.notifier);
+    final searchController = ref.read(searchTextControllerProvider);
 
     return Visibility(
       visible: history.isNotEmpty,
@@ -78,6 +79,7 @@ class SearchHistoryWidget extends ConsumerWidget {
                 ),
                 onTap: () async {
                   controller.setSearchTermFromHistory(term);
+
                   FocusManager.instance.primaryFocus?.unfocus();
                 },
               );

@@ -33,14 +33,15 @@ class CategoryFilterScreen extends ConsumerWidget {
           ),
         ),
       ),
-      body: ListView(
-        physics: const BouncingScrollPhysics(),
-        children: [
-          _SubcategoryFacets(tag),
-          _SortCriteriaSection(tag),
-          _OrderbySection(tag),
-        ],
-      ),
+      body: _CategoryFiltersWidget(tag),
+      // body: ListView(
+      //   physics: const BouncingScrollPhysics(),
+      //   children: [
+      //     _SubcategoryFacets(tag),
+      //     _SortCriteriaSection(tag),
+      //     _OrderbySection(tag),
+      //   ],
+      // ),
     );
   }
 }
@@ -201,6 +202,87 @@ class __SubcategoryFacetsState extends ConsumerState<_SubcategoryFacets> {
         }
         setState(() {
           checkBox.value = value!;
+        });
+      },
+    );
+  }
+}
+
+class _CategoryFiltersWidget extends ConsumerStatefulWidget {
+  final String tag;
+  const _CategoryFiltersWidget(this.tag, {Key? key}) : super(key: key);
+
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => __CategoryFiltersWidgetState();
+}
+
+class __CategoryFiltersWidgetState extends ConsumerState<_CategoryFiltersWidget> {
+  final sortCriteria = [
+    SortCtiteria(name: tr('tag_loves'), criteria: CategorySortableCriteria.like_count),
+    SortCtiteria(name: tr('tag_rating'), criteria: CategorySortableCriteria.rating),
+  ];
+
+  final orderDirection = [
+    SortOrderDirection(name: tr('tag_order_asc'), order: CategorySortOrder.asc),
+    SortOrderDirection(name: tr('tag_order_desc'), order: CategorySortOrder.desc),
+  ];
+
+  late SortOrderDirection _orderDirection = orderDirection.first;
+  late SortCtiteria _currentSortCtiteria;
+
+  @override
+  Widget build(BuildContext context) {
+    final order = ref.read(categorySortOrderDirectionProvider(widget.tag));
+    final criteria = ref.read(categorySortCriteriaProvider(widget.tag));
+
+    _orderDirection = orderDirection.firstWhere((element) => element.order == order);
+    _currentSortCtiteria = sortCriteria.firstWhere((element) => element.criteria == criteria);
+
+    return ListView(
+      physics: const BouncingScrollPhysics(),
+      children: [
+        _SubcategoryFacets(widget.tag),
+        ExpansionTile(
+          title: const Text(LocaleKeys.criteria).tr(),
+          initiallyExpanded: true,
+          leading: const Icon(Icons.access_time),
+          children: sortCriteria.map(_radioBtnCriteria).toList(),
+        ),
+        ExpansionTile(
+          title: const Text(LocaleKeys.criteria).tr(),
+          initiallyExpanded: true,
+          leading: const Icon(Icons.access_time),
+          children: orderDirection.map(_radioBtnOrderBy).toList(),
+        ),
+      ],
+    );
+  }
+
+  Widget _radioBtnOrderBy(SortOrderDirection direction) {
+    return RadioListTile<SortOrderDirection>(
+      value: direction,
+      groupValue: _orderDirection,
+      title: Text(direction.name),
+      onChanged: (value) {
+        print("Radio btn value is: ${value?.order.name}");
+        ref.read(categorySortOrderDirectionProvider(widget.tag).state).state = value!.order;
+        setState(() {
+          _orderDirection = value;
+        });
+      },
+    );
+  }
+
+  Widget _radioBtnCriteria(SortCtiteria criteria) {
+    return RadioListTile<SortCtiteria>(
+      value: criteria,
+      groupValue: _currentSortCtiteria,
+      title: Text(criteria.name),
+      onChanged: (value) {
+        print("Radio btn value is: ${value?.criteria.name}");
+        ref.read(categorySortCriteriaProvider(widget.tag).state).state = value!.criteria;
+        setState(() {
+          _currentSortCtiteria = value;
         });
       },
     );

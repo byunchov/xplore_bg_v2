@@ -1,6 +1,5 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:line_icons/line_icons.dart';
@@ -27,7 +26,7 @@ class UserProfileScreen extends ConsumerWidget {
         automaticallyImplyLeading: false,
 
         title: AppbarTitleWidget(
-          title: tr("menu_user_profile"),
+          title: LocaleKeys.menu_user_profile.tr(),
           actions: [
             AppbarActionWidget(
               iconData: user != null ? Icons.logout : Icons.login,
@@ -138,14 +137,14 @@ class UserProfileScreen extends ConsumerWidget {
                   children: [
                     _userStatsWidget(
                       context,
-                      title: tr("favourites"),
+                      title: LocaleKeys.favourites.tr(),
                       subtitle: "154",
                       iconData: LineIcons.heartAlt,
                       iconColor: Colors.red,
                     ),
                     _userStatsWidget(
                       context,
-                      title: tr("menu_bookmarks"),
+                      title: LocaleKeys.bookmarks.tr(),
                       subtitle: "34",
                       iconData: Icons.bookmark,
                       iconColor: Colors.lightBlue,

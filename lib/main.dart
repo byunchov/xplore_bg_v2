@@ -5,20 +5,29 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:xplore_bg_v2/domain/core/utils/config.util.dart';
 import 'package:xplore_bg_v2/domain/core/utils/google_maps.util.dart';
 import 'package:xplore_bg_v2/infrastructure/routing/router.gr.dart';
-import 'package:xplore_bg_v2/infrastructure/routing/router.gr.dart';
 import 'package:xplore_bg_v2/infrastructure/theme/apptheme.provider.dart';
 import 'package:xplore_bg_v2/infrastructure/theme/themes.dart';
 import 'package:xplore_bg_v2/initializer.dart';
 import 'package:xplore_bg_v2/presentation/location/controllers/gmaps.provider.dart';
 
+// TODO Add user model and update auth provider and repo
+// TODO create loading card for featured places
+// TODO fix uaer auth on app load
+// TODO refactor explore screen
+// TODO add userloaction service and acc. providers
+// TODO finish user screen
+// TODO add user profile edit
+// TODO add user auth checks troughout buttons
+// TODO add show more screen and acc. providers
+// TODO add reiew content page
+// TODO add clear all in category filter page
+// TODO add nearby section to place details
 void main() async {
   await Initializer.init();
 
   final restaurantPinBitmapArray =
       await GMapsUtils.getBytesFromAsset(AppConfig.restaurantPinIcon, 95);
   final lodgingPinBitmapArray = await GMapsUtils.getBytesFromAsset(AppConfig.hotelPinIcon, 95);
-
-  print(restaurantPinBitmapArray);
 
   runApp(
     EasyLocalization(
@@ -64,40 +73,3 @@ class MainApplication extends ConsumerWidget {
     );
   }
 }
-
-/* 
-class MyApp extends ConsumerWidget {
-  MyApp({Key? key}) : super(key: key);
-  final _appRouter = AppRouter(authGuard: AuthGuard(ref));
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    ref.read(appThemeProvider.notifier).loadThemeMode();
-    final darkModeEnabled = ref.watch(appThemeProvider);
-    final auth = ref.watch(authControllerProvider);
-
-    return MaterialApp.router(
-      title: AppConfig.appName,
-      theme: AppThemes.kLigthtTheme,
-      darkTheme: AppThemes.kDarkTheme,
-      themeMode: darkModeEnabled ? ThemeMode.dark : ThemeMode.light,
-      debugShowCheckedModeBanner: false,
-      supportedLocales: context.supportedLocales,
-      localizationsDelegates: context.localizationDelegates,
-      locale: context.locale,
-      // routerDelegate: _appRouter.declarativeDelegate(
-      //   routes: (ctx) {
-      //     final user = ref.read(authControllerProvider);
-      //     return [
-      //       if (user != null) const HomeRoute() else const SigninRoute(),
-      //     ];
-      //   },
-      // ),
-      routerDelegate: _appRouter.delegate(),
-      routeInformationParser: _appRouter.defaultRouteParser(),
-      // home: const PlaceDetailsScreen(),
-    );
-  }
-}
- */

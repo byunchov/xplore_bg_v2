@@ -192,12 +192,7 @@ class _NearbySection extends ConsumerWidget {
           width: double.infinity,
           height: 215,
           // color: Colors.blue,
-          child: ref.watch(likedProvider).maybeWhen(
-                data: (data) => NearbyListViewBuilder(items: data),
-                error: (error, stackTrace) => Text("Error: $error"),
-                loading: () => const NearbyListViewBuilder(),
-                orElse: () => const Text("Or else clause"),
-              ),
+          child: Container(),
         ),
       ),
     );

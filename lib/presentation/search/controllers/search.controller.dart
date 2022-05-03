@@ -1,9 +1,13 @@
 import 'dart:convert';
+import 'dart:developer';
 
+import 'package:dio/dio.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:meilisearch/meilisearch.dart';
 import 'package:xplore_bg_v2/domain/core/constants/storage.constants.dart';
+import 'package:xplore_bg_v2/infrastructure/repositories/search/search.repository.dart';
 import 'package:xplore_bg_v2/models/models.dart';
 
 final searchClientProvider = Provider<MeiliSearchClient>((ref) {
@@ -16,14 +20,43 @@ final searchClientProvider = Provider<MeiliSearchClient>((ref) {
 
 final searchFieldProvider = StateProvider.autoDispose<String>((ref) => "");
 
-final locationSearchProvider = FutureProvider.autoDispose<List<PlaceModel>>((ref) async {
+final paginatedPlaceSearchProvider =
+    StateNotifierProvider.autoDispose<PaginationNotifier<PlaceModel>, PaginationState<PlaceModel>>(
+        (ref) {
   final query = ref.watch(searchFieldProvider);
-  if (query.isNotEmpty) {
-    final index = await ref.read(searchClientProvider).getIndex('locations');
-    final searchResult = await index.search(query, limit: 10, filter: ['lang = "bg"']);
-    return searchResult.hits!.map((e) => PlaceModel.previewFromJson(e)).toList();
-  }
-  return [];
+
+  return PaginationNotifier<PlaceModel>(
+      itemsPerBatch: 10,
+      fetchNextItems: (item, {limit}) async {
+        final repository = ref.watch(searcRepositoryProvider);
+
+        final cancelToken = CancelToken();
+        ref.onDispose(cancelToken.cancel);
+
+        await Future<void>.delayed(const Duration(milliseconds: 250));
+        if (cancelToken.isCancelled) throw AbortedException();
+
+        log("searching for $query", name: "categoryPaginatedListProvider");
+
+        final result = await repository.search(
+          'locations',
+          query: query,
+          limit: limit,
+          offset: item?.offset,
+          attributesToRetrieve: repository.previewAttributes,
+        );
+        final data = result.hits?.map((e) => PlaceModel.previewFromJson(e)).toList();
+
+        return data ?? [];
+      })
+    ..init();
+});
+
+class AbortedException implements Exception {}
+
+final searchTextControllerProvider = Provider.autoDispose<TextEditingController>((ref) {
+  ref.onDispose(() => ref.state.dispose());
+  return TextEditingController();
 });
 
 class SearchResultNotifier extends StateNotifier<List<PlaceModel>> {
@@ -102,6 +135,7 @@ class SearchHistoryNotifier extends StateNotifier<List<String>> {
 
   void setSearchTermFromHistory(String query) {
     addSearchTerm(query);
+    _reader(searchTextControllerProvider).text = query;
     _reader(searchFieldProvider.notifier).state = query;
   }
 }

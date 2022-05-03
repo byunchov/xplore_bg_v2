@@ -8,14 +8,14 @@ class PaginatedListViewWidget<T> extends HookConsumerWidget {
     Key? key,
     required this.provider,
     required this.builder,
-    required this.loadingPlaceholder,
+    this.loadingPlaceholder,
     required this.emptyResultPlaceholder,
     this.errorPlaceholderBuilder,
   }) : super(key: key);
   final dynamic provider;
   final Widget Function(dynamic error)? errorPlaceholderBuilder;
   final Widget Function(T item) builder;
-  final Widget loadingPlaceholder;
+  final Widget? loadingPlaceholder;
   final Widget emptyResultPlaceholder;
 
   @override
@@ -60,7 +60,9 @@ class PaginatedListViewWidget<T> extends HookConsumerWidget {
 
         return _ListBuilder<T>(items: items, builder: builder);
       },
-      loading: () => SliverFillRemaining(child: loadingPlaceholder),
+      loading: () => SliverFillRemaining(
+        child: loadingPlaceholder ?? const _DefaultLoadingPlaceholder(),
+      ),
       error: (e, stk) => SliverFillRemaining(
         child: errorPlaceholderBuilder != null
             ? errorPlaceholderBuilder?.call(e)
@@ -160,6 +162,30 @@ class _ListBuilder<T> extends StatelessWidget {
           childCount: items.length,
         ),
       ),
+    );
+  }
+}
+
+class _DefaultLoadingPlaceholder extends StatelessWidget {
+  const _DefaultLoadingPlaceholder({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    const item = PlaceTileLoadingWidget();
+    final itemCount = (size.height - kToolbarHeight) / item.cardHeight;
+
+    return ListView.separated(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      padding: const EdgeInsets.all(16),
+      itemCount: itemCount.ceil(),
+      itemBuilder: (contex, index) {
+        return item;
+      },
+      separatorBuilder: (context, index) {
+        return const SizedBox(height: 15);
+      },
     );
   }
 }
