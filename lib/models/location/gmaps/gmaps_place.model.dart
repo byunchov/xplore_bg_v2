@@ -28,16 +28,16 @@ class GMapsPlaceModel extends LocationModel {
     this.website,
     this.reviews,
   }) : super(
-          id: id,
-          name: name,
-          category: category,
-          subcategory: subcategory,
-          residence: residence,
-          reviewsCount: reviewsCount,
-          rating: rating,
-          coordinates: coordinates,
-          thumbnail: thumbnail,
-        );
+            id: id,
+            name: name,
+            category: category,
+            subcategory: subcategory,
+            residence: residence,
+            reviewsCount: reviewsCount,
+            rating: rating,
+            coordinates: coordinates,
+            thumbnail: thumbnail,
+            gallery: gallery);
 
   GMapsPlaceModel copyWith({
     String? id,

@@ -1,14 +1,12 @@
-import 'dart:convert';
 import 'dart:typed_data';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loading_indicator/loading_indicator.dart';
-
 import 'package:xplore_bg_v2/domain/core/constants/widget.constants.dart';
+import 'package:xplore_bg_v2/domain/core/utils/google_maps.util.dart';
 import 'package:xplore_bg_v2/infrastructure/routing/router.gr.dart';
 import 'package:xplore_bg_v2/models/models.dart';
 import 'package:xplore_bg_v2/presentation/location/controllers/gmaps.provider.dart';
@@ -42,8 +40,11 @@ class _GMapsLisitngWidgetState extends ConsumerState<GMapsLisitngWidget> {
     setState(() {
       _location = ref.read(placeDetailsProvider(widget.locId.id)).value!;
     });
+    final provider = widget.locId.type == GMapsPlaceType.restaurant
+        ? restaurantPinBitmapProvider
+        : lodgingPinBitmapProvider;
 
-    final bitmap = ref.read(lodgingPinBitmapProvider);
+    final bitmap = ref.read(provider);
     _markerFromBitmap(bitmap);
     _addLocationMarker();
 
@@ -151,9 +152,9 @@ class _GMapsLisitngWidgetState extends ConsumerState<GMapsLisitngWidget> {
           title: location.name,
           snippet: location.residence,
           onTap: () {
-            context.router.push(LodgingDetailsRoute(
+            context.router.push(GMapsDetailsRoute(
               id: location.id,
-              lodging: location,
+              place: location,
               heroTag: location.id,
             ));
           },
@@ -209,7 +210,7 @@ class MapCardWidget extends StatelessWidget {
       child: InkWell(
         onTap: () {
           print(context.router.current.meta);
-          context.router.push(LodgingDetailsRoute(id: place.id, heroTag: heroTag, lodging: place));
+          context.router.push(GMapsDetailsRoute(id: place.id, heroTag: heroTag, place: place));
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,

@@ -1,61 +1,5 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:xplore_bg_v2/presentation/bookmarks/bookmarked.screen.dart';
-import 'package:xplore_bg_v2/presentation/bookmarks/liked.screen.dart';
-import 'package:xplore_bg_v2/presentation/category/category.screen.dart';
-import 'package:xplore_bg_v2/presentation/category/category_filters.screen.dart';
-import 'package:xplore_bg_v2/presentation/gallery/gallery.screen.dart';
-import 'package:xplore_bg_v2/presentation/launcher/auth_checker.screen.dart';
-import 'package:xplore_bg_v2/presentation/place/place.screen.dart';
-import 'package:xplore_bg_v2/presentation/restaurants/lodging.screen.dart';
-import 'package:xplore_bg_v2/presentation/restaurants/lodging_deatils.screen.dart';
-import 'package:xplore_bg_v2/presentation/restaurants/restaurant_deatils.screen.dart';
-import 'package:xplore_bg_v2/presentation/restaurants/restaurants.screen.dart';
 import 'package:xplore_bg_v2/presentation/screens.dart';
-
-/* @MaterialAutoRouter(
-  
-  routes: <AutoRoute>[
-    AutoRoute(page: HomeScreen, initial: true, children: [
-      AutoRoute(path: 'explore', page: ExploreScreen),
-      AutoRoute(
-        path: 'categories',
-        page: LandmarkCategoriesScreen,
-        children: [
-          AutoRoute(
-            path: ':tag',
-            page: CategoryScreen,
-            // children: [
-            //   AutoRoute(path: 'filters'),
-            // ],
-          ),
-        ],
-      ),
-      AutoRoute(
-        path: 'bookmarks',
-        page: BookmarksScreen,
-        children: [
-          AutoRoute(path: 'likes', page: LikedLocationsScreen),
-          AutoRoute(path: 'bookmark', page: BookmarkedLocationsScreen),
-        ],
-      ),
-      AutoRoute(path: 'user', page: UserProfileScreen),
-    ]),
-    AutoRoute(path: '/signin', page: SignInScreen),
-    AutoRoute(
-      path: "/location",
-      page: PlaceDetailsScreen,
-      children: [
-        AutoRoute(path: 'restaurants', page: RestaurantsScreen, children: [
-          AutoRoute(path: ":id", page: RestaurantDetailsScreen),
-        ]),
-        // AutoRoute(path: 'hotels', page: RestaurantsScreen, children: [
-        //   AutoRoute(path: ":id", page: RestaurantDetailsScreen),
-        // ]),
-      ],
-    ),
-  ],
-)
- */
 
 @AdaptiveAutoRouter(
   replaceInRouteName: 'Screen,Route',
@@ -101,13 +45,14 @@ import 'package:xplore_bg_v2/presentation/screens.dart';
       page: EmptyRouterPage,
       children: [
         AutoRoute(path: '', name: "LocationRoute", page: PlaceDetailsScreen),
+        AutoRoute(path: 'reviews/:id', page: PlaceReviewsScreen),
         AutoRoute(
           path: 'restaurants',
           name: "RestaurantsRouter",
           page: EmptyRouterPage,
           children: [
             AutoRoute(path: '', page: RestaurantsScreen),
-            AutoRoute(path: ":id", page: RestaurantDetailsScreen),
+            AutoRoute(path: ":id", page: GMapsDetailsScreen),
           ],
         ),
         AutoRoute(path: 'gallery/:index', page: GalleryScreen),
@@ -117,7 +62,7 @@ import 'package:xplore_bg_v2/presentation/screens.dart';
           page: EmptyRouterPage,
           children: [
             AutoRoute(path: '', page: LodgingScreen),
-            AutoRoute(path: ":id", page: LodgingDetailsScreen),
+            AutoRoute(path: ":id", page: GMapsDetailsScreen),
           ],
         ),
       ],

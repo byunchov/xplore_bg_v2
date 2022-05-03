@@ -1,8 +1,6 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:xplore_bg_v2/domain/core/generated/locale_keys.g.dart';
 import 'package:xplore_bg_v2/infrastructure/routing/router.gr.dart';
 import 'package:xplore_bg_v2/models/models.dart';
 import 'package:xplore_bg_v2/presentation/shared/pagination/paginated_list_view.widget.dart';
@@ -22,6 +20,8 @@ class CategoryScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     print(context.topRoute.path);
+
+    // ref.watch(categoryFacetsProvider(tag).select((value) => null));
 
     return Scaffold(
       appBar: AppBar(

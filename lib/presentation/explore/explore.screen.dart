@@ -264,8 +264,8 @@ class SearchBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Hero(
-      tag: "@searchWidget",
+    return Material(
+      color: Colors.transparent,
       child: InkWell(
         onTap: (() => context.router.navigate(const SearchRoute())),
         borderRadius: BorderRadius.circular(radius),
@@ -285,7 +285,7 @@ class SearchBarWidget extends StatelessWidget {
               children: [
                 const SizedBox(width: 10),
                 Icon(
-                  LineIcons.search,
+                  Icons.search,
                   size: 20,
                   color: Colors.grey[600],
                 ),

@@ -1,56 +1,13 @@
-import 'package:auto_route/annotations.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
 import 'package:xplore_bg_v2/domain/core/generated/locale_keys.g.dart';
 import 'package:xplore_bg_v2/models/models.dart';
 import 'package:xplore_bg_v2/presentation/location/controllers/gmaps.provider.dart';
-import 'package:xplore_bg_v2/presentation/location/controllers/lodging.provider.dart';
-import 'package:xplore_bg_v2/presentation/location/location.screen.dart';
-import 'package:xplore_bg_v2/presentation/shared/location/review_card.widget.dart';
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
 
-class LodgingDetailsScreen extends HookConsumerWidget {
-  final GMapsPlaceModel lodging;
-  final String id;
-  final String heroTag;
-
-  const LodgingDetailsScreen({
-    Key? key,
-    @PathParam() required this.id,
-    required this.lodging,
-    required this.heroTag,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // final details = ref.watch(lodgingDetailsProvider(restaurant.id));
-
-    final scrollController = useScrollController();
-
-    return LocationDetailsScreen(
-      scrollController: scrollController,
-      location: lodging,
-      heroTag: heroTag,
-      slivers: [
-        SliverToBoxAdapter(
-          child: LocationGallerySection(locationId: id),
-        ),
-        SliverToBoxAdapter(
-          child: _DetailSection(id),
-        ),
-        SliverToBoxAdapter(
-          child: _ReviewSection(id),
-        ),
-      ],
-    );
-  }
-}
-
-class _DetailSection extends ConsumerWidget {
-  const _DetailSection(this.locId, {Key? key}) : super(key: key);
+class DetailSectionWidget extends ConsumerWidget {
+  const DetailSectionWidget(this.locId, {Key? key}) : super(key: key);
   final String locId;
 
   @override
@@ -139,43 +96,5 @@ class _DetailSection extends ConsumerWidget {
           }).toList(),
         ),
     ];
-  }
-}
-
-class _ReviewSection extends ConsumerWidget {
-  const _ReviewSection(this.locId, {Key? key}) : super(key: key);
-  final String locId;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final details = ref.watch(gmapsPlaceDetailsProvider(locId));
-
-    return SectionWithTitleWidget(
-      title: SectionTitleWithDividerWidget(LocaleKeys.reviews.tr()),
-      child: details.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        data: (data) {
-          if (data.reviews == null || data.reviews!.isEmpty) {
-            return const SizedBox(
-              width: double.infinity,
-              height: 150,
-              child: Center(child: Text("No reviews")),
-            );
-          }
-          return ListView.separated(
-            shrinkWrap: true,
-            padding: EdgeInsets.zero,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: data.reviews!.length,
-            itemBuilder: ((_, index) {
-              final review = data.reviews![index];
-              return ReviewCardWidget(review: review, showRelativeTime: true);
-            }),
-            separatorBuilder: (_, __) => const Divider(),
-          );
-        },
-        error: (e, stk) => Center(child: Text(e.toString())),
-      ),
-    );
   }
 }

@@ -4,6 +4,7 @@ import 'package:xplore_bg_v2/domain/core/utils/typedef.util.dart';
 
 class ReviewModel {
   final String id;
+  final String locId;
   final String uid;
   final String fullName;
   final String profileImage;
@@ -16,6 +17,7 @@ class ReviewModel {
 
   ReviewModel({
     required this.id,
+    required this.locId,
     required this.uid,
     required this.fullName,
     required this.profileImage,
@@ -29,6 +31,7 @@ class ReviewModel {
 
   ReviewModel copyWith({
     String? id,
+    String? locId,
     String? uid,
     String? fullName,
     String? profileImage,
@@ -41,6 +44,7 @@ class ReviewModel {
   }) {
     return ReviewModel(
       id: id ?? this.id,
+      locId: locId ?? this.locId,
       uid: uid ?? this.uid,
       fullName: fullName ?? this.fullName,
       profileImage: profileImage ?? this.profileImage,
@@ -71,6 +75,7 @@ class ReviewModel {
   factory ReviewModel.fromMap(JsonMap map) {
     return ReviewModel(
       id: map['id'] ?? '',
+      locId: map['loc_id'] ?? '',
       uid: map['uid'] ?? '',
       fullName: map['fullName'] ?? '',
       profileImage: map['profileImage'] ?? '',
@@ -87,6 +92,7 @@ class ReviewModel {
   factory ReviewModel.fromGMaps(JsonMap map) {
     return ReviewModel(
       id: map['id'] ?? '',
+      locId: map['id'] ?? '',
       uid: map['uid'] ?? '',
       fullName: map['author_name'] ?? '',
       profileImage: map['profile_photo_url'] ?? '',

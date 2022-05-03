@@ -12,3 +12,7 @@ export 'package:xplore_bg_v2/models/location/review.model.dart';
 // GMaps models
 export 'package:xplore_bg_v2/models/location/gmaps/gmaps_place_id.model.dart';
 export 'package:xplore_bg_v2/models/location/gmaps/gmaps_place.model.dart';
+
+// Pagination models
+export 'package:xplore_bg_v2/infrastructure/pagination/pagination_notifier.dart';
+export 'package:xplore_bg_v2/models/pagination/pagination_state.model.dart';

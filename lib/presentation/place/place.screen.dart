@@ -9,6 +9,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:xplore_bg_v2/domain/core/generated/locale_keys.g.dart';
+import 'package:xplore_bg_v2/infrastructure/routing/router.gr.dart';
 
 import 'package:xplore_bg_v2/models/models.dart';
 import 'package:xplore_bg_v2/presentation/bookmarks/controllers/bookmarks.controller.dart';
@@ -18,7 +19,7 @@ import 'package:xplore_bg_v2/presentation/place/controllers/note_action.controll
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
 
 import 'controllers/place.provider.dart';
-import 'widgets/activities_body.widget.dart';
+import '../shared/places/details/activities_body.widget.dart';
 
 class PlaceDetailsScreen extends HookConsumerWidget {
   final PlaceModel place;
@@ -101,7 +102,9 @@ class _AutoHideBottomActionBar extends ConsumerWidget {
             id: id,
             field: 'review_count',
             iconStyle: const Icon(LineIcons.comments),
-            onPressed: () async {},
+            onPressed: () async {
+              context.router.navigate(PlaceReviewsRoute(id: id));
+            },
           ),
         ],
       ),

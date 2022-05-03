@@ -1,11 +1,9 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:xplore_bg_v2/domain/core/generated/locale_keys.g.dart';
 import 'package:xplore_bg_v2/domain/core/utils/google_maps.util.dart';
 import 'package:xplore_bg_v2/infrastructure/routing/router.gr.dart';
 import 'package:xplore_bg_v2/models/models.dart';
-import 'package:xplore_bg_v2/presentation/place/widgets/activity_cards.widget.dart';
+import 'package:xplore_bg_v2/presentation/shared/places/details/activity_cards.widget.dart';
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
 
 class PlaceActivitiesBody extends StatelessWidget {
@@ -29,10 +27,8 @@ class PlaceActivitiesBody extends StatelessWidget {
                   color: Colors.orange[300]!,
                   icon: Icons.restaurant_menu,
                   callback: () {
-                    // Navigator.of(context)
-                    //     .push(MaterialPageRoute(builder: (context) => RestaurantsScreen(place)));
                     context.pushRoute(
-                        RestaurantsRouter(children: [RestaurantsRoute(location: place)]));
+                        RestaurantsRouter(children: [RestaurantsRoute(locId: place.id)]));
                   },
                 ),
               ),

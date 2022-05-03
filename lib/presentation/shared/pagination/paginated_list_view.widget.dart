@@ -13,33 +13,26 @@ class PaginatedListViewWidget<T> extends HookConsumerWidget {
     this.errorPlaceholderBuilder,
   }) : super(key: key);
   final dynamic provider;
-  // final StateNotifierProvider<PaginationNotifier<T>, PaginationState<T>> provider;
   final Widget Function(dynamic error)? errorPlaceholderBuilder;
   final Widget Function(T item) builder;
   final Widget loadingPlaceholder;
   final Widget emptyResultPlaceholder;
-
-  //AutoDisposeStateNotifierProvider
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final scrollController = useScrollController();
 
     scrollController.addListener(() {
-      // log("maxScrollExtent -> $maxScroll", name: runtimeType.toString());
-      // log("currentScroll -> $currentScroll", name: runtimeType.toString());
-
       final maxScroll = scrollController.position.maxScrollExtent;
       final currentScroll = scrollController.position.pixels;
-      // final delta = MediaQuery.of(context).size.height * 0.1;
+      final delta = MediaQuery.of(context).size.height * 0.15;
 
       final isScrollable = maxScroll > 0;
-      final isAtPosition = (maxScroll == currentScroll);
-      // final isAtPosition = (maxScroll - currentScroll) <= delta;
+      // final isAtPosition = (maxScroll == currentScroll);
+      final isAtPosition = (maxScroll - currentScroll) <= delta;
 
       if (isAtPosition && isScrollable) {
         ref.read(provider.notifier).fetchNextBatch();
-        // log("Fetching more items...", name: runtimeType.toString());
       }
     });
 

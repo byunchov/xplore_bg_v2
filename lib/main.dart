@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:xplore_bg_v2/domain/core/utils/config.util.dart';
 import 'package:xplore_bg_v2/domain/core/utils/google_maps.util.dart';
 import 'package:xplore_bg_v2/infrastructure/routing/router.gr.dart';
+import 'package:xplore_bg_v2/infrastructure/routing/router.gr.dart';
 import 'package:xplore_bg_v2/infrastructure/theme/apptheme.provider.dart';
 import 'package:xplore_bg_v2/infrastructure/theme/themes.dart';
 import 'package:xplore_bg_v2/initializer.dart';

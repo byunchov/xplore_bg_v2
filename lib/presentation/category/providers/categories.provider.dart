@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
@@ -10,6 +12,12 @@ import 'package:xplore_bg_v2/presentation/category/models/filter_checkbox.model.
 
 final categoryPaginatedListProvider = StateNotifierProvider.autoDispose
     .family<PaginationNotifier<PlaceModel>, PaginationState<PlaceModel>, String>((ref, tag) {
+  final _ = ref.watch(categoryFacetsProvider(tag).select((value) => null));
+
+  final subcategoryFilters = ref.watch(subcategoryFilterListProvider(tag));
+  final sortBy = ref.watch(categorySortCriteriaProvider(tag));
+  final sortOrder = ref.watch(categorySortOrderDirectionProvider(tag));
+
   return PaginationNotifier<PlaceModel>(
       itemsPerBatch: 10,
       fetchNextItems: (item, {limit}) async {
@@ -28,7 +36,8 @@ final categoryPaginatedListProvider = StateNotifierProvider.autoDispose
           query: "",
           limit: limit,
           offset: item?.offset,
-          filter: ["category_tag=$tag"],
+          filter: ["category_tag=$tag", subcategoryFilters],
+          sort: ["${sortBy.name}:${sortOrder.name}"],
           attributesToRetrieve: repository.previewAttributes,
         );
         final data = result.hits?.map((e) => PlaceModel.previewFromJson(e)).toList();
@@ -84,6 +93,21 @@ final categoryFacetsProvider =
   final result = facets.entries.map((e) => SubcategoryCheckBox(name: e.key, itemCount: e.value));
 
   return result.toList();
+});
+
+final categorySortOrderDirectionProvider =
+    StateProvider.autoDispose.family<CategorySortOrder, String>((ref, tag) {
+  return CategorySortOrder.asc;
+});
+
+final categorySortCriteriaProvider =
+    StateProvider.autoDispose.family<CategorySortableCriteria, String>((ref, tag) {
+  return CategorySortableCriteria.rating;
+});
+
+final subcategoryFilterListProvider =
+    StateProvider.autoDispose.family<List<String>, String>((ref, tag) {
+  return [];
 });
 
 class AbortedException implements Exception {}
