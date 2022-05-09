@@ -50,6 +50,7 @@ class GalleryStatsWidget extends StatelessWidget {
           Text(
             author!,
             style: theme.textTheme.labelMedium?.copyWith(color: Colors.white),
+            overflow: TextOverflow.fade,
           ),
         ],
       ),

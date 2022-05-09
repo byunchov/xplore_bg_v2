@@ -21,7 +21,7 @@ class AuthCheckerScreen extends ConsumerWidget {
           } else {
             context.router.pushAndPopUntil(SigninRoute(
               onSignInCallback: (usr) {
-                SnackbarUtils.showSnackBar(context, message: "Welcome. ${usr.displayName}");
+                SnackbarUtils.showSnackBar(context, message: "Welcome. ${usr.fullName}");
               },
             ), predicate: (_) => true);
           }

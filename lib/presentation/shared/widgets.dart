@@ -11,6 +11,7 @@ export 'package:xplore_bg_v2/presentation/shared/widgets/scroll_to_hide.widget.d
 export 'package:xplore_bg_v2/presentation/shared/widgets/appbar_title.widget.dart';
 export 'package:xplore_bg_v2/presentation/shared/widgets/unfocus.widget.dart';
 export 'package:xplore_bg_v2/presentation/shared/pagination/paginated_list_view.widget.dart';
+export 'package:xplore_bg_v2/presentation/shared/widgets/signin_action_button.widget.dart';
 
 // Place widgets
 export 'package:xplore_bg_v2/presentation/shared/places/place_list_tile.widget.dart';

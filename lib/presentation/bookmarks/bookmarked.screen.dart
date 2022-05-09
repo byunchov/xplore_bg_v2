@@ -10,12 +10,14 @@ class BookmarkedLocationsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    const field = "bookmarks";
+
     return RefreshIndicator(
       onRefresh: () async {
-        ref.refresh(bookmarkedPlacesProvider.notifier);
+        ref.refresh(notedPlacesProvider(field).notifier);
       },
       child: PaginatedListViewWidget<PlaceModel>(
-        provider: bookmarkedPlacesProvider,
+        provider: notedPlacesProvider(field),
         emptyResultPlaceholder: BlankPage(
           heading: LocaleKeys.no_bookmarks.tr(),
           shortText: LocaleKeys.no_bookmarks_desc.tr(),

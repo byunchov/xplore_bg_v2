@@ -1,20 +1,87 @@
-import 'package:get/get.dart';
+// ignore_for_file: constant_identifier_names
 
-class ExploreController extends GetxController {
-  //TODO: Implement ExploreController
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:xplore_bg_v2/infrastructure/providers/general.provider.dart';
+import 'package:xplore_bg_v2/infrastructure/repositories/search/search.repository.dart';
+import 'package:xplore_bg_v2/models/models.dart';
+import 'package:xplore_bg_v2/presentation/search/controllers/search.controller.dart';
 
-  final count = 0.obs;
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {}
-  void increment() => count.value++;
+enum LocationSortType {
+  rating, // popular
+  review_count, // visited
+  like_count, // liked
 }
+
+final locationSortTypeProvider =
+    StateProvider.autoDispose<LocationSortType>((ref) => LocationSortType.rating);
+
+final locationSortProvider = FutureProvider.autoDispose<List<PlaceModel>>((ref) async {
+  final sortType = ref.watch(locationSortTypeProvider);
+  final lang = ref.watch(appLocaleProvider).languageCode;
+  final repository = ref.watch(searcRepositoryProvider);
+
+  final cancelToken = CancelToken();
+  ref.onDispose(cancelToken.cancel);
+
+  await Future<void>.delayed(const Duration(milliseconds: 250));
+  if (cancelToken.isCancelled) throw AbortedException();
+
+  final result = await repository.search(
+    'locations',
+    query: "",
+    limit: 5,
+    filter: ["lang = $lang"],
+    sort: ["${sortType.name}:desc"],
+    attributesToRetrieve: repository.previewAttributes,
+  );
+  final data = result.hits?.map((e) => PlaceModel.previewFromJson(e)).toList();
+
+  return data ?? [];
+});
+
+final locationsNearbyProvider = FutureProvider.autoDispose<List<PlaceModel>>((ref) async {
+  final lang = ref.watch(appLocaleProvider).languageCode;
+  final repository = ref.watch(searcRepositoryProvider);
+
+  final cancelToken = CancelToken();
+  ref.onDispose(cancelToken.cancel);
+
+  await Future<void>.delayed(const Duration(milliseconds: 250));
+  if (cancelToken.isCancelled) throw AbortedException();
+
+  final result = await repository.search(
+    'locations',
+    query: "",
+    limit: 10,
+    filter: ["lang = $lang"],
+    sort: ["_geoPoint(41.84126118480892, 23.48859392410678):asc"],
+    attributesToRetrieve: repository.previewAttributes,
+  );
+  final data = result.hits?.map((e) => PlaceModel.previewFromJson(e)).toList();
+
+  return data ?? [];
+});
+
+final featurePlacesProvider = FutureProvider<List<PlaceModel>>((ref) async {
+  final firestore = ref.read(firebaseFirestoreProvider);
+  final searchRepo = ref.read(searcRepositoryProvider);
+  final lang = ref.watch(appLocaleProvider).languageCode;
+
+  final featured =
+      await firestore.collection('featured').orderBy("created_at", descending: true).limit(1).get();
+  final docs = featured.docs;
+  if (docs.isNotEmpty) {
+    final doc = docs.first;
+    List<PlaceModel> locations = [];
+    for (var item in doc['locations']) {
+      final snap = await searchRepo.getDocument("locations", "${lang}_$item");
+      if (snap != null) {
+        locations.add(PlaceModel.previewFromJson(snap));
+      }
+    }
+    return locations;
+  }
+  return [];
+});

@@ -92,5 +92,7 @@ abstract class  LocaleKeys {
   static const bookmark_removed = 'bookmark_removed';
   static const favourite_added = 'favourite_added';
   static const favourite_removed = 'favourite_removed';
+  static const most_visited = 'most_visited';
+  static const most_liked = 'most_liked';
 
 }

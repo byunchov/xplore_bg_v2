@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:xplore_bg_v2/presentation/location/reviews/add_review.screen.dart';
 import 'package:xplore_bg_v2/presentation/screens.dart';
 
 @AdaptiveAutoRouter(
@@ -39,6 +40,7 @@ import 'package:xplore_bg_v2/presentation/screens.dart';
     ),
     AutoRoute(path: '/signin', name: "SigninRoute", page: SignInScreen),
     AutoRoute(path: '/search', page: SearchScreen),
+    AutoRoute(path: '/language', page: ChooseLanguageScreen),
     AutoRoute(
       path: "/location",
       name: "LocationRouter",
@@ -46,6 +48,7 @@ import 'package:xplore_bg_v2/presentation/screens.dart';
       children: [
         AutoRoute(path: '', name: "LocationRoute", page: PlaceDetailsScreen),
         AutoRoute(path: 'reviews/:id', page: PlaceReviewsScreen),
+        AutoRoute(path: 'review/:id', page: AddReviewScreen),
         AutoRoute(
           path: 'restaurants',
           name: "RestaurantsRouter",

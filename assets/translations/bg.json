@@ -89,5 +89,7 @@
   "bookmark_added": "Добавихте \"{name}\" към \"Отметки\".",
   "bookmark_removed": "Премахнахте \"{name}\" от \"Отметки\".",
   "favourite_added": "Добавихте \"{name}\" към \"Любими\".",
-  "favourite_removed": "Премахнахте \"{name}\" от \"Любими\"."
+  "favourite_removed": "Премахнахте \"{name}\" от \"Любими\".",
+  "most_visited": "Най-посещавани",
+  "most_liked": "Най-харесвани"
 }

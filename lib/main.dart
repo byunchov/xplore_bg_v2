@@ -10,18 +10,22 @@ import 'package:xplore_bg_v2/infrastructure/theme/themes.dart';
 import 'package:xplore_bg_v2/initializer.dart';
 import 'package:xplore_bg_v2/presentation/location/controllers/gmaps.provider.dart';
 
-// TODO Add user model and update auth provider and repo
-// TODO create loading card for featured places
-// TODO fix uaer auth on app load
-// TODO refactor explore screen
-// TODO add userloaction service and acc. providers
-// TODO finish user screen
-// TODO add user profile edit
+// TODO Add user model and update auth provider and repo - DONE
+// TODO create loading card for featured places - DONE
+// TODO fix user auth on app load
+// TODO refactor explore screen - DONE
+// TODO add user loaction service and acc. providers
+// TODO finish user screen - DONE
+// TODO add user profile edit - DROPPED
 // TODO add user auth checks troughout buttons
 // TODO add show more screen and acc. providers
-// TODO add reiew content page
-// TODO add clear all in category filter page
-// TODO add nearby section to place details
+// TODO add review content page - DONE
+// TODO add clear all in category filter page - DROPPED
+// TODO add nearby section to place details - DONE
+// TODO add change language menu and screen -DONE
+// TODO add language provider - DONE
+// TODO add
+
 void main() async {
   await Initializer.init();
 

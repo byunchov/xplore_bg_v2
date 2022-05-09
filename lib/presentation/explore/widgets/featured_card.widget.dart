@@ -3,7 +3,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:xplore_bg_v2/domain/core/constants/widget.constants.dart';
-import 'package:xplore_bg_v2/domain/core/utils/navigation.util.dart';
 import 'package:xplore_bg_v2/infrastructure/routing/router.gr.dart';
 import 'package:xplore_bg_v2/models/location/place.model.dart';
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';

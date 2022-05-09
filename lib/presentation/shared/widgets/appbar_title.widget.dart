@@ -27,7 +27,7 @@ class AppbarTitleWidget extends StatelessWidget {
         // Add leading action, if present
         if (leading != null) leading!,
         if (leading != null && !centerTitle) SizedBox(width: leadingSpaceAfter),
-        if (title is Widget) title,
+        if (title is Widget) Expanded(child: title),
         if (title is String)
           Expanded(
             child: Text(

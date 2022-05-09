@@ -17,3 +17,4 @@ export 'package:xplore_bg_v2/presentation/location/lodging/lodging.screen.dart';
 export 'package:xplore_bg_v2/presentation/location/restaurants/restaurants.screen.dart';
 export 'package:xplore_bg_v2/presentation/location/gmaps/gmaps_place_details.screen.dart';
 export 'package:xplore_bg_v2/presentation/location/reviews/reviews.screen.dart';
+export 'package:xplore_bg_v2/presentation/language/languages.screen.dart';

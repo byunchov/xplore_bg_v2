@@ -1,25 +1,17 @@
 import 'dart:developer';
-
 import 'package:auto_route/auto_route.dart';
-
-import 'package:easy_localization/easy_localization.dart';
 import 'package:expand_widget/expand_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:xplore_bg_v2/domain/core/generated/locale_keys.g.dart';
 import 'package:xplore_bg_v2/infrastructure/routing/router.gr.dart';
-
 import 'package:xplore_bg_v2/models/models.dart';
-import 'package:xplore_bg_v2/presentation/bookmarks/controllers/bookmarks.controller.dart';
-import 'package:xplore_bg_v2/presentation/gallery/controllers/gallery.provider.dart';
 import 'package:xplore_bg_v2/presentation/location/location.screen.dart';
 import 'package:xplore_bg_v2/presentation/place/controllers/note_action.controller.dart';
+import 'package:xplore_bg_v2/presentation/shared/places/details/activities_body.widget.dart';
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
-
 import 'controllers/place.provider.dart';
-import '../shared/places/details/activities_body.widget.dart';
 
 class PlaceDetailsScreen extends HookConsumerWidget {
   final PlaceModel place;
@@ -36,6 +28,7 @@ class PlaceDetailsScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final scrollController = useScrollController();
+    ref.watch(placeProvider(place.id).select((value) => null));
 
     log(place.id, name: runtimeType.toString());
 
@@ -53,8 +46,8 @@ class PlaceDetailsScreen extends HookConsumerWidget {
         SliverToBoxAdapter(
           child: _ActivitySection(place: place),
         ),
-        const SliverToBoxAdapter(
-          child: _NearbySection(),
+        SliverToBoxAdapter(
+          child: _NearbySection(place.id),
         ),
       ],
       bottomNavigationBar: _AutoHideBottomActionBar(
@@ -103,7 +96,7 @@ class _AutoHideBottomActionBar extends ConsumerWidget {
             field: 'review_count',
             iconStyle: const Icon(LineIcons.comments),
             onPressed: () async {
-              context.router.navigate(PlaceReviewsRoute(id: id));
+              context.router.navigate(PlaceReviewsRoute(locId: id));
             },
           ),
         ],
@@ -180,10 +173,14 @@ class _ActivitySection extends StatelessWidget {
 }
 
 class _NearbySection extends ConsumerWidget {
-  const _NearbySection({Key? key}) : super(key: key);
+  const _NearbySection(this.locId, {Key? key}) : super(key: key);
+
+  final String locId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final nearby = ref.watch(placeNearbyLocationsProvider(locId));
+
     return SectionWithTitleWidget(
       title: SectionTitleWithDividerWidget(LocaleKeys.section_nearby.tr()),
       child: Padding(
@@ -192,7 +189,11 @@ class _NearbySection extends ConsumerWidget {
           width: double.infinity,
           height: 215,
           // color: Colors.blue,
-          child: Container(),
+          child: nearby.when(
+            data: (data) => NearbyListViewBuilder(items: data, hideShowMoreCard: true),
+            error: (error, stackTrace) => Text("Error: $error"),
+            loading: () => const NearbyListViewBuilder(),
+          ),
         ),
       ),
     );

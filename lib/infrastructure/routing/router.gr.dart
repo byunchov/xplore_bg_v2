@@ -11,14 +11,14 @@
 // ignore_for_file: type=lint
 
 import 'package:auto_route/auto_route.dart' as _i2;
-import 'package:firebase_auth/firebase_auth.dart' as _i4;
-import 'package:flutter/material.dart' as _i3;
-import 'package:xplore_bg_v2/models/category.model.dart' as _i5;
-import 'package:xplore_bg_v2/models/models.dart' as _i6;
+import 'package:flutter/material.dart' as _i4;
+import 'package:xplore_bg_v2/models/models.dart' as _i5;
+import 'package:xplore_bg_v2/presentation/location/reviews/add_review.screen.dart'
+    as _i3;
 import 'package:xplore_bg_v2/presentation/screens.dart' as _i1;
 
 class AppRouter extends _i2.RootStackRouter {
-  AppRouter([_i3.GlobalKey<_i3.NavigatorState>? navigatorKey])
+  AppRouter([_i4.GlobalKey<_i4.NavigatorState>? navigatorKey])
       : super(navigatorKey);
 
   @override
@@ -41,6 +41,10 @@ class AppRouter extends _i2.RootStackRouter {
     SearchRoute.name: (routeData) {
       return _i2.AdaptivePage<dynamic>(
           routeData: routeData, child: const _i1.SearchScreen());
+    },
+    ChooseLanguageRoute.name: (routeData) {
+      return _i2.AdaptivePage<dynamic>(
+          routeData: routeData, child: const _i1.ChooseLanguageScreen());
     },
     LocationRouter.name: (routeData) {
       return _i2.AdaptivePage<dynamic>(
@@ -103,10 +107,19 @@ class AppRouter extends _i2.RootStackRouter {
     PlaceReviewsRoute.name: (routeData) {
       final pathParams = routeData.inheritedPathParams;
       final args = routeData.argsAs<PlaceReviewsRouteArgs>(
-          orElse: () => PlaceReviewsRouteArgs(id: pathParams.getString('id')));
+          orElse: () =>
+              PlaceReviewsRouteArgs(locId: pathParams.getString('id')));
       return _i2.AdaptivePage<dynamic>(
           routeData: routeData,
-          child: _i1.PlaceReviewsScreen(key: args.key, id: args.id));
+          child: _i1.PlaceReviewsScreen(key: args.key, locId: args.locId));
+    },
+    AddReviewRoute.name: (routeData) {
+      final pathParams = routeData.inheritedPathParams;
+      final args = routeData.argsAs<AddReviewRouteArgs>(
+          orElse: () => AddReviewRouteArgs(locId: pathParams.getString('id')));
+      return _i2.AdaptivePage<dynamic>(
+          routeData: routeData,
+          child: _i3.AddReviewScreen(key: args.key, locId: args.locId));
     },
     RestaurantsRouter.name: (routeData) {
       return _i2.AdaptivePage<dynamic>(
@@ -184,11 +197,14 @@ class AppRouter extends _i2.RootStackRouter {
         ]),
         _i2.RouteConfig(SigninRoute.name, path: '/signin'),
         _i2.RouteConfig(SearchRoute.name, path: '/search'),
+        _i2.RouteConfig(ChooseLanguageRoute.name, path: '/language'),
         _i2.RouteConfig(LocationRouter.name, path: '/location', children: [
           _i2.RouteConfig(LocationRoute.name,
               path: '', parent: LocationRouter.name),
           _i2.RouteConfig(PlaceReviewsRoute.name,
               path: 'reviews/:id', parent: LocationRouter.name),
+          _i2.RouteConfig(AddReviewRoute.name,
+              path: 'review/:id', parent: LocationRouter.name),
           _i2.RouteConfig(RestaurantsRouter.name,
               path: 'restaurants',
               parent: LocationRouter.name,
@@ -234,7 +250,8 @@ class HomeRoute extends _i2.PageRouteInfo<void> {
 /// generated route for
 /// [_i1.SignInScreen]
 class SigninRoute extends _i2.PageRouteInfo<SigninRouteArgs> {
-  SigninRoute({_i3.Key? key, required void Function(_i4.User) onSignInCallback})
+  SigninRoute(
+      {_i4.Key? key, required void Function(_i5.UserModel) onSignInCallback})
       : super(SigninRoute.name,
             path: '/signin',
             args:
@@ -246,9 +263,9 @@ class SigninRoute extends _i2.PageRouteInfo<SigninRouteArgs> {
 class SigninRouteArgs {
   const SigninRouteArgs({this.key, required this.onSignInCallback});
 
-  final _i3.Key? key;
+  final _i4.Key? key;
 
-  final void Function(_i4.User) onSignInCallback;
+  final void Function(_i5.UserModel) onSignInCallback;
 
   @override
   String toString() {
@@ -262,6 +279,15 @@ class SearchRoute extends _i2.PageRouteInfo<void> {
   const SearchRoute() : super(SearchRoute.name, path: '/search');
 
   static const String name = 'SearchRoute';
+}
+
+/// generated route for
+/// [_i1.ChooseLanguageScreen]
+class ChooseLanguageRoute extends _i2.PageRouteInfo<void> {
+  const ChooseLanguageRoute()
+      : super(ChooseLanguageRoute.name, path: '/language');
+
+  static const String name = 'ChooseLanguageRoute';
 }
 
 /// generated route for
@@ -323,7 +349,7 @@ class LandmarkCategoriesRoute extends _i2.PageRouteInfo<void> {
 /// [_i1.CategoryScreen]
 class CategoryRoute extends _i2.PageRouteInfo<CategoryRouteArgs> {
   CategoryRoute(
-      {_i3.Key? key, required String tag, _i5.CategoryModel? category})
+      {_i4.Key? key, required String tag, _i5.CategoryModel? category})
       : super(CategoryRoute.name,
             path: ':tag',
             args: CategoryRouteArgs(key: key, tag: tag, category: category),
@@ -335,7 +361,7 @@ class CategoryRoute extends _i2.PageRouteInfo<CategoryRouteArgs> {
 class CategoryRouteArgs {
   const CategoryRouteArgs({this.key, required this.tag, this.category});
 
-  final _i3.Key? key;
+  final _i4.Key? key;
 
   final String tag;
 
@@ -350,7 +376,7 @@ class CategoryRouteArgs {
 /// generated route for
 /// [_i1.CategoryFilterScreen]
 class CategoryFilterRoute extends _i2.PageRouteInfo<CategoryFilterRouteArgs> {
-  CategoryFilterRoute({_i3.Key? key, required String tag, required String name})
+  CategoryFilterRoute({_i4.Key? key, required String tag, required String name})
       : super(CategoryFilterRoute.name,
             path: ':tag/filters',
             args: CategoryFilterRouteArgs(key: key, tag: tag, name: name));
@@ -362,7 +388,7 @@ class CategoryFilterRouteArgs {
   const CategoryFilterRouteArgs(
       {this.key, required this.tag, required this.name});
 
-  final _i3.Key? key;
+  final _i4.Key? key;
 
   final String tag;
 
@@ -395,10 +421,10 @@ class BookmarkedLocationsRoute extends _i2.PageRouteInfo<void> {
 /// [_i1.PlaceDetailsScreen]
 class LocationRoute extends _i2.PageRouteInfo<LocationRouteArgs> {
   LocationRoute(
-      {_i3.Key? key,
-      required _i6.PlaceModel place,
+      {_i4.Key? key,
+      required _i5.PlaceModel place,
       required String heroTag,
-      _i3.Animation<double>? transitionAnimation})
+      _i4.Animation<double>? transitionAnimation})
       : super(LocationRoute.name,
             path: '',
             args: LocationRouteArgs(
@@ -417,13 +443,13 @@ class LocationRouteArgs {
       required this.heroTag,
       this.transitionAnimation});
 
-  final _i3.Key? key;
+  final _i4.Key? key;
 
-  final _i6.PlaceModel place;
+  final _i5.PlaceModel place;
 
   final String heroTag;
 
-  final _i3.Animation<double>? transitionAnimation;
+  final _i4.Animation<double>? transitionAnimation;
 
   @override
   String toString() {
@@ -434,25 +460,50 @@ class LocationRouteArgs {
 /// generated route for
 /// [_i1.PlaceReviewsScreen]
 class PlaceReviewsRoute extends _i2.PageRouteInfo<PlaceReviewsRouteArgs> {
-  PlaceReviewsRoute({_i3.Key? key, required String id})
+  PlaceReviewsRoute({_i4.Key? key, required String locId})
       : super(PlaceReviewsRoute.name,
             path: 'reviews/:id',
-            args: PlaceReviewsRouteArgs(key: key, id: id),
-            rawPathParams: {'id': id});
+            args: PlaceReviewsRouteArgs(key: key, locId: locId),
+            rawPathParams: {'id': locId});
 
   static const String name = 'PlaceReviewsRoute';
 }
 
 class PlaceReviewsRouteArgs {
-  const PlaceReviewsRouteArgs({this.key, required this.id});
+  const PlaceReviewsRouteArgs({this.key, required this.locId});
 
-  final _i3.Key? key;
+  final _i4.Key? key;
 
-  final String id;
+  final String locId;
 
   @override
   String toString() {
-    return 'PlaceReviewsRouteArgs{key: $key, id: $id}';
+    return 'PlaceReviewsRouteArgs{key: $key, locId: $locId}';
+  }
+}
+
+/// generated route for
+/// [_i3.AddReviewScreen]
+class AddReviewRoute extends _i2.PageRouteInfo<AddReviewRouteArgs> {
+  AddReviewRoute({_i4.Key? key, required String locId})
+      : super(AddReviewRoute.name,
+            path: 'review/:id',
+            args: AddReviewRouteArgs(key: key, locId: locId),
+            rawPathParams: {'id': locId});
+
+  static const String name = 'AddReviewRoute';
+}
+
+class AddReviewRouteArgs {
+  const AddReviewRouteArgs({this.key, required this.locId});
+
+  final _i4.Key? key;
+
+  final String locId;
+
+  @override
+  String toString() {
+    return 'AddReviewRouteArgs{key: $key, locId: $locId}';
   }
 }
 
@@ -469,7 +520,7 @@ class RestaurantsRouter extends _i2.PageRouteInfo<void> {
 /// generated route for
 /// [_i1.GalleryScreen]
 class GalleryRoute extends _i2.PageRouteInfo<GalleryRouteArgs> {
-  GalleryRoute({_i3.Key? key, required String id, int index = 0})
+  GalleryRoute({_i4.Key? key, required String id, int index = 0})
       : super(GalleryRoute.name,
             path: 'gallery/:index',
             args: GalleryRouteArgs(key: key, id: id, index: index),
@@ -481,7 +532,7 @@ class GalleryRoute extends _i2.PageRouteInfo<GalleryRouteArgs> {
 class GalleryRouteArgs {
   const GalleryRouteArgs({this.key, required this.id, this.index = 0});
 
-  final _i3.Key? key;
+  final _i4.Key? key;
 
   final String id;
 
@@ -505,7 +556,7 @@ class LodgingRouter extends _i2.PageRouteInfo<void> {
 /// generated route for
 /// [_i1.RestaurantsScreen]
 class RestaurantsRoute extends _i2.PageRouteInfo<RestaurantsRouteArgs> {
-  RestaurantsRoute({required String locId, _i3.Key? key})
+  RestaurantsRoute({required String locId, _i4.Key? key})
       : super(RestaurantsRoute.name,
             path: '', args: RestaurantsRouteArgs(locId: locId, key: key));
 
@@ -517,7 +568,7 @@ class RestaurantsRouteArgs {
 
   final String locId;
 
-  final _i3.Key? key;
+  final _i4.Key? key;
 
   @override
   String toString() {
@@ -529,9 +580,9 @@ class RestaurantsRouteArgs {
 /// [_i1.GMapsDetailsScreen]
 class GMapsDetailsRoute extends _i2.PageRouteInfo<GMapsDetailsRouteArgs> {
   GMapsDetailsRoute(
-      {_i3.Key? key,
+      {_i4.Key? key,
       required String id,
-      required _i6.GMapsPlaceModel place,
+      required _i5.GMapsPlaceModel place,
       required String heroTag})
       : super(GMapsDetailsRoute.name,
             path: ':id',
@@ -546,11 +597,11 @@ class GMapsDetailsRouteArgs {
   const GMapsDetailsRouteArgs(
       {this.key, required this.id, required this.place, required this.heroTag});
 
-  final _i3.Key? key;
+  final _i4.Key? key;
 
   final String id;
 
-  final _i6.GMapsPlaceModel place;
+  final _i5.GMapsPlaceModel place;
 
   final String heroTag;
 
@@ -563,7 +614,7 @@ class GMapsDetailsRouteArgs {
 /// generated route for
 /// [_i1.LodgingScreen]
 class LodgingRoute extends _i2.PageRouteInfo<LodgingRouteArgs> {
-  LodgingRoute({required String locId, _i3.Key? key})
+  LodgingRoute({required String locId, _i4.Key? key})
       : super(LodgingRoute.name,
             path: '', args: LodgingRouteArgs(locId: locId, key: key));
 
@@ -575,7 +626,7 @@ class LodgingRouteArgs {
 
   final String locId;
 
-  final _i3.Key? key;
+  final _i4.Key? key;
 
   @override
   String toString() {

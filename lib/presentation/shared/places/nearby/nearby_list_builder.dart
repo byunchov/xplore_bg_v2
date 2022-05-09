@@ -10,6 +10,7 @@ class NearbyListViewBuilder extends StatelessWidget {
     this.loadingItems = 5,
     this.shoMoreCallback,
     this.padding = const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+    this.hideShowMoreCard = false,
   }) : super(key: key);
 
   final List<PlaceModel>? items;
@@ -17,6 +18,7 @@ class NearbyListViewBuilder extends StatelessWidget {
   final int loadingItems;
   final EdgeInsets padding;
   final void Function(String id)? shoMoreCallback;
+  final bool hideShowMoreCard;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +37,7 @@ class NearbyListViewBuilder extends StatelessWidget {
         itemBuilder: (_, index) {
           if (items != null) {
             if (index == items!.length) {
-              return const NearbyShowMoreCardWidget();
+              return hideShowMoreCard ? const SizedBox.shrink() : const NearbyShowMoreCardWidget();
             }
             return NearbyCardWidget(place: items![index]);
           }

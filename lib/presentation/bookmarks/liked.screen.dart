@@ -10,12 +10,14 @@ class LikedLocationsScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    const field = "likes";
+
     return RefreshIndicator(
       onRefresh: () async {
-        ref.refresh(likedPlacesProvider.notifier);
+        ref.refresh(notedPlacesProvider(field).notifier);
       },
       child: PaginatedListViewWidget<PlaceModel>(
-        provider: likedPlacesProvider,
+        provider: notedPlacesProvider(field),
         emptyResultPlaceholder: BlankPage(
           heading: LocaleKeys.no_favourites.tr(),
           shortText: LocaleKeys.no_favourites_desc.tr(),

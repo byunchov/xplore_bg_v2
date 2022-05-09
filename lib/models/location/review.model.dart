@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:xplore_bg_v2/domain/core/utils/typedef.util.dart';
+import 'package:xplore_bg_v2/models/models.dart';
 
 class ReviewModel {
   final String id;
@@ -61,13 +62,14 @@ class ReviewModel {
     return {
       'id': id,
       'uid': uid,
+      'loc_id': locId,
       'full_name': fullName,
       'profile_image': profileImage,
       'lang': lang,
       'rating': rating,
       'content': content,
-      'createdAt': createdAt.millisecondsSinceEpoch,
-      'updatedAt': updatedAt?.millisecondsSinceEpoch,
+      'created_at': createdAt.millisecondsSinceEpoch,
+      'updated_at': updatedAt?.millisecondsSinceEpoch,
       'relativeTimeDescription': relativeTimeDescription,
     };
   }
@@ -77,14 +79,14 @@ class ReviewModel {
       id: map['id'] ?? '',
       locId: map['loc_id'] ?? '',
       uid: map['uid'] ?? '',
-      fullName: map['fullName'] ?? '',
-      profileImage: map['profileImage'] ?? '',
+      fullName: map['full_name'] ?? '',
+      profileImage: map['profile_image'] ?? '',
       lang: map['lang'] ?? '',
       rating: map['rating']?.toDouble() ?? 0.0,
       content: map['content'] ?? '',
-      createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] ?? 0),
+      createdAt: DateTime.fromMillisecondsSinceEpoch(map['created_at'] ?? 0),
       updatedAt:
-          map['updatedAt'] != null ? DateTime.fromMillisecondsSinceEpoch(map['updatedAt']) : null,
+          map['updated_at'] != null ? DateTime.fromMillisecondsSinceEpoch(map['updated_at']) : null,
       relativeTimeDescription: map['relativeTimeDescription'],
     );
   }
@@ -100,9 +102,23 @@ class ReviewModel {
       rating: map['rating']?.toDouble() ?? 0.0,
       content: map['text'] ?? '',
       createdAt: DateTime.fromMillisecondsSinceEpoch(map['time'] * 1000 ?? 0),
-      updatedAt:
-          map['updatedAt'] != null ? DateTime.fromMillisecondsSinceEpoch(map['updatedAt']) : null,
       relativeTimeDescription: map['relative_time_description'],
+    );
+  }
+
+  factory ReviewModel.fromUserInput(
+      String content, String locId, UserModel user, String language, double rating) {
+    return ReviewModel(
+      id: user.uid,
+      locId: locId,
+      uid: user.uid,
+      fullName: user.fullName,
+      profileImage: user.profileImage,
+      lang: language,
+      rating: rating,
+      content: content,
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
     );
   }
 

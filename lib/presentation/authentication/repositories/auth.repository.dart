@@ -4,12 +4,13 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:xplore_bg_v2/infrastructure/providers/general.provider.dart';
 import 'package:xplore_bg_v2/infrastructure/repositories/failure.dart';
+import 'package:xplore_bg_v2/models/models.dart';
 
 abstract class BaseAuthRepository {
   Stream<User?> get authStateChanges;
-  Future<User?> signInWithGoogle();
-  Future<User?> signInWithFacebook();
-  User? getCurrentUser();
+  Future<UserModel?> signInWithGoogle();
+  Future<UserModel?> signInWithFacebook();
+  UserModel? getCurrentUser();
   Future<void> signOut();
 }
 
@@ -32,7 +33,7 @@ class AuthRepository implements BaseAuthRepository {
   }
 
   @override
-  Future<User?> signInWithGoogle() async {
+  Future<UserModel?> signInWithGoogle() async {
     try {
       // Trigger the authentication flow
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -46,14 +47,15 @@ class AuthRepository implements BaseAuthRepository {
         idToken: googleAuth?.idToken,
       );
       final result = await _read(firebaseAuthProvider).signInWithCredential(credential);
-      return result.user;
+      final user = result.user;
+      return user != null ? UserModel.fromFirebaseUser(user) : null;
     } on FirebaseAuthException catch (e) {
       throw Failure(message: e.message!);
     }
   }
 
   @override
-  Future<User?> signInWithFacebook() async {
+  Future<UserModel?> signInWithFacebook() async {
     try {
       // Trigger the sign-in flow
       final LoginResult loginResult = await FacebookAuth.instance.login();
@@ -63,16 +65,18 @@ class AuthRepository implements BaseAuthRepository {
 
       // Once signed in, return the UserCredential
       final result = await _read(firebaseAuthProvider).signInWithCredential(credential);
-      return result.user;
+      final user = result.user;
+      return user != null ? UserModel.fromFirebaseUser(user) : null;
     } on FirebaseAuthException catch (e) {
       throw Failure(message: e.message!);
     }
   }
 
   @override
-  User? getCurrentUser() {
+  UserModel? getCurrentUser() {
     try {
-      return _read(firebaseAuthProvider).currentUser;
+      final user = _read(firebaseAuthProvider).currentUser;
+      return user != null ? UserModel.fromFirebaseUser(user) : null;
     } on FirebaseAuthException catch (e) {
       throw Failure(message: e.message!);
     }

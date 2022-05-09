@@ -1,6 +1,5 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:xplore_bg_v2/infrastructure/theme/themes.dart';
 import 'package:xplore_bg_v2/presentation/gallery/widgets/gallery_stats.widget.dart';
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
 

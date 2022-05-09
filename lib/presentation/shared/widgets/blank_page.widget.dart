@@ -9,6 +9,8 @@ class BlankPage extends StatelessWidget {
   final String? shortText;
   final bool divider;
   final Widget? customAction;
+  final double iconSize;
+  final EdgeInsets iconPadding;
 
   const BlankPage({
     Key? key,
@@ -18,36 +20,37 @@ class BlankPage extends StatelessWidget {
     this.shortText,
     this.divider = false,
     this.customAction,
+    this.iconSize = 96,
+    this.iconPadding = const EdgeInsets.only(bottom: 15),
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 30),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Visibility(
-              visible: icon != null,
-              child: Column(
-                children: [
-                  Icon(
-                    icon ?? Feather.image,
-                    size: 96,
-                    color: iconColor ?? theme.iconTheme.color!,
-                  ),
-                  const SizedBox(height: 15),
-                ],
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          if (icon != null)
+            Flexible(
+              child: Padding(
+                padding: iconPadding,
+                child: Icon(
+                  icon ?? Feather.image,
+                  size: iconSize,
+                  color: iconColor ?? theme.iconTheme.color!,
+                ),
               ),
             ),
-            Text(
+          Flexible(
+            child: Text(
               heading,
               style: theme.textTheme.headline5?.copyWith(fontWeight: FontWeight.w600),
             ),
-            Visibility(
+          ),
+          Flexible(
+            child: Visibility(
               visible: divider,
               child: CustomDivider(
                 width: MediaQuery.of(context).size.width * 0.55,
@@ -56,8 +59,10 @@ class BlankPage extends StatelessWidget {
               ),
               replacement: const SizedBox(height: 5),
             ),
-            if (shortText != null)
-              Text(
+          ),
+          if (shortText != null)
+            Flexible(
+              child: Text(
                 shortText!,
                 textAlign: TextAlign.center,
                 softWrap: true,
@@ -65,9 +70,9 @@ class BlankPage extends StatelessWidget {
                 style: theme.textTheme.subtitle2,
                 overflow: TextOverflow.ellipsis,
               ),
-            if (customAction != null) customAction!,
-          ],
-        ),
+            ),
+          if (customAction != null) Flexible(child: customAction!),
+        ],
       ),
     );
   }

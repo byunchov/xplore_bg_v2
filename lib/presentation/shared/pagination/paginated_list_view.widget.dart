@@ -4,19 +4,24 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
 
 class PaginatedListViewWidget<T> extends HookConsumerWidget {
-  const PaginatedListViewWidget({
-    Key? key,
-    required this.provider,
-    required this.builder,
-    this.loadingPlaceholder,
-    required this.emptyResultPlaceholder,
-    this.errorPlaceholderBuilder,
-  }) : super(key: key);
+  const PaginatedListViewWidget(
+      {Key? key,
+      required this.provider,
+      required this.builder,
+      this.loadingPlaceholder,
+      required this.emptyResultPlaceholder,
+      this.errorPlaceholderBuilder,
+      this.hideNoMoreItems = false,
+      this.listPadding = const EdgeInsets.symmetric(horizontal: 8, vertical: 12)})
+      : super(key: key);
+
   final dynamic provider;
   final Widget Function(dynamic error)? errorPlaceholderBuilder;
   final Widget Function(T item) builder;
   final Widget? loadingPlaceholder;
   final Widget emptyResultPlaceholder;
+  final EdgeInsets listPadding;
+  final bool hideNoMoreItems;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -58,7 +63,7 @@ class PaginatedListViewWidget<T> extends HookConsumerWidget {
         // return SliverFillRemaining(child: errorPlaceholderBuilder("Error message"));
         if (items.isEmpty) return SliverFillRemaining(child: emptyResultPlaceholder);
 
-        return _ListBuilder<T>(items: items, builder: builder);
+        return _ListBuilder<T>(items: items, builder: builder, listPadding: listPadding);
       },
       loading: () => SliverFillRemaining(
         child: loadingPlaceholder ?? const _DefaultLoadingPlaceholder(),
@@ -73,10 +78,10 @@ class PaginatedListViewWidget<T> extends HookConsumerWidget {
               ),
       ),
       onGoingLoading: (items) {
-        return _ListBuilder<T>(items: items, builder: builder);
+        return _ListBuilder<T>(items: items, builder: builder, listPadding: listPadding);
       },
       onGoingError: (items, e, stk) {
-        return _ListBuilder<T>(items: items, builder: builder);
+        return _ListBuilder<T>(items: items, builder: builder, listPadding: listPadding);
       },
     );
   }
@@ -92,7 +97,7 @@ class PaginatedListViewWidget<T> extends HookConsumerWidget {
             items as List<T>;
             final bool noMoreItems = ref.read(provider.notifier).noMoreItems;
 
-            if (noMoreItems && items.isNotEmpty) {
+            if (noMoreItems && items.isNotEmpty && !hideNoMoreItems) {
               return const Padding(
                 padding: EdgeInsets.only(bottom: 20),
                 child: Text(
@@ -145,15 +150,17 @@ class _ListBuilder<T> extends StatelessWidget {
     Key? key,
     required this.items,
     required this.builder,
+    required this.listPadding,
   }) : super(key: key);
 
   final List<T> items;
   final Widget Function(T item) builder;
+  final EdgeInsets listPadding;
 
   @override
   Widget build(BuildContext context) {
     return SliverPadding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+      padding: listPadding,
       sliver: SliverList(
         delegate: SliverChildBuilderDelegate(
           (context, index) {
