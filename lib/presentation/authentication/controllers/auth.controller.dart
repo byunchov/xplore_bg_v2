@@ -34,7 +34,7 @@ class AuthController extends StateNotifier<UserModel?> {
   }
 
   void appStarted() async {
-    final user = _read(authRepositoryProvider).getCurrentUser();
+    _read(authRepositoryProvider).getCurrentUser();
     // if (user == null) {
     //   await _read(authRepositoryProvider).signInAnonymously();
     // }

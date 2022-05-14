@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -133,7 +132,7 @@ class AddReviewScreen extends ConsumerWidget {
                     ),
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
-                        final message = ref.read(reviewTextControllerProvider(locId)).text;
+                        // final message = ref.read(reviewTextControllerProvider(locId)).text;
 
                         ref.read(reviewRepositoryProvider).saveUserReview(locId);
                         Future.delayed(const Duration(seconds: 3), () {

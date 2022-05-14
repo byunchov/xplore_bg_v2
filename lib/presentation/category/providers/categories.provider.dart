@@ -4,10 +4,8 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:xplore_bg_v2/infrastructure/pagination/pagination_notifier.dart';
 import 'package:xplore_bg_v2/infrastructure/repositories/search/search.repository.dart';
 import 'package:xplore_bg_v2/models/models.dart';
-import 'package:xplore_bg_v2/models/pagination/pagination_state.model.dart';
 import 'package:xplore_bg_v2/presentation/category/models/filter_checkbox.model.dart';
 
 final categoryPaginatedListProvider = StateNotifierProvider.autoDispose

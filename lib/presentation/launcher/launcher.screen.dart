@@ -1,8 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:xplore_bg_v2/presentation/authentication/controllers/auth.controller.dart';
-import 'package:xplore_bg_v2/presentation/screens.dart';
 
 class LauncherScreen extends ConsumerWidget {
   const LauncherScreen({Key? key}) : super(key: key);

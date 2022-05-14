@@ -36,7 +36,6 @@ class ExploreScreen extends ConsumerWidget {
                   FeauturedSectionWidget(),
                   NearbySectionWidget(),
                   SortableSectionWidget(),
-                  NearbySectionWidget(),
                 ],
               ),
             ),

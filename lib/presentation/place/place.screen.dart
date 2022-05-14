@@ -190,7 +190,12 @@ class _NearbySection extends ConsumerWidget {
           height: 215,
           // color: Colors.blue,
           child: nearby.when(
-            data: (data) => NearbyListViewBuilder(items: data, hideShowMoreCard: true),
+            data: (data) {
+              if (data.isEmpty) {
+                return const BlankPage(heading: "No results");
+              }
+              return NearbyListViewBuilder(items: data, hideShowMoreCard: true);
+            },
             error: (error, stackTrace) => Text("Error: $error"),
             loading: () => const NearbyListViewBuilder(),
           ),

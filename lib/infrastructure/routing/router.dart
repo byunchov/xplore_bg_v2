@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:xplore_bg_v2/presentation/explore/show_more_nearby.screen.dart';
 import 'package:xplore_bg_v2/presentation/location/reviews/add_review.screen.dart';
 import 'package:xplore_bg_v2/presentation/screens.dart';
 
@@ -28,7 +29,7 @@ import 'package:xplore_bg_v2/presentation/screens.dart';
         AutoRoute(
           path: 'bookmarks',
           name: "NotedLocationsRouter",
-          page: BookmarksScreen,
+          page: NotedScreen,
           children: [
             // AutoRoute(path: '', page: BookmarksScreen),
             AutoRoute(path: 'likes', page: LikedLocationsScreen),
@@ -41,6 +42,7 @@ import 'package:xplore_bg_v2/presentation/screens.dart';
     AutoRoute(path: '/signin', name: "SigninRoute", page: SignInScreen),
     AutoRoute(path: '/search', page: SearchScreen),
     AutoRoute(path: '/language', page: ChooseLanguageScreen),
+    AutoRoute(path: '/nearby', page: ShowMoreNearbyScreen),
     AutoRoute(
       path: "/location",
       name: "LocationRouter",

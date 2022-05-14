@@ -1,6 +1,5 @@
 // ignore_for_file: constant_identifier_names
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:xplore_bg_v2/infrastructure/providers/general.provider.dart';
@@ -40,10 +39,11 @@ final locationSortProvider = FutureProvider.autoDispose<List<PlaceModel>>((ref) 
 
   return data ?? [];
 });
-
+/* 
 final locationsNearbyProvider = FutureProvider.autoDispose<List<PlaceModel>>((ref) async {
   final lang = ref.watch(appLocaleProvider).languageCode;
   final repository = ref.watch(searcRepositoryProvider);
+  final location = ref.watch(locationProvider).value;
 
   final cancelToken = CancelToken();
   ref.onDispose(cancelToken.cancel);
@@ -51,17 +51,48 @@ final locationsNearbyProvider = FutureProvider.autoDispose<List<PlaceModel>>((re
   await Future<void>.delayed(const Duration(milliseconds: 250));
   if (cancelToken.isCancelled) throw AbortedException();
 
+  if (location == null) return [];
+
   final result = await repository.search(
     'locations',
     query: "",
     limit: 10,
     filter: ["lang = $lang"],
-    sort: ["_geoPoint(41.84126118480892, 23.48859392410678):asc"],
+    sort: ["_geoPoint(${location.latitude},${location.longitude}):asc"],
     attributesToRetrieve: repository.previewAttributes,
   );
   final data = result.hits?.map((e) => PlaceModel.previewFromJson(e)).toList();
 
   return data ?? [];
+}); 
+*/
+
+final locationsNearbyProvider =
+    StateNotifierProvider.autoDispose<PaginationNotifier<PlaceModel>, PaginationState<PlaceModel>>(
+        (ref) {
+  return PaginationNotifier<PlaceModel>(
+      itemsPerBatch: 10,
+      fetchNextItems: (item, {limit}) async {
+        final repository = ref.watch(searcRepositoryProvider);
+
+        final cancelToken = CancelToken();
+        ref.onDispose(cancelToken.cancel);
+
+        await Future<void>.delayed(const Duration(milliseconds: 250));
+        if (cancelToken.isCancelled) throw AbortedException();
+
+        final result = await repository.search(
+          'locations',
+          query: "",
+          limit: limit,
+          offset: item?.offset,
+          attributesToRetrieve: repository.previewAttributes,
+        );
+        final data = result.hits?.map((e) => PlaceModel.previewFromJson(e)).toList();
+
+        return data ?? [];
+      })
+    ..init();
 });
 
 final featurePlacesProvider = FutureProvider<List<PlaceModel>>((ref) async {

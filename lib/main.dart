@@ -14,17 +14,16 @@ import 'package:xplore_bg_v2/presentation/location/controllers/gmaps.provider.da
 // TODO create loading card for featured places - DONE
 // TODO fix user auth on app load
 // TODO refactor explore screen - DONE
-// TODO add user loaction service and acc. providers
+// TODO add user loaction service and acc. providers - DONE
 // TODO finish user screen - DONE
 // TODO add user profile edit - DROPPED
 // TODO add user auth checks troughout buttons
-// TODO add show more screen and acc. providers
+// TODO add show more screen and acc. providers - DONE
 // TODO add review content page - DONE
 // TODO add clear all in category filter page - DROPPED
 // TODO add nearby section to place details - DONE
 // TODO add change language menu and screen -DONE
 // TODO add language provider - DONE
-// TODO add
 
 void main() async {
   await Initializer.init();

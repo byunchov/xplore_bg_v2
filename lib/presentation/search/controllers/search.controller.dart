@@ -5,18 +5,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:meilisearch/meilisearch.dart';
 import 'package:xplore_bg_v2/domain/core/constants/storage.constants.dart';
 import 'package:xplore_bg_v2/infrastructure/repositories/search/search.repository.dart';
 import 'package:xplore_bg_v2/models/models.dart';
-
-final searchClientProvider = Provider<MeiliSearchClient>((ref) {
-  return MeiliSearchClient(
-    'https://xplorebg.ddns.net',
-    'ZBRX7Scz798580600a1f2a1ce48b6ccc597810e656467a9000ba6c16461e6cb1909a9f3f',
-    2500,
-  );
-});
 
 final searchFieldProvider = StateProvider.autoDispose<String>((ref) => "");
 

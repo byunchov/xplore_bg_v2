@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:xplore_bg_v2/infrastructure/routing/router.gr.dart';
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
 
-class BookmarksScreen extends StatelessWidget {
-  const BookmarksScreen({Key? key}) : super(key: key);
+class NotedScreen extends StatelessWidget {
+  const NotedScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

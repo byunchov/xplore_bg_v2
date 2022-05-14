@@ -12,7 +12,7 @@ class AppThemeState extends StateNotifier<bool> {
 final appThemeStateNotifier = StateNotifierProvider<AppThemeState, bool>((ref) => AppThemeState());
 
 void main() {
-  runApp(ProviderScope(child: MyApp()));
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends ConsumerWidget {
@@ -26,7 +26,7 @@ class MyApp extends ConsumerWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: darkModeEnabled ? ThemeMode.dark : ThemeMode.light,
-      home: MyHomePage(),
+      home: const MyHomePage(),
     );
   }
 }
@@ -46,10 +46,10 @@ class MyHomePage extends StatelessWidget {
           Expanded(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text("Light Mode"),
+              children: const [
+                Text("Light Mode"),
                 DarkModeSwitch(),
-                const Text("Dark Mode"),
+                Text("Dark Mode"),
               ],
             ),
           ),

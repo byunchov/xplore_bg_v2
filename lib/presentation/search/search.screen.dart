@@ -15,8 +15,8 @@ class SearchScreen extends ConsumerWidget {
     // final results = ref.watch(locationSearchProvider);
     final theme = Theme.of(context);
 
-    final history = ref.watch(searchHistoryProvider);
-    final result = ref.watch(paginatedPlaceSearchProvider);
+    ref.watch(searchHistoryProvider.select((value) => null));
+    ref.watch(paginatedPlaceSearchProvider.select((value) => null));
 
     final query = ref.watch(searchFieldProvider);
     final controller = ref.watch(searchFieldProvider.notifier);
