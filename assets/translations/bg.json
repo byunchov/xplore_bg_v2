@@ -91,5 +91,13 @@
   "favourite_added": "Добавихте \"{name}\" към \"Любими\".",
   "favourite_removed": "Премахнахте \"{name}\" от \"Любими\".",
   "most_visited": "Най-посещавани",
-  "most_liked": "Най-харесвани"
+  "most_liked": "Най-харесвани",
+  "privacy_policy": "Политика за поверителност",
+  "logged_out_msg": "Излязохте от системата.",
+  "empty_result_set": "Празен набор резултати",
+  "empty_result_set_hint": "Не са намерени съвпадащи резултати.",
+  "no_more_items": "Няма повече елементи",
+  "toggle_dark_mode": "Тъмен режим",
+  "error_title": "Грешка",
+  "signin_user_msg": "Добре дошли, {name}!"
 }

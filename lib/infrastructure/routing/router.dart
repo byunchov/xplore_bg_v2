@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:xplore_bg_v2/infrastructure/routing/auth.guard.dart';
 import 'package:xplore_bg_v2/presentation/explore/show_more_nearby.screen.dart';
 import 'package:xplore_bg_v2/presentation/location/reviews/add_review.screen.dart';
 import 'package:xplore_bg_v2/presentation/screens.dart';
@@ -9,9 +10,11 @@ import 'package:xplore_bg_v2/presentation/screens.dart';
     AutoRoute(
       // initial: true,
       page: AuthCheckerScreen,
+      // guards: [AuthGuard],
     ),
     AutoRoute(
       initial: true,
+      guards: [AuthGuard],
       path: "/home",
       page: HomeScreen,
       children: [

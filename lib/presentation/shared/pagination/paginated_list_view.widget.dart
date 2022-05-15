@@ -73,7 +73,7 @@ class PaginatedListViewWidget<T> extends HookConsumerWidget {
             ? errorPlaceholderBuilder?.call(e)
             : BlankPage(
                 icon: Icons.error_outline_rounded,
-                heading: "Error",
+                heading: LocaleKeys.error_title.tr(),
                 shortText: e.toString(),
               ),
       ),
@@ -98,10 +98,10 @@ class PaginatedListViewWidget<T> extends HookConsumerWidget {
             final bool noMoreItems = ref.read(provider.notifier).noMoreItems;
 
             if (noMoreItems && items.isNotEmpty && !hideNoMoreItems) {
-              return const Padding(
-                padding: EdgeInsets.only(bottom: 20),
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 20),
                 child: Text(
-                  "No More Items Found!",
+                  LocaleKeys.no_more_items.tr(),
                   textAlign: TextAlign.center,
                 ),
               );
@@ -121,7 +121,7 @@ class PaginatedListViewWidget<T> extends HookConsumerWidget {
         orElse: () => const SizedBox.shrink(),
         onGoingLoading: (items) => const Padding(
           padding: EdgeInsets.only(bottom: 16),
-          child: Center(child: CircularProgressIndicator()),
+          child: Center(child: CusrotmLoadingIndicator()),
         ),
         onGoingError: (items, e, _) => Center(
           child: Padding(

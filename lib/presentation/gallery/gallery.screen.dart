@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:auto_route/annotations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -45,9 +43,6 @@ class _GalleryScreenState extends ConsumerState<GalleryScreen> {
   @override
   Widget build(BuildContext context) {
     final gallery = ref.watch(galleryStateProvider(widget.id));
-    log(widget.id, name: runtimeType.toString());
-
-    // final gallery = widget.gallery;
 
     return Scaffold(
       body: gallery.when(

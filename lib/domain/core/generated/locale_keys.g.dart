@@ -94,5 +94,13 @@ abstract class  LocaleKeys {
   static const favourite_removed = 'favourite_removed';
   static const most_visited = 'most_visited';
   static const most_liked = 'most_liked';
+  static const privacy_policy = 'privacy_policy';
+  static const logged_out_msg = 'logged_out_msg';
+  static const empty_result_set = 'empty_result_set';
+  static const empty_result_set_hint = 'empty_result_set_hint';
+  static const no_more_items = 'no_more_items';
+  static const toggle_dark_mode = 'toggle_dark_mode';
+  static const error_title = 'error_title';
+  static const signin_user_msg = 'signin_user_msg';
 
 }

@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:xplore_bg_v2/infrastructure/providers/general.provider.dart';
 import 'package:xplore_bg_v2/infrastructure/repositories/search/search.repository.dart';
 import 'package:xplore_bg_v2/models/models.dart';
 import 'package:xplore_bg_v2/presentation/gallery/controllers/gallery.provider.dart';
@@ -37,6 +38,7 @@ final placeNearbyLocationsProvider =
     FutureProvider.autoDispose.family<List<PlaceModel>, String>((ref, id) async {
   final repository = ref.read(searcRepositoryProvider);
   final place = ref.watch(placeProvider(id))!;
+  final lang = ref.watch(appLocaleProvider).languageCode;
 
   final cancelToken = CancelToken();
   ref.onDispose(cancelToken.cancel);
@@ -49,7 +51,7 @@ final placeNearbyLocationsProvider =
     'locations',
     query: "",
     limit: 10,
-    filter: ['lang = "bg"'],
+    filter: ["lang=$lang", "loc_id!=$id"],
     sort: ["_geoPoint(${place.coordinates!.latitude}, ${place.coordinates!.longitude}):asc"],
     attributesToRetrieve: repository.previewAttributes,
   );

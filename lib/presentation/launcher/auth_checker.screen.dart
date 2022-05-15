@@ -1,11 +1,21 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:xplore_bg_v2/infrastructure/routing/router.gr.dart';
-import 'package:xplore_bg_v2/presentation/authentication/controllers/auth.controller.dart';
-import 'package:xplore_bg_v2/domain/core/utils/snackbar.util.dart';
-import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
 
+class AuthCheckerScreen extends StatelessWidget {
+  const AuthCheckerScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Center(
+          child: SizedBox.square(
+        dimension: 64,
+        child: CircularProgressIndicator(),
+      )),
+    );
+  }
+}
+
+/* 
 class AuthCheckerScreen extends ConsumerWidget {
   const AuthCheckerScreen({Key? key}) : super(key: key);
 
@@ -36,3 +46,4 @@ class AuthCheckerScreen extends ConsumerWidget {
     );
   }
 }
+ */

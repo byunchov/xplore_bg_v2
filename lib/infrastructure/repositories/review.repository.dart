@@ -1,7 +1,7 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto/crypto.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:xplore_bg_v2/infrastructure/providers/general.provider.dart';
 import 'package:xplore_bg_v2/infrastructure/repositories/failure.dart';
@@ -19,6 +19,7 @@ class ReviewRepository {
     final rating = _read(reviewRatingValueProvider(locId));
     final content = _read(reviewTextControllerProvider(locId)).text;
     final firestore = _read(firebaseFirestoreProvider);
+    final lang = _read(appLocaleProvider).languageCode;
 
     final reviewId = "$locId@${user!.uid}";
     final hashId = md5.convert(utf8.encode(reviewId)).toString();
@@ -29,7 +30,7 @@ class ReviewRepository {
       uid: user.uid,
       fullName: user.fullName,
       profileImage: user.profileImage,
-      lang: "bg",
+      lang: lang,
       rating: rating,
       content: content,
       createdAt: DateTime.now(),
@@ -39,7 +40,38 @@ class ReviewRepository {
     final reviewData = review.toMap();
     reviewData.removeWhere((k, v) => v == null);
     try {
-      await firestore.collection("locations/$locId/reviews").doc(user.uid).set(reviewData);
+      await firestore
+          .collection("locations/$locId/reviews")
+          .doc(user.uid)
+          .set(reviewData, SetOptions(merge: true));
+    } on FirebaseException catch (e) {
+      throw Failure(message: e.message!);
+    }
+  }
+
+  Future<void> updateUserReview(String locId) async {
+    final firestore = _read(firebaseFirestoreProvider);
+    final lang = _read(appLocaleProvider).languageCode;
+    final user = _read(authControllerProvider);
+    final rating = _read(reviewRatingValueProvider(locId));
+    final content = _read(reviewTextControllerProvider(locId)).text;
+
+    final review = ReviewModel(
+      id: "",
+      locId: locId,
+      uid: user!.uid,
+      fullName: user.fullName,
+      profileImage: user.profileImage,
+      lang: lang,
+      rating: rating,
+      content: content,
+      updatedAt: DateTime.now(),
+    );
+
+    final reviewData = review.toMap();
+    reviewData.removeWhere((k, v) => v == null || v.isEmpty);
+    try {
+      await firestore.doc("locations/$locId/reviews/${user.uid}").update(reviewData);
     } on FirebaseException catch (e) {
       throw Failure(message: e.message!);
     }
@@ -56,5 +88,18 @@ class ReviewRepository {
       throw Failure(message: e.message!);
     }
     // await firestore.doc("locations/$locId/reviews/${user!.uid}").delete();
+  }
+
+  Future<ReviewModel> getUserReview(String locId) async {
+    final user = _read(authControllerProvider);
+    final firestore = _read(firebaseFirestoreProvider);
+
+    try {
+      final snapshot = await firestore.doc("locations/$locId/reviews/${user!.uid}").get();
+      final review = ReviewModel.fromMap(snapshot.data()!);
+      return review;
+    } on FirebaseException catch (e) {
+      throw Failure(message: e.message!);
+    }
   }
 }

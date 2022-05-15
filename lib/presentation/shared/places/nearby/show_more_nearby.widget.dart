@@ -6,9 +6,11 @@ import 'package:xplore_bg_v2/domain/core/generated/locale_keys.g.dart';
 
 class NearbyShowMoreCardWidget extends StatelessWidget {
   final double elevation;
+  final VoidCallback? onPressed;
   const NearbyShowMoreCardWidget({
     Key? key,
     this.elevation = 4,
+    this.onPressed,
   }) : super(key: key);
 
   @override
@@ -24,7 +26,7 @@ class NearbyShowMoreCardWidget extends StatelessWidget {
         color: theme.listTileTheme.tileColor,
         child: InkWell(
           borderRadius: BorderRadius.circular(radius),
-          onTap: () {},
+          onTap: onPressed,
           child: Container(
             width: constraints.maxHeight * 0.5, // 4/3 ratio
             padding: const EdgeInsets.all(10),

@@ -32,6 +32,16 @@ class PlaceReviewsScreen extends ConsumerWidget {
             buttonSize: 42,
             onTap: () => context.router.pop(),
           ),
+          actions: [
+            IconButton(
+              onPressed: () {
+                ref.refresh(placeReiewListProvider(locId));
+                ref.refresh(placeUserReviewProvider(locId));
+              },
+              icon: const Icon(Icons.refresh),
+              tooltip: "Refresh",
+            ),
+          ],
         ),
       ),
       body: RefreshIndicator(
@@ -63,9 +73,22 @@ class _ReviewHeaderSection extends ConsumerWidget {
     if (user.isAuthenticated) {
       return _CurrentUserReviewSection(id);
     }
-    return BlankPage(
-      heading: LocaleKeys.not_signed_in.tr(),
-      shortText: LocaleKeys.not_signed_in_desc.tr(),
+    return Padding(
+      padding: const EdgeInsets.only(top: 32, bottom: 16),
+      child: BlankPage(
+        heading: LocaleKeys.not_signed_in.tr(),
+        shortText: LocaleKeys.not_signed_in_desc.tr(),
+        customAction: Padding(
+          padding: const EdgeInsets.only(top: 16),
+          child: ElevatedButton.icon(
+            onPressed: () {
+              context.router.navigate(SigninRoute(onSignInCallback: (user) {}));
+            },
+            icon: const Icon(Icons.login),
+            label: Text(LocaleKeys.signin_btn.tr()),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -86,7 +109,7 @@ class _CurrentUserReviewSection extends ConsumerWidget {
         return ReviewCardWidget(review: data, actionMenu: _ReviewActionButton(id));
       },
       error: (error, stk) => Text(error.toString()),
-      loading: () => const Center(child: CircularProgressIndicator()),
+      loading: () => const ReviewLoadingCardWidget(),
     );
   }
 }
@@ -167,11 +190,11 @@ class _ReviewListSection extends ConsumerWidget {
     final user = ref.watch(authControllerProvider);
 
     return PaginatedListViewWidget<ReviewModel>(
-      listPadding: EdgeInsets.zero,
+      listPadding: const EdgeInsets.symmetric(vertical: 8),
       provider: placeReiewListProvider(locId),
       hideNoMoreItems: true,
       builder: (review) {
-        if (user!.uid == review.uid) {
+        if (user?.uid == review.uid) {
           return ReviewCardWidget(
             review: review,
             actionMenu: _ReviewActionButton(locId),
@@ -180,7 +203,13 @@ class _ReviewListSection extends ConsumerWidget {
 
         return ReviewCardWidget(review: review);
       },
-      loadingPlaceholder: const Center(child: CircularProgressIndicator()),
+      loadingPlaceholder: ListView.separated(
+        itemCount: 10,
+        itemBuilder: (BuildContext context, int index) {
+          return const ReviewLoadingCardWidget();
+        },
+        separatorBuilder: (_, __) => const SizedBox(height: 8),
+      ),
       emptyResultPlaceholder: BlankPage(
         icon: Icons.rate_review_rounded,
         heading: tr(LocaleKeys.no_reviews),
@@ -208,6 +237,7 @@ class _ReviewActionButton extends ConsumerWidget {
         return [
           PopupMenuItem(
             child: ListTile(
+              tileColor: Colors.transparent,
               leading: const Icon(Icons.edit),
               title: const Text(LocaleKeys.edit).tr(),
             ),
@@ -215,6 +245,7 @@ class _ReviewActionButton extends ConsumerWidget {
           ),
           PopupMenuItem(
             child: ListTile(
+              tileColor: Colors.transparent,
               leading: const Icon(Icons.delete),
               title: const Text(LocaleKeys.delete).tr(),
             ),
@@ -226,6 +257,7 @@ class _ReviewActionButton extends ConsumerWidget {
         switch (select) {
           case ReviewAction.edit:
             log(select.name);
+            await _handleUpdate(context, ref);
             break;
           case ReviewAction.delete:
             _handleDelete(context, ref);
@@ -255,5 +287,12 @@ class _ReviewActionButton extends ConsumerWidget {
       title: LocaleKeys.delete.tr(),
       message: LocaleKeys.delete_review.tr(),
     );
+  }
+
+  Future<void> _handleUpdate(BuildContext context, WidgetRef ref) async {
+    final review = await ref.read(reviewRepositoryProvider).getUserReview(locId);
+    ref.watch(reviewTextControllerProvider(locId)).text = review.content;
+    ref.watch(reviewRatingValueProvider(locId).state).state = review.rating;
+    context.router.navigate(AddReviewRoute(locId: locId));
   }
 }

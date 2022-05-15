@@ -3,22 +3,25 @@ import 'package:xplore_bg_v2/models/models.dart';
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
 
 class NearbyListViewBuilder extends StatelessWidget {
-  const NearbyListViewBuilder({
-    Key? key,
-    this.items,
-    this.itemsToShow = 10,
-    this.loadingItems = 5,
-    this.shoMoreCallback,
-    this.padding = const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-    this.hideShowMoreCard = false,
-  }) : super(key: key);
+  const NearbyListViewBuilder(
+      {Key? key,
+      this.items,
+      this.itemsToShow = 10,
+      this.loadingItems = 5,
+      this.showMoreCallback,
+      this.padding = const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+      this.hideShowMoreCard = false,
+      this.showDistance = false})
+      : super(key: key);
 
   final List<PlaceModel>? items;
   final int itemsToShow;
   final int loadingItems;
   final EdgeInsets padding;
-  final void Function(String id)? shoMoreCallback;
+  // final void Function(String id)? showMoreCallback;
+  final VoidCallback? showMoreCallback;
   final bool hideShowMoreCard;
+  final bool showDistance;
 
   @override
   Widget build(BuildContext context) {
@@ -37,9 +40,11 @@ class NearbyListViewBuilder extends StatelessWidget {
         itemBuilder: (_, index) {
           if (items != null) {
             if (index == items!.length) {
-              return hideShowMoreCard ? const SizedBox.shrink() : const NearbyShowMoreCardWidget();
+              return hideShowMoreCard
+                  ? const SizedBox.shrink()
+                  : NearbyShowMoreCardWidget(onPressed: showMoreCallback);
             }
-            return NearbyCardWidget(place: items![index]);
+            return NearbyCardWidget(place: items![index], useGeolocator: showDistance);
           }
           return const NearbyCardLoadingWidget();
         },

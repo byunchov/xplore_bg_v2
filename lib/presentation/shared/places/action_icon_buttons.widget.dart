@@ -11,6 +11,7 @@ class NotedActionIconButton extends ConsumerWidget {
   final String field;
   final dynamic iconStyle;
   final VoidCallback onPressed;
+  final bool checkUserAuth;
 
   const NotedActionIconButton({
     Key? key,
@@ -18,10 +19,12 @@ class NotedActionIconButton extends ConsumerWidget {
     required this.field,
     required this.iconStyle,
     required this.onPressed,
+    this.checkUserAuth = true,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(authControllerProvider);
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -42,7 +45,7 @@ class NotedActionIconButton extends ConsumerWidget {
             ],
           ),
         ),
-        onTap: onPressed,
+        onTap: (user != null || !checkUserAuth) ? onPressed : null,
       ),
     );
   }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:xplore_bg_v2/domain/core/utils/snackbar.util.dart';
+import 'package:xplore_bg_v2/domain/core/utils/url_launcher.util.dart';
 import 'package:xplore_bg_v2/models/models.dart';
 import 'package:xplore_bg_v2/presentation/location/controllers/gmaps.provider.dart';
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
@@ -22,7 +24,7 @@ class DetailSectionWidget extends ConsumerWidget {
         child: details.when(
           loading: () => const Center(child: CircularProgressIndicator()),
           data: (data) {
-            final infoList = _infoList(data);
+            final infoList = _infoList(context, data);
             return ListView.separated(
               shrinkWrap: true,
               padding: EdgeInsets.zero,
@@ -47,14 +49,21 @@ class DetailSectionWidget extends ConsumerWidget {
     );
   }
 
-  List<Widget> _infoList(GMapsPlaceModel data) {
+  List<Widget> _infoList(BuildContext context, GMapsPlaceModel data) {
     return [
       // add location details ?
       if (data.residence != null && data.residence!.isNotEmpty)
         ListTile(
           title: Text(data.residence!),
           leading: const Icon(Icons.location_pin),
-          onTap: () {},
+          onTap: () async {
+            final launched = await UrlLauncherUtils.launchCoordinates(
+                data.coordinates!.latitude, data.coordinates!.longitude, data.name);
+
+            if (!launched) {
+              SnackbarUtils.showSnackBar(context, message: "Error launching target!");
+            }
+          },
         ),
 
       // add place phone number
@@ -62,7 +71,13 @@ class DetailSectionWidget extends ConsumerWidget {
         ListTile(
           title: Text(data.phoneNumber!),
           leading: const Icon(Icons.phone),
-          onTap: () {},
+          onTap: () async {
+            final launched = await UrlLauncherUtils.launchPhone(data.phoneNumber!);
+
+            if (!launched) {
+              SnackbarUtils.showSnackBar(context, message: "Error launching target!");
+            }
+          },
         ),
 
       // add place website
@@ -74,7 +89,13 @@ class DetailSectionWidget extends ConsumerWidget {
             overflow: TextOverflow.ellipsis,
           ),
           leading: const Icon(Icons.language_sharp),
-          onTap: () {},
+          onTap: () async {
+            final launched = await UrlLauncherUtils.launchWebsite(data.website!);
+
+            if (!launched) {
+              SnackbarUtils.showSnackBar(context, message: "Error launching target!");
+            }
+          },
         ),
 
       if (data.openingHours != null && data.openingHours!.isNotEmpty)

@@ -12,8 +12,9 @@
 
 import 'package:auto_route/auto_route.dart' as _i3;
 import 'package:flutter/material.dart' as _i5;
-import 'package:xplore_bg_v2/models/location/place.model.dart' as _i7;
-import 'package:xplore_bg_v2/models/models.dart' as _i6;
+import 'package:xplore_bg_v2/infrastructure/routing/auth.guard.dart' as _i6;
+import 'package:xplore_bg_v2/models/location/place.model.dart' as _i8;
+import 'package:xplore_bg_v2/models/models.dart' as _i7;
 import 'package:xplore_bg_v2/presentation/explore/show_more_nearby.screen.dart'
     as _i2;
 import 'package:xplore_bg_v2/presentation/location/reviews/add_review.screen.dart'
@@ -21,8 +22,12 @@ import 'package:xplore_bg_v2/presentation/location/reviews/add_review.screen.dar
 import 'package:xplore_bg_v2/presentation/screens.dart' as _i1;
 
 class AppRouter extends _i3.RootStackRouter {
-  AppRouter([_i5.GlobalKey<_i5.NavigatorState>? navigatorKey])
+  AppRouter(
+      {_i5.GlobalKey<_i5.NavigatorState>? navigatorKey,
+      required this.authGuard})
       : super(navigatorKey);
+
+  final _i6.AuthGuard authGuard;
 
   @override
   final Map<String, _i3.PageFactory> pagesMap = {
@@ -176,7 +181,9 @@ class AppRouter extends _i3.RootStackRouter {
         _i3.RouteConfig('/#redirect',
             path: '/', redirectTo: '/home', fullMatch: true),
         _i3.RouteConfig(AuthCheckerRoute.name, path: '/auth-checker-screen'),
-        _i3.RouteConfig(HomeRoute.name, path: '/home', children: [
+        _i3.RouteConfig(HomeRoute.name, path: '/home', guards: [
+          authGuard
+        ], children: [
           _i3.RouteConfig(ExploreRoute.name,
               path: 'explore', parent: HomeRoute.name),
           _i3.RouteConfig(LandmarksRouter.name,
@@ -259,7 +266,7 @@ class HomeRoute extends _i3.PageRouteInfo<void> {
 /// [_i1.SignInScreen]
 class SigninRoute extends _i3.PageRouteInfo<SigninRouteArgs> {
   SigninRoute(
-      {_i5.Key? key, required void Function(_i6.UserModel) onSignInCallback})
+      {_i5.Key? key, required void Function(_i7.UserModel) onSignInCallback})
       : super(SigninRoute.name,
             path: '/signin',
             args:
@@ -273,7 +280,7 @@ class SigninRouteArgs {
 
   final _i5.Key? key;
 
-  final void Function(_i6.UserModel) onSignInCallback;
+  final void Function(_i7.UserModel) onSignInCallback;
 
   @override
   String toString() {
@@ -366,7 +373,7 @@ class LandmarkCategoriesRoute extends _i3.PageRouteInfo<void> {
 /// [_i1.CategoryScreen]
 class CategoryRoute extends _i3.PageRouteInfo<CategoryRouteArgs> {
   CategoryRoute(
-      {_i5.Key? key, required String tag, _i6.CategoryModel? category})
+      {_i5.Key? key, required String tag, _i7.CategoryModel? category})
       : super(CategoryRoute.name,
             path: ':tag',
             args: CategoryRouteArgs(key: key, tag: tag, category: category),
@@ -382,7 +389,7 @@ class CategoryRouteArgs {
 
   final String tag;
 
-  final _i6.CategoryModel? category;
+  final _i7.CategoryModel? category;
 
   @override
   String toString() {
@@ -439,7 +446,7 @@ class BookmarkedLocationsRoute extends _i3.PageRouteInfo<void> {
 class LocationRoute extends _i3.PageRouteInfo<LocationRouteArgs> {
   LocationRoute(
       {_i5.Key? key,
-      required _i7.PlaceModel place,
+      required _i8.PlaceModel place,
       required String heroTag,
       _i5.Animation<double>? transitionAnimation})
       : super(LocationRoute.name,
@@ -462,7 +469,7 @@ class LocationRouteArgs {
 
   final _i5.Key? key;
 
-  final _i7.PlaceModel place;
+  final _i8.PlaceModel place;
 
   final String heroTag;
 
@@ -599,7 +606,7 @@ class GMapsDetailsRoute extends _i3.PageRouteInfo<GMapsDetailsRouteArgs> {
   GMapsDetailsRoute(
       {_i5.Key? key,
       required String id,
-      required _i6.GMapsPlaceModel place,
+      required _i7.GMapsPlaceModel place,
       required String heroTag})
       : super(GMapsDetailsRoute.name,
             path: ':id',
@@ -618,7 +625,7 @@ class GMapsDetailsRouteArgs {
 
   final String id;
 
-  final _i6.GMapsPlaceModel place;
+  final _i7.GMapsPlaceModel place;
 
   final String heroTag;
 

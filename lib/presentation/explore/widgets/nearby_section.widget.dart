@@ -44,7 +44,11 @@ class NearbySectionWidget extends ConsumerWidget {
               if (data.isEmpty) {
                 return const BlankPage(heading: "No results");
               }
-              return NearbyListViewBuilder(items: data, hideShowMoreCard: true);
+              return NearbyListViewBuilder(
+                items: data.getRange(0, 10).toList(),
+                showMoreCallback: () => context.router.navigate(const ShowMoreNearbyRoute()),
+                showDistance: true,
+              );
             },
             error: (error, stackTrace) => Text("Error: $error"),
             loading: () => _createList(context),

@@ -12,6 +12,7 @@ export 'package:xplore_bg_v2/presentation/shared/widgets/appbar_title.widget.dar
 export 'package:xplore_bg_v2/presentation/shared/widgets/unfocus.widget.dart';
 export 'package:xplore_bg_v2/presentation/shared/pagination/paginated_list_view.widget.dart';
 export 'package:xplore_bg_v2/presentation/shared/widgets/signin_action_button.widget.dart';
+export 'package:xplore_bg_v2/presentation/user_profile/widgets/user_not_loggedin.widget.dart';
 
 // Place widgets
 export 'package:xplore_bg_v2/presentation/shared/places/place_list_tile.widget.dart';
@@ -31,12 +32,15 @@ export 'package:xplore_bg_v2/presentation/shared/location/section_title.widget.d
 
 // GMaps Place widgets
 export 'package:xplore_bg_v2/presentation/shared/location/gmaps/gmaps_listing.widget.dart';
+export 'package:xplore_bg_v2/presentation/shared/location/gmaps/map_card_widget.dart';
 
 // Loading animated widgets
 export 'package:xplore_bg_v2/presentation/shared/loading/place_listtile.loading.dart';
 export 'package:xplore_bg_v2/presentation/shared/location/gallery_section.widget.dart';
 export 'package:xplore_bg_v2/presentation/shared/loading/nearby_card.widget.dart';
 export 'package:xplore_bg_v2/presentation/shared/loading/gallery_listview.widget.dart';
+export 'package:xplore_bg_v2/presentation/shared/loading/review_card.widget.dart';
+export 'package:xplore_bg_v2/presentation/shared/loading/loading_indicator.widget.dart';
 
 // Translations
 export 'package:easy_localization/easy_localization.dart';

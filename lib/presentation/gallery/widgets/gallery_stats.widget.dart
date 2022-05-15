@@ -20,7 +20,7 @@ class GalleryStatsWidget extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        if (author != null && author!.isNotEmpty) _authorCard(context, theme),
+        if (author != null && author!.isNotEmpty) Expanded(child: _authorCard(context, theme)),
         const Spacer(),
         if (showCurrentPosition) _positionIndicator(theme),
       ],
@@ -28,8 +28,7 @@ class GalleryStatsWidget extends StatelessWidget {
   }
 
   Widget _authorCard(BuildContext context, ThemeData theme) {
-    final size = MediaQuery.of(context).size;
-    final cardMaxWidth = size.width * 0.6;
+    // final cardMaxWidth = size.width * 0.6;
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -37,20 +36,22 @@ class GalleryStatsWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(5),
         color: Colors.black.withOpacity(0.55),
       ),
-      constraints: BoxConstraints(maxWidth: cardMaxWidth),
+      // constraints: BoxConstraints(maxWidth: cardMaxWidth),
       child: Row(
-        mainAxisSize: MainAxisSize.min,
+        // mainAxisSize: MainAxisSize.min,
         children: [
           const Icon(
             Icons.camera_alt,
             color: Colors.white,
             size: 18,
           ),
-          const SizedBox(width: 6),
-          Text(
-            author!,
-            style: theme.textTheme.labelMedium?.copyWith(color: Colors.white),
-            overflow: TextOverflow.fade,
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              author!,
+              style: theme.textTheme.labelMedium?.copyWith(color: Colors.white),
+              overflow: TextOverflow.fade,
+            ),
           ),
         ],
       ),

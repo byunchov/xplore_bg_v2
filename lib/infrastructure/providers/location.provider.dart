@@ -2,8 +2,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:xplore_bg_v2/infrastructure/repositories/failure.dart';
 
-final locationProvider =
-    StateNotifierProvider.autoDispose<UserLocationNotifier, AsyncValue<Position>>(
+final locationProvider = StateNotifierProvider<UserLocationNotifier, AsyncValue<Position>>(
   (ref) => UserLocationNotifier(const AsyncValue.loading())..getContinuousLocation(),
 );
 

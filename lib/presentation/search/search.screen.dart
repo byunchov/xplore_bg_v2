@@ -61,23 +61,21 @@ class _SearchBarHeaderWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final searchController = ref.watch(searchTextControllerProvider);
     final theme = Theme.of(context);
-    return Expanded(
-      child: Center(
-        child: TextFormField(
-          autofocus: true,
-          controller: searchController,
-          decoration: InputDecoration(
-            border: InputBorder.none,
-            hintText: LocaleKeys.search_places.tr(),
-            hintStyle: const TextStyle(fontWeight: FontWeight.w500),
-            focusColor: theme.primaryColor,
-          ),
-          textInputAction: TextInputAction.search,
-          onFieldSubmitted: (value) async {
-            ref.read(searchHistoryProvider.notifier).addSearchTerm(value);
-            ref.read(searchFieldProvider.notifier).state = value;
-          },
+    return Center(
+      child: TextFormField(
+        autofocus: true,
+        controller: searchController,
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          hintText: LocaleKeys.search_places.tr(),
+          hintStyle: const TextStyle(fontWeight: FontWeight.w500),
+          focusColor: theme.primaryColor,
         ),
+        textInputAction: TextInputAction.search,
+        onFieldSubmitted: (value) async {
+          ref.read(searchHistoryProvider.notifier).addSearchTerm(value);
+          ref.read(searchFieldProvider.notifier).state = value;
+        },
       ),
     );
   }

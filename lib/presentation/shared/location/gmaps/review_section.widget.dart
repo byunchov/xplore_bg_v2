@@ -32,7 +32,8 @@ class ReviewSectionWidget extends ConsumerWidget {
               final review = data.reviews![index];
               return ReviewCardWidget(review: review, showRelativeTime: true);
             }),
-            separatorBuilder: (_, __) => const Divider(),
+            // separatorBuilder: (_, __) => const Divider(),
+            separatorBuilder: (_, __) => const SizedBox(height: 8),
           );
         },
         error: (e, stk) => Center(child: Text(e.toString())),

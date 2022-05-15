@@ -5,8 +5,8 @@ import 'package:xplore_bg_v2/infrastructure/repositories/search/search.repositor
 import 'package:xplore_bg_v2/models/models.dart';
 import 'package:xplore_bg_v2/presentation/authentication/controllers/auth.controller.dart';
 
-final notedPlacesProvider = StateNotifierProvider.autoDispose
-    .family<PaginationNotifier<PlaceModel>, PaginationState<PlaceModel>, String>((ref, field) {
+final notedPlacesProvider = StateNotifierProvider.family<PaginationNotifier<PlaceModel>,
+    PaginationState<PlaceModel>, String>((ref, field) {
   return PaginationNotifier(
     itemsPerBatch: 10,
     fetchNextItems: (item, {limit}) async {

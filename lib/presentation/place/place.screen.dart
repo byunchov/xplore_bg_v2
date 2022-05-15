@@ -98,6 +98,7 @@ class _AutoHideBottomActionBar extends ConsumerWidget {
             onPressed: () async {
               context.router.navigate(PlaceReviewsRoute(locId: id));
             },
+            checkUserAuth: false,
           ),
         ],
       ),

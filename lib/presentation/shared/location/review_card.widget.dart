@@ -24,7 +24,7 @@ class ReviewCardWidget extends StatelessWidget {
 
     final String createdAt = showRelativeTime && (review.relativeTimeDescription != null)
         ? review.relativeTimeDescription!
-        : review.createdAt.toLocal().toIso8601String();
+        : review.createdAt!.toLocal().toIso8601String();
 
     return Container(
       padding: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),

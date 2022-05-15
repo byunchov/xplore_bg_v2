@@ -1,26 +1,30 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:latlong2/latlong.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:xplore_bg_v2/domain/core/constants/widget.constants.dart';
+import 'package:xplore_bg_v2/infrastructure/providers/location.provider.dart';
 import 'package:xplore_bg_v2/infrastructure/routing/router.gr.dart';
 import 'package:xplore_bg_v2/models/location/place.model.dart';
 
-class NearbyCardWidget extends StatelessWidget {
+class NearbyCardWidget extends ConsumerWidget {
   final PlaceModel place;
   final double elevation;
+  final bool useGeolocator;
   const NearbyCardWidget({
     Key? key,
     required this.place,
     this.elevation = 4,
+    this.useGeolocator = true,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     const radius = WidgetConstants.kCradBorderRadius;
-    final currentLocation = LatLng(41.84126118480892, 23.48859392410678);
-    final int distFromMe = const Distance().distance(currentLocation, place.coordinates!).toInt();
+    final currentLocation =
+        ref.watch(locationProvider.select((value) => useGeolocator ? value : null));
 
     final heroTag = UniqueKey().toString();
 
@@ -40,7 +44,6 @@ class NearbyCardWidget extends StatelessWidget {
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(radius),
-              // color: theme.listTileTheme.tileColor,
             ),
             child: Column(
               mainAxisSize: MainAxisSize.max,
@@ -65,37 +68,41 @@ class NearbyCardWidget extends StatelessWidget {
                           ),
                           child: Stack(
                             children: [
-                              Align(
-                                // alignment: Alignment.bottomCenter,
-                                // alignment: Alignment.topCenter,
-                                alignment: Alignment.bottomRight,
-                                child: Container(
-                                  height: 32,
-                                  alignment: Alignment.center,
-                                  width: constraints.maxWidth - radius * 2,
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey[900]?.withOpacity(0.9),
-                                    // borderRadius: const BorderRadius.only(
-                                    //   topLeft: Radius.circular(radius),
-                                    //   topRight: Radius.circular(radius),
-                                    // ),
-                                    // borderRadius: const BorderRadius.only(
-                                    //   bottomLeft: Radius.circular(radius),
-                                    //   bottomRight: Radius.circular(radius),
-                                    // ),
-                                    borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(radius),
-                                      bottomRight: Radius.circular(radius),
+                              if (useGeolocator)
+                                Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: Container(
+                                    height: 32,
+                                    alignment: Alignment.center,
+                                    width: constraints.maxWidth - radius * 2,
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[900]?.withOpacity(0.9),
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(radius),
+                                        bottomRight: Radius.circular(radius),
+                                      ),
+                                    ),
+                                    child: currentLocation?.when(
+                                      data: (location) {
+                                        final distance = Geolocator.distanceBetween(
+                                                location.latitude,
+                                                location.longitude,
+                                                place.coordinates!.latitude,
+                                                place.coordinates!.longitude)
+                                            .toInt();
+                                        return Text(
+                                          "${distance.toString()} m",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.fade,
+                                          style: theme.textTheme.bodyLarge
+                                              ?.copyWith(color: Colors.white),
+                                        );
+                                      },
+                                      loading: () => const CircularProgressIndicator(),
+                                      error: (error, stk) => null,
                                     ),
                                   ),
-                                  child: Text(
-                                    "${distFromMe.toString()} m",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.fade,
-                                    style: theme.textTheme.bodyLarge?.copyWith(color: Colors.white),
-                                  ),
-                                ),
-                              )
+                                )
                             ],
                           ),
                         ),

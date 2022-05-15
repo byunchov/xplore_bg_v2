@@ -91,5 +91,13 @@
   "favourite_added": "\"{name}\" was added to \"Favourites\".",
   "favourite_removed": "\"{name}\" was removed from \"Favourites\".",
   "most_visited": "Most visited",
-  "most_liked": "Most liked"
+  "most_liked": "Most liked",
+  "privacy_policy": "Privacy Policy",
+  "logged_out_msg": "You're now logged out.",
+  "empty_result_set": "Empty result set",
+  "empty_result_set_hint": "No matching results found.",
+  "no_more_items": "No More Items",
+  "toggle_dark_mode": "Toggle dark mode",
+  "error_title": "Error",
+  "signin_user_msg": "Welcome {name}!"
 }

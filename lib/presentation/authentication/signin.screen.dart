@@ -28,17 +28,20 @@ class SignInScreen extends ConsumerWidget {
           icon: const Icon(Icons.close),
           onPressed: () {
             print(context.router.stackData.length);
-            if (context.router.stackData.length > 2) {
-              context.router.navigateBack();
-            } else {
-              context.router.popAndPush(const HomeRoute());
+            if (!auth.isAuthenticated && !auth.isGuest) {
+              auth.siginGuest();
+            }
+
+            context.router.pop();
+            if (context.router.stackData.length < 2) {
+              context.router.push(const HomeRoute());
             }
           },
         ),
         actions: [
           IconButton(
             icon: const Icon(Icons.language),
-            onPressed: () {},
+            onPressed: () => context.router.navigate(const ChooseLanguageRoute()),
           ),
           if (auth.isAuthenticated)
             IconButton(

@@ -29,6 +29,7 @@ class BlankPage extends StatelessWidget {
     final theme = Theme.of(context);
     return Center(
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [

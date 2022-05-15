@@ -40,7 +40,7 @@ class ShowMoreNearbyScreen extends HookConsumerWidget {
             shortText: err.toString(),
           ),
           builder: (item) {
-            return PlaceListTile(placePreview: item);
+            return PlaceListTile(placePreview: item, showDistance: true);
           },
         ),
       ),

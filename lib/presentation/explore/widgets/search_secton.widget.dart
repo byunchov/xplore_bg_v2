@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:xplore_bg_v2/domain/core/utils/snackbar.util.dart';
 import 'package:xplore_bg_v2/models/swipe_action.model.dart';
@@ -40,8 +39,10 @@ class SortableSectionWidget extends ConsumerWidget {
         },
       ),
       postfix: IconButton(
-        onPressed: () {},
-        icon: const Icon(Feather.arrow_right),
+        onPressed: () {
+          ref.refresh(locationSortProvider);
+        },
+        icon: const Icon(Icons.refresh),
       ),
       child: ref.watch(locationSortProvider).when(
             data: (data) => ListView.separated(

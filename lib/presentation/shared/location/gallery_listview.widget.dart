@@ -23,16 +23,16 @@ class GalleryListViewWidget extends ConsumerWidget {
 
     log(locId, name: runtimeType.toString());
 
-    return gallery.when(
-      loading: () => const GalleryListViewWLoadingWidget(),
-      data: (data) {
-        if (data.itemCount == 0) {
-          return const Center(child: Text("Empty page"));
-        }
+    return SizedBox(
+      height: 150,
+      child: gallery.when(
+        loading: () => const GalleryListViewWLoadingWidget(),
+        data: (data) {
+          if (data.itemCount == 0) {
+            return const Center(child: Text("Empty page"));
+          }
 
-        return SizedBox(
-          height: 150,
-          child: ListView.separated(
+          return ListView.separated(
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
             scrollDirection: Axis.horizontal,
             physics: const BouncingScrollPhysics(),
@@ -61,10 +61,10 @@ class GalleryListViewWidget extends ConsumerWidget {
               );
             }),
             separatorBuilder: (BuildContext context, int index) => const SizedBox(width: 12),
-          ),
-        );
-      },
-      error: (e, stk) => Text(e.toString()),
+          );
+        },
+        error: (e, stk) => Text(e.toString()),
+      ),
     );
   }
 }

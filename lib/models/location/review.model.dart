@@ -12,7 +12,7 @@ class ReviewModel {
   final String lang;
   final double rating;
   final String content;
-  final DateTime createdAt;
+  final DateTime? createdAt;
   final DateTime? updatedAt;
   final String? relativeTimeDescription;
 
@@ -25,7 +25,7 @@ class ReviewModel {
     required this.lang,
     required this.rating,
     required this.content,
-    required this.createdAt,
+    this.createdAt,
     this.updatedAt,
     this.relativeTimeDescription,
   });
@@ -68,7 +68,7 @@ class ReviewModel {
       'lang': lang,
       'rating': rating,
       'content': content,
-      'created_at': createdAt.millisecondsSinceEpoch,
+      'created_at': createdAt?.millisecondsSinceEpoch,
       'updated_at': updatedAt?.millisecondsSinceEpoch,
       'relativeTimeDescription': relativeTimeDescription,
     };

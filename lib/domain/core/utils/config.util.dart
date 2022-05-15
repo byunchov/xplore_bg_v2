@@ -21,4 +21,6 @@ class AppConfig {
   static const String mailTo = "mailto:$supportEmail?subject=About $appName App&body=";
 
   static const String supportEmail = 'xplorebg.project@gmail.com';
+  static const String privacyPolicyUrl =
+      "https://www.privacypolicies.com/live/dbb3bb87-d6e4-4ae4-a7ca-879bc62c0fc1";
 }

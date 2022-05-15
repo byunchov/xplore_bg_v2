@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:xplore_bg_v2/domain/core/utils/google_maps.util.dart';
+import 'package:xplore_bg_v2/domain/core/utils/snackbar.util.dart';
+import 'package:xplore_bg_v2/domain/core/utils/url_launcher.util.dart';
 import 'package:xplore_bg_v2/infrastructure/routing/router.gr.dart';
 import 'package:xplore_bg_v2/models/models.dart';
 import 'package:xplore_bg_v2/presentation/shared/places/details/activity_cards.widget.dart';
@@ -53,6 +55,14 @@ class PlaceActivitiesBody extends StatelessWidget {
               imageUrl: GMapsUtils.getMapTileWithPinURL(place.coordinates!),
               fit: BoxFit.cover,
             ),
+            callback: () async {
+              final launched = await UrlLauncherUtils.launchCoordinates(
+                  place.coordinates!.latitude, place.coordinates!.longitude, place.name);
+
+              if (!launched) {
+                SnackbarUtils.showSnackBar(context, message: "Error launching target!");
+              }
+            },
           ),
         ],
       ),

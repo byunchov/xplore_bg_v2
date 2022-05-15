@@ -46,7 +46,7 @@ final placeUserReviewProvider =
   ref.onDispose(cancelToken.cancel);
 
   await Future<void>.delayed(const Duration(milliseconds: 250));
-  if (cancelToken.isCancelled) throw AbortedException();
+  if (cancelToken.isCancelled) return null;
 
   log("Loading reviews for $id", name: "placeReiewListProvider");
 
