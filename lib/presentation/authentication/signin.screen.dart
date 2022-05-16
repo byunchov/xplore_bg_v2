@@ -2,6 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:xplore_bg_v2/domain/core/utils/snackbar.util.dart';
+import 'package:xplore_bg_v2/infrastructure/repositories/failure.dart';
 import 'package:xplore_bg_v2/infrastructure/routing/router.gr.dart';
 import 'package:xplore_bg_v2/models/models.dart';
 import 'package:xplore_bg_v2/presentation/authentication/controllers/auth.controller.dart';
@@ -11,10 +13,10 @@ import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
 class SignInScreen extends ConsumerWidget {
   const SignInScreen({
     Key? key,
-    required this.onSignInCallback,
+    this.onSignInCallback,
   }) : super(key: key);
 
-  final void Function(UserModel user) onSignInCallback;
+  final void Function(UserModel? user)? onSignInCallback;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -63,53 +65,58 @@ class SignInScreen extends ConsumerWidget {
                 children: [
                   Text(
                     LocaleKeys.welcome_to,
-                    style: theme.textTheme.titleLarge?.copyWith(
-                      fontSize: 21,
+                    // style: theme.textTheme.titleLarge?.copyWith(
+                    style: theme.textTheme.headline6?.copyWith(
+                      // fontSize: 21,
                       fontWeight: FontWeight.w500,
                       letterSpacing: 1.1,
+                      color: theme.textTheme.headlineLarge?.color,
                     ),
                   ).tr(),
                   const SizedBox(height: 5),
                   Text(
                     LocaleKeys.app_title,
-                    style: theme.textTheme.titleLarge?.copyWith(
-                      fontSize: 36,
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.headlineMedium?.copyWith(
+                      // fontSize: 36,
                       fontWeight: FontWeight.w800,
                       letterSpacing: 1.2,
+                      color: theme.textTheme.titleLarge?.color,
                     ),
                   ).tr(),
                 ],
               ),
             ),
-            Flexible(
-              flex: 2,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 35),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CustomDivider(
-                      width: size.width * 0.55,
-                      height: 4,
-                      margin: const EdgeInsets.only(bottom: 25),
-                    ),
-                    Text(
-                      LocaleKeys.welcome_msg,
-                      textAlign: TextAlign.center,
-                      style: theme.textTheme.headlineSmall?.copyWith(
-                        fontSize: 19,
-                        fontWeight: FontWeight.w400,
+            if (size.height >= 540)
+              Flexible(
+                flex: 2,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 35),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CustomDivider(
+                        width: size.width * 0.55,
+                        height: 4,
+                        margin: const EdgeInsets.only(bottom: 25),
                       ),
-                    ).tr(),
-                    CustomDivider(
-                      width: size.width * 0.55,
-                      height: 4,
-                      margin: const EdgeInsets.only(top: 25),
-                    ),
-                  ],
+                      Text(
+                        LocaleKeys.welcome_msg,
+                        textAlign: TextAlign.center,
+                        style: theme.textTheme.headlineSmall?.copyWith(
+                          fontSize: 19,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ).tr(),
+                      CustomDivider(
+                        width: size.width * 0.55,
+                        height: 4,
+                        margin: const EdgeInsets.only(top: 25),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
             Flexible(
               flex: 2,
               child: Column(
@@ -122,9 +129,11 @@ class SignInScreen extends ConsumerWidget {
                     onPressed: () async {
                       try {
                         final user = await ref.read(authRepositoryProvider).signInWithGoogle();
-                        onSignInCallback.call(user!);
-                      } catch (e) {
-                        debugPrint(e.toString());
+                        onSignInCallback != null
+                            ? onSignInCallback!.call(user)
+                            : _defaultOnSigingCallback(context, user);
+                      } on Failure catch (e) {
+                        SnackbarUtils.showSnackBar(context, message: e.message);
                       }
                     },
                   ),
@@ -136,9 +145,11 @@ class SignInScreen extends ConsumerWidget {
                     onPressed: () async {
                       try {
                         final user = await ref.read(authRepositoryProvider).signInWithFacebook();
-                        onSignInCallback.call(user!);
-                      } catch (e) {
-                        debugPrint(e.toString());
+                        onSignInCallback != null
+                            ? onSignInCallback!.call(user)
+                            : _defaultOnSigingCallback(context, user);
+                      } on Failure catch (e) {
+                        SnackbarUtils.showSnackBar(context, message: e.message);
                       }
                     },
                   ),
@@ -150,5 +161,14 @@ class SignInScreen extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  void _defaultOnSigingCallback(BuildContext context, UserModel? user) {
+    SnackbarUtils.showSnackBar(
+      context,
+      message: LocaleKeys.signin_user_msg.tr(namedArgs: {'name': user!.fullName}),
+      snackBarType: SnackBarType.success,
+    );
+    context.router.pop();
   }
 }

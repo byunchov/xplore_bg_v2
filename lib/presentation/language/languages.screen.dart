@@ -29,12 +29,14 @@ class ChooseLanguageScreen extends ConsumerWidget {
                 (context.locale.toString() == locale.toString()) ? const Icon(Icons.check) : null,
             onTap: () async {
               context.setLocale(locale);
+              ref.read(appLocaleProvider.notifier).setAppLocale(locale);
+              // ref.read(appLocaleProvider.state).state = locale;
+
               context.router.pop();
-              ref.read(appLocaleProvider.state).state = locale;
             },
           );
         },
-        separatorBuilder: (_, __) => const Divider(height: 5),
+        separatorBuilder: (_, __) => const SizedBox(height: 2.5),
       ),
     );
   }

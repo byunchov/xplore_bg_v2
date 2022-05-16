@@ -40,7 +40,8 @@ class AppRouter extends _i3.RootStackRouter {
           routeData: routeData, child: const _i1.HomeScreen());
     },
     SigninRoute.name: (routeData) {
-      final args = routeData.argsAs<SigninRouteArgs>();
+      final args = routeData.argsAs<SigninRouteArgs>(
+          orElse: () => const SigninRouteArgs());
       return _i3.AdaptivePage<dynamic>(
           routeData: routeData,
           child: _i1.SignInScreen(
@@ -265,8 +266,7 @@ class HomeRoute extends _i3.PageRouteInfo<void> {
 /// generated route for
 /// [_i1.SignInScreen]
 class SigninRoute extends _i3.PageRouteInfo<SigninRouteArgs> {
-  SigninRoute(
-      {_i5.Key? key, required void Function(_i7.UserModel) onSignInCallback})
+  SigninRoute({_i5.Key? key, void Function(_i7.UserModel?)? onSignInCallback})
       : super(SigninRoute.name,
             path: '/signin',
             args:
@@ -276,11 +276,11 @@ class SigninRoute extends _i3.PageRouteInfo<SigninRouteArgs> {
 }
 
 class SigninRouteArgs {
-  const SigninRouteArgs({this.key, required this.onSignInCallback});
+  const SigninRouteArgs({this.key, this.onSignInCallback});
 
   final _i5.Key? key;
 
-  final void Function(_i7.UserModel) onSignInCallback;
+  final void Function(_i7.UserModel?)? onSignInCallback;
 
   @override
   String toString() {

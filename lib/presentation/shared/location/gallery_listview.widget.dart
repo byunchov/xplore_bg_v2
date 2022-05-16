@@ -29,7 +29,10 @@ class GalleryListViewWidget extends ConsumerWidget {
         loading: () => const GalleryListViewWLoadingWidget(),
         data: (data) {
           if (data.itemCount == 0) {
-            return const Center(child: Text("Empty page"));
+            return BlankSectionWidget(
+              message: LocaleKeys.empty_gallery.tr(),
+              icon: Icons.broken_image_outlined,
+            );
           }
 
           return ListView.separated(

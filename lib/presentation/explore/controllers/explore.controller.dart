@@ -35,42 +35,17 @@ final locationSortProvider = FutureProvider.autoDispose<List<PlaceModel>>((ref) 
     filter: ["lang = $lang"],
     sort: ["${sortType.name}:desc"],
     attributesToRetrieve: repository.previewAttributes,
+    cancelToken: cancelToken,
   );
   final data = result.hits?.map((e) => PlaceModel.previewFromJson(e)).toList();
 
   return data ?? [];
 });
-/* 
-final locationsNearbyProvider = FutureProvider.autoDispose<List<PlaceModel>>((ref) async {
-  final lang = ref.watch(appLocaleProvider).languageCode;
-  final repository = ref.watch(searcRepositoryProvider);
-  final location = ref.watch(locationProvider).value;
-
-  final cancelToken = CancelToken();
-  ref.onDispose(cancelToken.cancel);
-
-  await Future<void>.delayed(const Duration(milliseconds: 250));
-  if (cancelToken.isCancelled) throw AbortedException();
-
-  if (location == null) return [];
-
-  final result = await repository.search(
-    'locations',
-    query: "",
-    limit: 10,
-    filter: ["lang = $lang"],
-    sort: ["_geoPoint(${location.latitude},${location.longitude}):asc"],
-    attributesToRetrieve: repository.previewAttributes,
-  );
-  final data = result.hits?.map((e) => PlaceModel.previewFromJson(e)).toList();
-
-  return data ?? [];
-}); 
-*/
 
 final locationsNearbyProvider =
     StateNotifierProvider<PaginationNotifier<PlaceModel>, PaginationState<PlaceModel>>((ref) {
   final userLocation = ref.watch(locationProvider);
+  final lang = ref.watch(appLocaleProvider).languageCode;
   return PaginationNotifier<PlaceModel>(
       itemsPerBatch: 10,
       fetchNextItems: (item, {limit}) async {
@@ -92,8 +67,10 @@ final locationsNearbyProvider =
           query: "",
           limit: limit,
           offset: item?.offset,
+          filter: ["lang = $lang"],
           sort: ["_geoPoint(${location.latitude},${location.longitude}):asc"],
           attributesToRetrieve: repository.previewAttributes,
+          cancelToken: cancelToken,
         );
         final data = result.hits?.map((e) => PlaceModel.previewFromJson(e)).toList();
 

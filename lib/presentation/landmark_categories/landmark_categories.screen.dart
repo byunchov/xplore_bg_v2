@@ -2,18 +2,13 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:xplore_bg_v2/infrastructure/providers/general.provider.dart';
+import 'package:xplore_bg_v2/infrastructure/repositories/failure.dart';
 import 'package:xplore_bg_v2/infrastructure/routing/router.gr.dart';
 import 'package:xplore_bg_v2/models/category.model.dart';
 import 'package:xplore_bg_v2/presentation/landmark_categories/widgets/category_card.widget.dart';
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
 
-final categoriesProvider = FutureProvider<List<CategoryModel>>((ref) async {
-  final firestore = ref.read(firebaseFirestoreProvider);
-  final test = await firestore.collection("categories").get();
-
-  return test.docs.map((e) => CategoryModel.fromSnapshot(e)).toList();
-});
+import 'controllers/categories.provider.dart';
 
 class LandmarkCategoriesScreen extends ConsumerStatefulWidget {
   const LandmarkCategoriesScreen({Key? key}) : super(key: key);
@@ -31,15 +26,22 @@ class _LandmarkCategoriesScreenState extends ConsumerState<LandmarkCategoriesScr
 
     return Scaffold(
       appBar: AppBar(
-        // elevation: 2.0,
         title: const Text(LocaleKeys.menu_landmarks).tr(),
       ),
       body: Padding(
         padding: const EdgeInsets.all(0),
         child: categories.when(
           data: (data) => _quilted(data),
-          error: (err, _) => Text(err.toString()),
-          loading: () => const Center(child: CircularProgressIndicator()),
+          // error: (err, _) => Text(err.toString()),
+          error: (error, stackTrace) {
+            final message = error is Failure ? error.message.tr() : error.toString();
+            return BlankPage(
+              icon: Icons.error_outline_rounded,
+              heading: LocaleKeys.error_title.tr(),
+              shortText: message,
+            );
+          },
+          loading: () => const Center(child: CusrotmLoadingIndicator()),
         ),
       ),
     );
@@ -67,12 +69,6 @@ class _LandmarkCategoriesScreenState extends ConsumerState<LandmarkCategoriesScr
             categoryItem: categories[index],
             onPressed: () {
               final categoryItem = categories[index];
-              // context.router.navigate(CategoryRoute(id: categoryItem.tag!, category: categoryItem));
-
-              // ctx2.pushRoute(HomeRoute(children: [
-              //   LandmarkCategoriesRoute(
-              //       children: [CategoryRoute(id: categoryItem.tag!, category: categoryItem)])
-              // ]));
               context.router.push(CategoryRoute(category: categoryItem, tag: categoryItem.tag!));
             },
           ),

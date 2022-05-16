@@ -4,6 +4,7 @@ export 'package:xplore_bg_v2/presentation/shared/widgets/marquee.widget.dart';
 export 'package:xplore_bg_v2/presentation/shared/widgets/cachedimage.widget.dart';
 export 'package:xplore_bg_v2/presentation/shared/widgets/divider.widget.dart';
 export 'package:xplore_bg_v2/presentation/shared/widgets/blank_page.widget.dart';
+export 'package:xplore_bg_v2/presentation/shared/widgets/blank_section.widget.dart';
 export 'package:xplore_bg_v2/presentation/shared/widgets/scrollbar_wrapper.widget.dart';
 export 'package:xplore_bg_v2/presentation/shared/widgets/appbar_action.widget.dart';
 export 'package:xplore_bg_v2/presentation/shared/widgets/section.widget.dart';
@@ -23,6 +24,7 @@ export 'package:xplore_bg_v2/presentation/shared/places/place_action_dialog.widg
 export 'package:xplore_bg_v2/presentation/shared/places/nearby/nearby_card.widget.dart';
 export 'package:xplore_bg_v2/presentation/shared/places/nearby/show_more_nearby.widget.dart';
 export 'package:xplore_bg_v2/presentation/shared/places/nearby/nearby_list_builder.dart';
+export 'package:xplore_bg_v2/presentation/shared/places/swipe_like_bookmark_tile.widget.dart';
 
 // Generic Location widgets
 export 'package:xplore_bg_v2/presentation/shared/location/gallery_listview.widget.dart';

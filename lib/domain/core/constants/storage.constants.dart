@@ -4,4 +4,5 @@ abstract class StorageConstants {
   static const String appThemeMode = 'theme_mode';
   static const String tokenAuthorization = 'token-authorization';
   static const String gusetLogin = 'guest_user';
+  static const String appLocale = 'app_locale';
 }

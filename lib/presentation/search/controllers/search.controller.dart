@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:xplore_bg_v2/domain/core/constants/storage.constants.dart';
+import 'package:xplore_bg_v2/infrastructure/providers/general.provider.dart';
 import 'package:xplore_bg_v2/infrastructure/repositories/search/search.repository.dart';
 import 'package:xplore_bg_v2/models/models.dart';
 
@@ -15,6 +16,7 @@ final paginatedPlaceSearchProvider =
     StateNotifierProvider.autoDispose<PaginationNotifier<PlaceModel>, PaginationState<PlaceModel>>(
         (ref) {
   final query = ref.watch(searchFieldProvider);
+  final lang = ref.watch(appLocaleProvider).languageCode;
 
   return PaginationNotifier<PlaceModel>(
       itemsPerBatch: 10,
@@ -34,7 +36,9 @@ final paginatedPlaceSearchProvider =
           query: query,
           limit: limit,
           offset: item?.offset,
+          filter: ["lang = $lang"],
           attributesToRetrieve: repository.previewAttributes,
+          cancelToken: cancelToken,
         );
         final data = result.hits?.map((e) => PlaceModel.previewFromJson(e)).toList();
 

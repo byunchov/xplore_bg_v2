@@ -17,10 +17,13 @@ class ReviewSectionWidget extends ConsumerWidget {
         loading: () => const Center(child: CircularProgressIndicator()),
         data: (data) {
           if (data.reviews == null || data.reviews!.isEmpty) {
-            return const SizedBox(
+            return SizedBox(
               width: double.infinity,
-              height: 150,
-              child: Center(child: Text("No reviews")),
+              height: 160,
+              child: BlankSectionWidget(
+                message: LocaleKeys.no_reviews.tr(),
+                icon: Icons.reviews_outlined,
+              ),
             );
           }
           return ListView.separated(

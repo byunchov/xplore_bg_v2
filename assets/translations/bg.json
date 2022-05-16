@@ -99,5 +99,19 @@
   "no_more_items": "Няма повече елементи",
   "toggle_dark_mode": "Тъмен режим",
   "error_title": "Грешка",
-  "signin_user_msg": "Добре дошли, {name}!"
+  "signin_user_msg": "Добре дошли, {name}!",
+  "sth_went_wrong": "Нещо се обърка.",
+  "empty_gallery": "Галерията е празна.",
+  "error_loaction_denied_permission": "Разрешенията за местоположение са отказани.",
+  "error_loaction_denied_forever": "Разрешенията за местоположение са отказани за постоянно.",
+  "error_loaction_service_disabled": "Услугата за местоположение е деактивирана.",
+  "error_request_cancelled": "Заявката е отменена",
+  "error_receive_timeout": "Таймаут за получаване.",
+  "error_connection_timeout": "Времето за свързване изтече.",
+  "error_send_timeout": "Таймаут за изпращане.",
+  "error_no_internet_connection": "Няма интернет връзка!",
+  "error_bad_request": "Лоша заявка.",
+  "error_request_not_found": "Заявката не е намерена.",
+  "error_internal_server": "Вътрешна грешка на сървъра.",
+  "enable_location": "Предоставяне на разрешения"
 }

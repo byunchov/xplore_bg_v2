@@ -15,8 +15,10 @@ class UserSettingSection extends StatelessWidget {
     return SectionWithTitleWidget(
       title: SectionTitleWithDividerWidget(LocaleKeys.general_settings.tr()),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           const _DarkModeSwitch(),
+          const SizedBox(height: 1.4),
           _SettingsListTile(
             title: LocaleKeys.select_lang.tr(),
             iconData: Icons.language,
@@ -26,6 +28,7 @@ class UserSettingSection extends StatelessWidget {
             },
           ),
           // const Divider(),
+          const SizedBox(height: 1.4),
           _SettingsListTile(
             title: LocaleKeys.feedback.tr(),
             iconData: Icons.email,
@@ -34,6 +37,7 @@ class UserSettingSection extends StatelessWidget {
               UrlLauncherUtils.launchMailTo(AppConfig.supportEmail);
             },
           ),
+          const SizedBox(height: 1.4),
           _SettingsListTile(
             title: LocaleKeys.privacy_policy.tr(),
             iconData: Icons.policy_rounded,

@@ -99,5 +99,19 @@
   "no_more_items": "No More Items",
   "toggle_dark_mode": "Toggle dark mode",
   "error_title": "Error",
-  "signin_user_msg": "Welcome {name}!"
+  "signin_user_msg": "Welcome {name}!",
+  "sth_went_wrong": "Something went wrong.",
+  "empty_gallery": "Gallery is empty.",
+  "error_loaction_denied_permission": "Location permissions are denied.",
+  "error_loaction_denied_forever": "Location permissions are permanently denied.",
+  "error_loaction_service_disabled": "Location services are disabled.",
+  "error_request_cancelled": "Request Cancelled",
+  "error_receive_timeout": "Receive timeout.",
+  "error_connection_timeout": "Connection timed out.",
+  "error_send_timeout": "Send timeout.",
+  "error_no_internet_connection": "No Internet Connection!",
+  "error_bad_request": "Bad Request.",
+  "error_request_not_found": "Request not found.",
+  "error_internal_server": "Internal Server Error.",
+  "enable_location": "Grant permissions"
 }

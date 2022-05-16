@@ -47,6 +47,7 @@ class PaginationNotifier<T> extends StateNotifier<PaginationState<T>> {
       final List<T> result = await fetchNextItems(item, limit: itemsPerBatch);
       updateData(result);
     } catch (e, stk) {
+      if (!mounted) return;
       state = PaginationState.error(e, stk);
     }
   }

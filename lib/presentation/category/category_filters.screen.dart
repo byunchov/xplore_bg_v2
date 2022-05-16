@@ -34,14 +34,6 @@ class CategoryFilterScreen extends ConsumerWidget {
         ),
       ),
       body: _CategoryFiltersWidget(tag),
-      // body: ListView(
-      //   physics: const BouncingScrollPhysics(),
-      //   children: [
-      //     _SubcategoryFacets(tag),
-      //     _SortCriteriaSection(tag),
-      //     _OrderbySection(tag),
-      //   ],
-      // ),
     );
   }
 }
@@ -83,7 +75,6 @@ class __SortCriteriaSectionState extends ConsumerState<_SortCriteriaSection> {
       groupValue: _currentSortCtiteria,
       title: Text(criteria.name),
       onChanged: (value) {
-        print("Radio btn value is: ${value?.criteria.name}");
         ref.read(categorySortCriteriaProvider(widget.tag).state).state = value!.criteria;
         setState(() {
           _currentSortCtiteria = value;
@@ -130,7 +121,6 @@ class __OrderbySectionState extends ConsumerState<_OrderbySection> {
       groupValue: _orderDirection,
       title: Text(direction.name),
       onChanged: (value) {
-        print("Radio btn value is: ${value?.order.name}");
         ref.read(categorySortOrderDirectionProvider(widget.tag).state).state = value!.order;
         setState(() {
           _orderDirection = value;
@@ -160,7 +150,15 @@ class __SubcategoryFacetsState extends ConsumerState<_SubcategoryFacets> {
       children: [
         facets.when(
           data: (data) {
-            if (data.isEmpty) return const Text("Empty");
+            if (data.isEmpty) {
+              return SizedBox(
+                height: 150,
+                child: BlankSectionWidget(
+                  icon: Icons.search_off_rounded,
+                  message: LocaleKeys.empty_result_set.tr(),
+                ),
+              );
+            }
 
             return ListView(
               shrinkWrap: true,

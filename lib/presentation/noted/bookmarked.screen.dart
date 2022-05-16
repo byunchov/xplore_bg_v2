@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:xplore_bg_v2/infrastructure/repositories/failure.dart';
 import 'package:xplore_bg_v2/models/models.dart';
 import 'package:xplore_bg_v2/presentation/authentication/controllers/auth.controller.dart';
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
@@ -26,11 +27,14 @@ class BookmarkedLocationsScreen extends ConsumerWidget {
                 shortText: LocaleKeys.no_bookmarks_desc.tr(),
                 icon: Icons.bookmark_remove_rounded,
               ),
-              errorPlaceholderBuilder: (err) => BlankPage(
-                icon: Icons.error_outline_rounded,
-                heading: LocaleKeys.error_title.tr(),
-                shortText: err.toString(),
-              ),
+              errorPlaceholderBuilder: (error) {
+                final message = error is Failure ? error.message.tr() : error.toString();
+                return BlankPage(
+                  icon: Icons.error_outline_rounded,
+                  heading: LocaleKeys.error_title.tr(),
+                  shortText: message,
+                );
+              },
               builder: (item) {
                 return PlaceListTile(placePreview: item);
               },

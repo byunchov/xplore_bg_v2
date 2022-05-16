@@ -30,13 +30,7 @@ class UserProfileScreen extends ConsumerWidget {
                 if (user.isAuthenticated) {
                   _handleLogOut(context, ref);
                 } else {
-                  context.router.navigate(SigninRoute(onSignInCallback: (user) {
-                    SnackbarUtils.showSnackBar(
-                      context,
-                      message: LocaleKeys.signin_user_msg.tr(namedArgs: {'name': user.fullName}),
-                    );
-                    context.router.pop();
-                  }));
+                  context.router.navigate(SigninRoute());
                 }
               },
             ),

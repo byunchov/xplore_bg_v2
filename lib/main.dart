@@ -37,10 +37,10 @@ void main() async {
       path: "assets/translations",
       supportedLocales: AppConfig.appLocales,
       fallbackLocale: const Locale("bg"),
-      startLocale: const Locale("bg"),
+      startLocale: null,
       useOnlyLangCode: true,
       child: ProviderScope(
-        child: const MainApplication(),
+        child: const _MaterialApp(),
         overrides: [
           restaurantPinBitmapProvider.overrideWithValue(restaurantPinBitmapArray),
           lodgingPinBitmapProvider.overrideWithValue(lodgingPinBitmapArray),
@@ -50,16 +50,19 @@ void main() async {
   );
 }
 
-class MainApplication extends ConsumerWidget {
-  const MainApplication({Key? key}) : super(key: key);
-
-  // final _appRouter = AppRouter();
+class _MaterialApp extends ConsumerWidget {
+  const _MaterialApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.read(appThemeProvider.notifier).loadThemeMode();
+    // ref.read(appLocaleProvider.notifier).loadAppLocale();
     final darkModeEnabled = ref.watch(appThemeProvider);
+
     final appRouter = ref.read(appRouterProvider);
+
+    // ref.read(appLocaleProvider.state).state = context.locale;
+    ref.read(appLocaleProvider.notifier).setAppLocale(context.locale);
 
     return MaterialApp.router(
       title: AppConfig.appName,

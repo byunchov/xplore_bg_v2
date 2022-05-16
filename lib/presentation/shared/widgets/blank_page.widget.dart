@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
 
 class BlankPage extends StatelessWidget {
@@ -38,7 +37,7 @@ class BlankPage extends StatelessWidget {
               child: Padding(
                 padding: iconPadding,
                 child: Icon(
-                  icon ?? Feather.image,
+                  icon,
                   size: iconSize,
                   color: iconColor ?? theme.iconTheme.color!,
                 ),

@@ -13,7 +13,7 @@ class CategoryModel {
     this.tag,
   });
 
-  factory CategoryModel.fromSnapshot(DocumentSnapshot snapshot, [String locale = "bg"]) {
+  factory CategoryModel.fromSnapshot(DocumentSnapshot snapshot, {String locale = "bg"}) {
     return CategoryModel(
       name: snapshot['locales'][locale] as String,
       itemCount: snapshot['item_count'] as int,

@@ -18,8 +18,6 @@ class CategoryScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    print(context.topRoute.path);
-
     // ref.watch(categoryFacetsProvider(tag).select((value) => null));
 
     return Scaffold(

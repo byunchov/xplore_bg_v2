@@ -102,5 +102,19 @@ abstract class  LocaleKeys {
   static const toggle_dark_mode = 'toggle_dark_mode';
   static const error_title = 'error_title';
   static const signin_user_msg = 'signin_user_msg';
+  static const sth_went_wrong = 'sth_went_wrong';
+  static const empty_gallery = 'empty_gallery';
+  static const error_loaction_denied_permission = 'error_loaction_denied_permission';
+  static const error_loaction_denied_forever = 'error_loaction_denied_forever';
+  static const error_loaction_service_disabled = 'error_loaction_service_disabled';
+  static const error_request_cancelled = 'error_request_cancelled';
+  static const error_receive_timeout = 'error_receive_timeout';
+  static const error_connection_timeout = 'error_connection_timeout';
+  static const error_send_timeout = 'error_send_timeout';
+  static const error_no_internet_connection = 'error_no_internet_connection';
+  static const error_bad_request = 'error_bad_request';
+  static const error_request_not_found = 'error_request_not_found';
+  static const error_internal_server = 'error_internal_server';
+  static const enable_location = 'enable_location';
 
 }

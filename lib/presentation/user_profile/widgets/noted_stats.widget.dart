@@ -56,65 +56,6 @@ class UserNotedStatsWidget extends ConsumerWidget {
   }
 }
 
-class UserNotedStatsWidget2 extends ConsumerWidget {
-  const UserNotedStatsWidget2({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final size = MediaQuery.of(context).size;
-    final theme = Theme.of(context);
-
-    final user = ref.watch(authControllerProvider);
-
-    return Container(
-      width: size.width * 0.88,
-      height: 115,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: theme.listTileTheme.tileColor,
-        // color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.3),
-            spreadRadius: 3,
-            blurRadius: 10,
-            offset: const Offset(0, 10), // changes position of shadow
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          _UserStatItemWidget(
-            id: user!.uid,
-            field: "like_count",
-            title: LocaleKeys.favourites.tr(),
-            icon: LineIcons.heartAlt,
-            iconColor: Colors.red,
-            onPressed: () {
-              context.router
-                  .navigate(const NotedLocationsRouter(children: [LikedLocationsRoute()]));
-            },
-          ),
-          _UserStatItemWidget(
-            id: user.uid,
-            field: "bookmark_count",
-            title: LocaleKeys.bookmarks.tr(),
-            icon: Icons.bookmark,
-            iconColor: Colors.lightBlue,
-            onPressed: () {
-              context.router
-                  .navigate(const NotedLocationsRouter(children: [BookmarkedLocationsRoute()]));
-            },
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class _UserStatItemWidget extends StatelessWidget {
   final String id;
   final String field;
