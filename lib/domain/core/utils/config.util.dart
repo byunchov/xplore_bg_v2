@@ -8,7 +8,6 @@ class AppConfig {
   static const String appLogo = 'assets/images/logo.png';
 
   //google maps
-  static const String mapsAPIKey = "AIzaSyCeAhX_oifgNEat12FLWk2GsACFteq4_BM";
   static const String hotelIcon = 'assets/images/maps/hotel.png';
   static const String restaurantIcon = 'assets/images/maps/restaurant.png';
   static const String hotelPinIcon = 'assets/images/maps/hotel_pin.png';
