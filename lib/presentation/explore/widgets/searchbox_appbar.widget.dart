@@ -57,9 +57,9 @@ class _SearchBarWidget extends StatelessWidget {
                 ),
                 const SizedBox(width: 10),
                 Text(
-                  LocaleKeys.search_places,
+                  LocaleKeys.search_places.tr(),
                   style: TextStyle(color: Colors.grey[700], fontSize: 15),
-                ).tr(),
+                ),
               ],
             ),
           ),

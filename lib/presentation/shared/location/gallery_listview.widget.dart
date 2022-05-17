@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:xplore_bg_v2/domain/core/constants/widget.constants.dart';
+import 'package:xplore_bg_v2/infrastructure/repositories/failure.dart';
 import 'package:xplore_bg_v2/infrastructure/routing/router.gr.dart';
 import 'package:xplore_bg_v2/presentation/gallery/controllers/gallery.provider.dart';
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
@@ -66,7 +67,17 @@ class GalleryListViewWidget extends ConsumerWidget {
             separatorBuilder: (BuildContext context, int index) => const SizedBox(width: 12),
           );
         },
-        error: (e, stk) => Text(e.toString()),
+        error: (error, stackTrace) {
+          final message = error is Failure ? error.message.tr() : error.toString();
+
+          return SizedBox(
+            height: 150,
+            child: BlankSectionWidget(
+              icon: Icons.description_outlined,
+              message: message.tr(),
+            ),
+          );
+        },
       ),
     );
   }

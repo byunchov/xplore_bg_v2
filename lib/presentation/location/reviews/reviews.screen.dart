@@ -190,19 +190,31 @@ class _ReviewListSection extends ConsumerWidget {
     final user = ref.watch(authControllerProvider);
 
     return PaginatedListViewWidget<ReviewModel>(
-      listPadding: const EdgeInsets.symmetric(vertical: 8),
+      listPadding: const EdgeInsets.only(bottom: 16),
       provider: placeReiewListProvider(locId),
       hideNoMoreItems: true,
       builder: (review) {
-        if (user?.uid == review.uid) {
-          return ReviewCardWidget(
-            review: review,
-            actionMenu: _ReviewActionButton(locId),
-          );
-        }
-
-        return ReviewCardWidget(review: review);
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 8),
+            ReviewCardWidget(
+              review: review,
+              actionMenu: user?.uid == review.uid ? _ReviewActionButton(locId) : null,
+            ),
+          ],
+        );
       },
+      // builder: (review) {
+      //   if (user?.uid == review.uid) {
+      //     return ReviewCardWidget(
+      //       review: review,
+      //       actionMenu: _ReviewActionButton(locId),
+      //     );
+      //   }
+
+      //   return ReviewCardWidget(review: review);
+      // },
       loadingPlaceholder: ListView.separated(
         itemCount: 10,
         itemBuilder: (BuildContext context, int index) {

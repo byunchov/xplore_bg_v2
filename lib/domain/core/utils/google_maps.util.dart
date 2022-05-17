@@ -61,28 +61,24 @@ class GMapsUtils {
     return EscapeHtmlUtils.removeEscapedHtml(EscapeHtmlUtils.removeHtmlTags(author));
   }
 
-  static String getNearbySearchURL(
-    LatLng coordinates,
-    GMapsPlaceType type, {
-    int? radius,
-    int? maxResults = 20,
-  }) {
+  static String getNearbySearchURL(LatLng coordinates, GMapsPlaceType type,
+      {int? radius, int? maxResults = 20, String lang = 'bg'}) {
     final radiusQuery = radius != null ? '&radius=$radius' : '';
     final limit = maxResults != null ? "&maxResults=$maxResults" : "";
     final rankBy = radius == null ? "&rankby=distance" : "";
 
     final url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json'
         '?location=${coordinates.latitude},${coordinates.longitude}$radiusQuery'
-        '&type=${type.name}$rankBy$limit&language=bg&key=$mapsAPIKey';
+        '&type=${type.name}$rankBy$limit&language=$lang&key=$mapsAPIKey';
 
     return url;
   }
 
-  static String getPlaceDetailsURL(String id) {
+  static String getPlaceDetailsURL(String id, {String lang = 'bg'}) {
     final url = "https://maps.googleapis.com/maps/api/place/details/json?"
         "place_id=$id&fields=name,formatted_address,international_phone_number,"
         "geometry/location,opening_hours/weekday_text,photos,price_level,rating,reviews,"
-        "url,user_ratings_total,website,price_level,types&language=bg&key=$mapsAPIKey";
+        "url,user_ratings_total,website,price_level,types&language=$lang&key=$mapsAPIKey";
 
     return url;
   }

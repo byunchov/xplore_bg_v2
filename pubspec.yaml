@@ -2,7 +2,7 @@ name: xplore_bg_v2
 description: A new Flutter project.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.0+1
+version: 1.0.2+3
 
 environment:
   sdk: ">=2.16.0 <3.0.0"
@@ -60,6 +60,9 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   freezed: ^2.0.2
+
+# dependency_overrides:
+#   analyzer: ^4.0.0
 
 flutter_icons:
   image_path: "assets/images/launcher_icon.png"

@@ -3,7 +3,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:xplore_bg_v2/infrastructure/repositories/failure.dart';
 import 'package:xplore_bg_v2/presentation/explore/controllers/explore.controller.dart';
 import 'package:xplore_bg_v2/presentation/explore/widgets/featured_card.widget.dart';
-import 'package:xplore_bg_v2/presentation/explore/widgets/loading_featured_card.widget.dart';
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
 
 class FeauturedSectionWidget extends ConsumerWidget {

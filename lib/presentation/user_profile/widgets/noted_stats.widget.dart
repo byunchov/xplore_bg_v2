@@ -17,40 +17,42 @@ class UserNotedStatsWidget extends ConsumerWidget {
 
     final user = ref.watch(authControllerProvider);
 
-    return Container(
-      width: size.width,
-      height: 120,
-      decoration: BoxDecoration(
-        color: theme.listTileTheme.tileColor,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          _UserStatItemWidget(
-            id: user!.uid,
-            field: "like_count",
-            title: LocaleKeys.favourites.tr(),
-            icon: LineIcons.heartAlt,
-            iconColor: Colors.red,
-            onPressed: () {
-              context.router
-                  .navigate(const NotedLocationsRouter(children: [LikedLocationsRoute()]));
-            },
-          ),
-          _UserStatItemWidget(
-            id: user.uid,
-            field: "bookmark_count",
-            title: LocaleKeys.bookmarks.tr(),
-            icon: Icons.bookmark,
-            iconColor: Colors.lightBlue,
-            onPressed: () {
-              context.router
-                  .navigate(const NotedLocationsRouter(children: [BookmarkedLocationsRoute()]));
-            },
-          ),
-        ],
+    return Material(
+      color: theme.listTileTheme.tileColor,
+      child: SizedBox(
+        width: size.width,
+        height: 120,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            _UserStatItemWidget(
+              id: user!.uid,
+              field: "like_count",
+              title: LocaleKeys.favourites.tr(),
+              icon: LineIcons.heartAlt,
+              iconColor: Colors.red,
+              onPressed: () {
+                context.router.navigate(const HomeRoute(children: [
+                  NotedLocationsRouter(children: [LikedLocationsRoute()])
+                ]));
+              },
+            ),
+            _UserStatItemWidget(
+              id: user.uid,
+              field: "bookmark_count",
+              title: LocaleKeys.bookmarks.tr(),
+              icon: Icons.bookmark,
+              iconColor: Colors.lightBlue,
+              onPressed: () {
+                context.router.navigate(const HomeRoute(children: [
+                  NotedLocationsRouter(children: [BookmarkedLocationsRoute()])
+                ]));
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -63,6 +65,8 @@ class _UserStatItemWidget extends StatelessWidget {
   final IconData icon;
   final MaterialColor iconColor;
   final VoidCallback? onPressed;
+  final double iconRadius;
+
   const _UserStatItemWidget({
     Key? key,
     required this.id,
@@ -71,12 +75,14 @@ class _UserStatItemWidget extends StatelessWidget {
     required this.icon,
     required this.iconColor,
     this.onPressed,
+    this.iconRadius = 6,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return GestureDetector(
+    return InkWell(
+      borderRadius: BorderRadius.circular(iconRadius),
       onTap: onPressed,
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -86,7 +92,7 @@ class _UserStatItemWidget extends StatelessWidget {
             height: 42,
             decoration: BoxDecoration(
               color: iconColor.shade200,
-              borderRadius: BorderRadius.circular(6),
+              borderRadius: BorderRadius.circular(iconRadius),
             ),
             child: Center(
               child: Icon(
@@ -98,6 +104,7 @@ class _UserStatItemWidget extends StatelessWidget {
           ),
           const SizedBox(width: 10),
           Column(
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

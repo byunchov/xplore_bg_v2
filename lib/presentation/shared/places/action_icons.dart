@@ -26,9 +26,9 @@ class BookmarkIcon implements IconStyle {
   late Icon _regular;
   late Icon _bold;
 
-  BookmarkIcon({Color? colorBold}) {
+  BookmarkIcon({Color? colorBold, Color? colorRegular}) {
     _bold = Icon(Icons.bookmark, size: IconStyle.iconSize, color: colorBold ?? Colors.blue);
-    _regular = const Icon(Icons.bookmark_outline, size: IconStyle.iconSize);
+    _regular = Icon(Icons.bookmark_outline, size: IconStyle.iconSize, color: colorRegular);
   }
 
   @override
@@ -42,9 +42,9 @@ class LikeIcon implements IconStyle {
   late Icon _regular;
   late Icon _bold;
 
-  LikeIcon({Color? colorBold}) {
+  LikeIcon({Color? colorBold, Color? colorRegular}) {
     _bold = Icon(Icons.favorite, size: IconStyle.iconSize, color: colorBold ?? Colors.red);
-    _regular = const Icon(Icons.favorite_border, size: IconStyle.iconSize);
+    _regular = Icon(Icons.favorite_border, size: IconStyle.iconSize, color: colorRegular);
   }
 
   @override

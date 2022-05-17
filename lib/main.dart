@@ -12,18 +12,19 @@ import 'package:xplore_bg_v2/presentation/location/controllers/gmaps.provider.da
 
 // TODO Add user model and update auth provider and repo - DONE
 // TODO create loading card for featured places - DONE
-// TODO fix user auth on app load
+// TODO fix user auth on app load - DONE?
 // TODO refactor explore screen - DONE
 // TODO add user loaction service and acc. providers - DONE
 // TODO finish user screen - DONE
-// TODO add user profile edit - DROPPED
-// TODO add user auth checks troughout buttons
+// TODO add user auth checks troughout buttons - DONE
 // TODO add show more screen and acc. providers - DONE
 // TODO add review content page - DONE
-// TODO add clear all in category filter page - DROPPED
 // TODO add nearby section to place details - DONE
 // TODO add change language menu and screen -DONE
 // TODO add language provider - DONE
+
+// TODO add user profile edit - DROPPED
+// TODO add clear all in category filter page - DROPPED
 
 void main() async {
   await Initializer.init();
@@ -37,7 +38,7 @@ void main() async {
       path: "assets/translations",
       supportedLocales: AppConfig.appLocales,
       fallbackLocale: const Locale("bg"),
-      startLocale: null,
+      startLocale: const Locale("bg"),
       useOnlyLangCode: true,
       child: ProviderScope(
         child: const _MaterialApp(),
@@ -80,3 +81,5 @@ class _MaterialApp extends ConsumerWidget {
     );
   }
 }
+
+// flutter pub global run dcdg -o uml_diagram.puml --exclude '*.g.dart' --exclude '*.freezed.dart'

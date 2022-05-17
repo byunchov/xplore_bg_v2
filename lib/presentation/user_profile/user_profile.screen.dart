@@ -1,8 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:xplore_bg_v2/domain/core/utils/dialog.util.dart';
-import 'package:xplore_bg_v2/domain/core/utils/snackbar.util.dart';
+import 'package:xplore_bg_v2/domain/core/utils/utils.dart';
 import 'package:xplore_bg_v2/infrastructure/routing/router.gr.dart';
 import 'package:xplore_bg_v2/presentation/authentication/controllers/auth.controller.dart';
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
@@ -15,25 +14,13 @@ class UserProfileScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(authControllerProvider.notifier);
-
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: AppbarTitleWidget(
           title: LocaleKeys.menu_user_profile.tr(),
-          actions: [
-            AppbarActionWidget(
-              iconData: user.isAuthenticated ? Icons.logout : Icons.login,
-              buttonSize: 42,
-              onTap: () {
-                if (user.isAuthenticated) {
-                  _handleLogOut(context, ref);
-                } else {
-                  context.router.navigate(SigninRoute());
-                }
-              },
-            ),
+          actions: const [
+            _UserAppBarAction(),
           ],
         ),
       ),
@@ -47,11 +34,33 @@ class UserProfileScreen extends ConsumerWidget {
             children: const [
               UserProfileSection(),
               UserSettingSection(),
-              SizedBox(height: 16),
+              _MemberSinceBadge(),
+              // SizedBox(height: 16),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class _UserAppBarAction extends ConsumerWidget {
+  const _UserAppBarAction({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(authControllerProvider);
+
+    return AppbarActionWidget(
+      iconData: (user != null) ? Icons.logout : Icons.login,
+      buttonSize: 42,
+      onTap: () {
+        if (user != null) {
+          _handleLogOut(context, ref);
+        } else {
+          context.router.navigate(SigninRoute());
+        }
+      },
     );
   }
 
@@ -70,6 +79,31 @@ class UserProfileScreen extends ConsumerWidget {
       },
       title: LocaleKeys.logout.tr(),
       message: LocaleKeys.logout_hint.tr(),
+    );
+  }
+}
+
+class _MemberSinceBadge extends ConsumerWidget {
+  const _MemberSinceBadge({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    final user = ref.watch(authControllerProvider);
+
+    if (user == null) {
+      return const SizedBox(height: 24);
+    }
+
+    final joinDate =
+        DateTimeUtils.yMMMMdFormat(user.joinDate!.toLocal(), context.locale.languageCode);
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 24, bottom: 16),
+      child: Text(
+        LocaleKeys.member_since.tr(namedArgs: {'date': joinDate.toString()}),
+        style: theme.textTheme.caption,
+      ),
     );
   }
 }

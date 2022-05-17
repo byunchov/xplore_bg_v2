@@ -19,7 +19,8 @@ class SearchResultsWidget extends ConsumerWidget {
         shortText: LocaleKeys.no_places_found_desc.tr(),
       ),
       builder: (item) {
-        return PlaceListTile(placePreview: item);
+        return PlaceLikeBookmarkSwipeListTile(place: item);
+        // return PlaceListTile(placePreview: item);
       },
     );
   }

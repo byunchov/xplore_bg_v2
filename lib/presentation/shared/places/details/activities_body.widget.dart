@@ -52,7 +52,10 @@ class PlaceActivitiesBody extends StatelessWidget {
             text: "",
             icon: Icons.navigation_rounded,
             image: CustomCachedImage(
-              imageUrl: GMapsUtils.getMapTileWithPinURL(place.coordinates!),
+              imageUrl: GMapsUtils.getMapTileWithPinURL(
+                place.coordinates!,
+                lang: context.locale.languageCode,
+              ),
               fit: BoxFit.cover,
             ),
             callback: () async {

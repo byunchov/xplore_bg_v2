@@ -1,6 +1,7 @@
 import 'package:expand_widget/expand_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:xplore_bg_v2/domain/core/utils/utils.dart';
 import 'package:xplore_bg_v2/models/models.dart';
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
 
@@ -24,7 +25,7 @@ class ReviewCardWidget extends StatelessWidget {
 
     final String createdAt = showRelativeTime && (review.relativeTimeDescription != null)
         ? review.relativeTimeDescription!
-        : review.createdAt!.toLocal().toIso8601String();
+        : DateTimeUtils.yMEdHmFormat(review.createdAt!.toLocal(), context.locale.languageCode);
 
     return Container(
       padding: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),

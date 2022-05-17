@@ -32,3 +32,4 @@ analyzer:
   exclude:
     - '**/*.g.dart'
     - '**/*.freezed.dart'
+    - 'lib/domain/core/generated/locale_keys.g.dart'

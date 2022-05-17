@@ -116,5 +116,7 @@ abstract class  LocaleKeys {
   static const error_request_not_found = 'error_request_not_found';
   static const error_internal_server = 'error_internal_server';
   static const enable_location = 'enable_location';
+  static const member_since = 'member_since';
+  static const no_description = 'no_description';
 
 }

@@ -113,5 +113,7 @@
   "error_bad_request": "Bad Request.",
   "error_request_not_found": "Request not found.",
   "error_internal_server": "Internal Server Error.",
-  "enable_location": "Grant permissions"
+  "enable_location": "Grant permissions",
+  "member_since": "Xplorer since {date}",
+  "no_description": "No description found."
 }

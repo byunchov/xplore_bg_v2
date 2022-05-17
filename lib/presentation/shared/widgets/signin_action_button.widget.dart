@@ -63,7 +63,7 @@ class _SigninActionButtonState extends State<SigninActionButton> {
           ? null
           : () async {
               setState(() => _isLoading = true);
-              await widget.onPressed();
+              await widget.onPressed.call();
               setState(() => _isLoading = false);
             },
     );

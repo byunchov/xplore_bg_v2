@@ -113,5 +113,7 @@
   "error_bad_request": "Лоша заявка.",
   "error_request_not_found": "Заявката не е намерена.",
   "error_internal_server": "Вътрешна грешка на сървъра.",
-  "enable_location": "Предоставяне на разрешения"
+  "enable_location": "Предоставяне на разрешения",
+  "member_since": "Xplorer от {date}",
+  "no_description": "Не е намерено описание."
 }

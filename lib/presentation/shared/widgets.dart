@@ -43,6 +43,7 @@ export 'package:xplore_bg_v2/presentation/shared/loading/nearby_card.widget.dart
 export 'package:xplore_bg_v2/presentation/shared/loading/gallery_listview.widget.dart';
 export 'package:xplore_bg_v2/presentation/shared/loading/review_card.widget.dart';
 export 'package:xplore_bg_v2/presentation/shared/loading/loading_indicator.widget.dart';
+export 'package:xplore_bg_v2/presentation/explore/widgets/loading_featured_card.widget.dart';
 
 // Translations
 export 'package:easy_localization/easy_localization.dart';

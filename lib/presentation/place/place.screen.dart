@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:xplore_bg_v2/infrastructure/repositories/failure.dart';
 import 'package:xplore_bg_v2/infrastructure/routing/router.gr.dart';
 import 'package:xplore_bg_v2/models/models.dart';
 import 'package:xplore_bg_v2/presentation/location/location.screen.dart';
@@ -127,7 +128,13 @@ class _DescriptionSection extends ConsumerWidget {
         child: details.when(
           data: (data) {
             if (data == null) {
-              return const Text("No description found.");
+              return SizedBox(
+                height: 150,
+                child: BlankSectionWidget(
+                  icon: Icons.description_outlined,
+                  message: LocaleKeys.no_description.tr(),
+                ),
+              );
             }
             return ExpandText(
               data.description ?? "",
@@ -143,10 +150,21 @@ class _DescriptionSection extends ConsumerWidget {
               hintTextStyle: TextStyle(color: theme.primaryColor),
             );
           },
-          error: (err, stack) {
-            return Container();
+          error: (error, stackTrace) {
+            final message = error is Failure ? error.message.tr() : error.toString();
+
+            return SizedBox(
+              height: 150,
+              child: BlankSectionWidget(
+                icon: Icons.description_outlined,
+                message: message.tr(),
+              ),
+            );
           },
-          loading: () => const Center(child: CircularProgressIndicator()),
+          loading: () => const SizedBox(
+            height: 150,
+            child: Center(child: CusrotmLoadingIndicator()),
+          ),
         ),
       ),
     );

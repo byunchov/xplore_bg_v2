@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:xplore_bg_v2/domain/core/utils/google_maps.util.dart';
+import 'package:xplore_bg_v2/infrastructure/repositories/failure.dart';
 import 'package:xplore_bg_v2/infrastructure/routing/router.gr.dart';
 import 'package:xplore_bg_v2/models/models.dart';
 import 'package:xplore_bg_v2/presentation/location/controllers/gmaps.provider.dart';
@@ -78,29 +79,33 @@ class _GMapsLisitngWidgetState extends ConsumerState<GMapsLisitngWidget> {
             ),
           ),
           GalleryOverlayWidgets.backButtonAndTitleOverlay(context, widget.heading),
-          restaurantList.when(
-            loading: () {
-              return const Align(
-                alignment: Alignment.center,
-                child: CusrotmLoadingIndicator(),
-              );
-            },
-            error: (err, st) => Text("$err"),
-            data: (data) {
-              _addMarkers(data);
-              return Positioned(
-                bottom: 20.0,
-                child: SizedBox(
-                  height: 250.0,
-                  width: MediaQuery.of(context).size.width,
-                  child: CarouselSliderWidget(
+          Positioned(
+            bottom: 20.0,
+            child: SizedBox(
+              height: 250.0,
+              width: MediaQuery.of(context).size.width,
+              child: restaurantList.when(
+                loading: () {
+                  return const FeaturedLoadingCardWidget();
+                },
+                error: (error, stackTrace) {
+                  final message = error is Failure ? error.message.tr() : error.toString();
+
+                  return BlankSectionWidget(
+                    message: message.tr(),
+                    icon: Icons.location_on_outlined,
+                  );
+                },
+                data: (data) {
+                  _addMarkers(data);
+                  return CarouselSliderWidget(
                     controller: _carouselController,
                     children: data.map((e) => MapCardWidget(place: e)).toList(),
                     onPageChanged: _animateCameraToPosition,
-                  ),
-                ),
-              );
-            },
+                  );
+                },
+              ),
+            ),
           ),
         ],
       ),

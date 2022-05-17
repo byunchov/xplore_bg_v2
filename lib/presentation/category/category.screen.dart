@@ -54,7 +54,8 @@ class CategoryScreen extends ConsumerWidget {
         icon: Icons.search_off_rounded,
       ),
       builder: (item) {
-        return PlaceListTile(placePreview: item);
+        // return PlaceListTile(placePreview: item);
+        return PlaceLikeBookmarkSwipeListTile(place: item);
       },
     );
   }
