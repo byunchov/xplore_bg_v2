@@ -11,17 +11,21 @@ class PlaceLikeBookmarkSwipeListTile extends ConsumerWidget {
   const PlaceLikeBookmarkSwipeListTile({
     Key? key,
     required this.place,
+    this.showDistance = false,
   }) : super(key: key);
+
   final PlaceModel place;
+  final bool showDistance;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(authControllerProvider);
 
     return user == null
-        ? PlaceListTile(placePreview: place)
+        ? PlaceListTile(placePreview: place, showDistance: showDistance)
         : PlaceSwipeListTile(
             placePreview: place,
+            showDistance: showDistance,
             actions: [
               SwipeActionModel(
                 child: SwipeActionButton(

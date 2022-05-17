@@ -9,12 +9,14 @@ class PlaceSwipeListTile extends StatelessWidget {
   final PlaceModel placePreview;
   final List<SwipeActionModel>? actions;
   final double widthSpace;
+  final bool showDistance;
 
   const PlaceSwipeListTile({
     Key? key,
     required this.placePreview,
     this.actions,
     this.widthSpace = 60,
+    this.showDistance = false,
   }) : super(key: key);
 
   @override
@@ -36,6 +38,7 @@ class PlaceSwipeListTile extends StatelessWidget {
       child: PlaceListTile(
         placePreview: placePreview,
         onLongPress: () => _onLongPress(context),
+        showDistance: showDistance,
       ),
     );
   }

@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:xplore_bg_v2/infrastructure/providers/general.provider.dart';
 import 'package:xplore_bg_v2/infrastructure/repositories/failure.dart';
 import 'package:xplore_bg_v2/models/models.dart';
+import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
 
 abstract class BaseAuthRepository {
   Stream<User?> get authStateChanges;
@@ -51,6 +52,8 @@ class AuthRepository implements BaseAuthRepository {
       return user != null ? UserModel.fromFirebaseUser(user) : null;
     } on FirebaseAuthException catch (e) {
       throw Failure(message: e.message!);
+    } catch (e) {
+      throw const Failure(message: LocaleKeys.sth_went_wrong);
     }
   }
 
@@ -69,6 +72,8 @@ class AuthRepository implements BaseAuthRepository {
       return user != null ? UserModel.fromFirebaseUser(user) : null;
     } on FirebaseAuthException catch (e) {
       throw Failure(message: e.message!);
+    } catch (e) {
+      throw const Failure(message: LocaleKeys.sth_went_wrong);
     }
   }
 

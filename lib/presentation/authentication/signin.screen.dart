@@ -133,7 +133,7 @@ class SignInScreen extends ConsumerWidget {
                             ? onSignInCallback!.call(user)
                             : _defaultOnSigingCallback(context, user);
                       } on Failure catch (e) {
-                        SnackbarUtils.showSnackBar(context, message: e.message);
+                        SnackbarUtils.showSnackBar(context, message: e.message.tr());
                       }
                     },
                   ),
@@ -149,7 +149,7 @@ class SignInScreen extends ConsumerWidget {
                             ? onSignInCallback!.call(user)
                             : _defaultOnSigingCallback(context, user);
                       } on Failure catch (e) {
-                        SnackbarUtils.showSnackBar(context, message: e.message);
+                        SnackbarUtils.showSnackBar(context, message: e.message.tr());
                       }
                     },
                   ),
