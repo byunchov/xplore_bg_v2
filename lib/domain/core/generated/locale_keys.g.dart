@@ -118,5 +118,10 @@ abstract class  LocaleKeys {
   static const enable_location = 'enable_location';
   static const member_since = 'member_since';
   static const no_description = 'no_description';
+  static const delete_account = 'delete_account';
+  static const delete_account_confirm = 'delete_account_confirm';
+  static const delete_account_deleted = 'delete_account_deleted';
+  static const user_lbl = 'user_lbl';
+  static const update_profile_success = 'update_profile_success';
 
 }

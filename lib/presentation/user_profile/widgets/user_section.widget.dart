@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:xplore_bg_v2/presentation/authentication/controllers/auth.controller.dart';
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
 import 'package:xplore_bg_v2/presentation/user_profile/widgets/noted_stats.widget.dart';
+import 'package:xplore_bg_v2/presentation/user_profile/widgets/settings_section.widget.dart';
 import 'package:xplore_bg_v2/presentation/user_profile/widgets/user_avatar.widget.dart';
 
 class UserProfileSection extends ConsumerWidget {
@@ -43,16 +44,19 @@ class _UserLoggedInWidget extends ConsumerWidget {
           ),
         ),
         const SizedBox(height: 10),
-        Text(
-          user.email,
-          textAlign: TextAlign.center,
-          maxLines: 1,
-          style: theme.textTheme.subtitle1?.copyWith(
-            fontWeight: FontWeight.w400,
+        if (user.email.isNotEmpty)
+          Text(
+            user.email,
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            style: theme.textTheme.subtitle1?.copyWith(
+              fontWeight: FontWeight.w400,
+            ),
           ),
-        ),
         const SizedBox(height: 24),
         const UserNotedStatsWidget(),
+        const SizedBox(height: 16),
+        const UserSettingSection(),
         const SizedBox(height: 16),
       ],
     );

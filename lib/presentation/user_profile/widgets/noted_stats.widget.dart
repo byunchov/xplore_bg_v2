@@ -141,16 +141,19 @@ class _UserNotedStatsText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final firestore = FirebaseFirestore.instance;
-
-    return StreamBuilder<DocumentSnapshot>(
-      stream: firestore.doc("users/$id").snapshots(),
-      builder: (context, snap) {
-        if (!snap.hasData) return const Text('--');
-        // final snapshot = snap.data as DocumentSnapshot<Map<String, dynamic>>;
-        final data = snap.data;
-        final count = data?[field];
-        return Text(count.toString(), style: textStyle);
-      },
-    );
+    try {
+      return StreamBuilder<DocumentSnapshot>(
+        stream: firestore.doc("users/$id").snapshots(),
+        builder: (context, snap) {
+          if (!snap.hasData) return const Text('--');
+          if (snap.hasError) return const SizedBox.shrink();
+          final data = snap.data;
+          final count = data?[field];
+          return Text(count.toString(), style: textStyle);
+        },
+      );
+    } catch (e) {
+      return const SizedBox.shrink();
+    }
   }
 }

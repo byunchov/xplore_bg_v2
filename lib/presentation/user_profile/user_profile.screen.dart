@@ -5,6 +5,7 @@ import 'package:xplore_bg_v2/domain/core/utils/utils.dart';
 import 'package:xplore_bg_v2/infrastructure/routing/router.gr.dart';
 import 'package:xplore_bg_v2/presentation/authentication/controllers/auth.controller.dart';
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
+import 'package:xplore_bg_v2/presentation/user_profile/widgets/misc_section.widget.dart';
 
 import 'widgets/settings_section.widget.dart';
 import 'widgets/user_section.widget.dart';
@@ -33,9 +34,8 @@ class UserProfileScreen extends ConsumerWidget {
             mainAxisSize: MainAxisSize.max,
             children: const [
               UserProfileSection(),
-              UserSettingSection(),
+              UserMiscSection(),
               _MemberSinceBadge(),
-              // SizedBox(height: 16),
             ],
           ),
         ),
@@ -56,29 +56,11 @@ class _UserAppBarAction extends ConsumerWidget {
       buttonSize: 42,
       onTap: () {
         if (user != null) {
-          _handleLogOut(context, ref);
+          DialogUtils.showSignOutDialog(context, ref);
         } else {
           context.router.navigate(SigninRoute());
         }
       },
-    );
-  }
-
-  void _handleLogOut(BuildContext context, WidgetRef ref) {
-    DialogUtils.showYesNoDialog(
-      context,
-      onConfirm: () async {
-        ref.read(authControllerProvider.notifier).signOut();
-
-        SnackbarUtils.showSnackBar(
-          context,
-          // title: LocaleKeys.logout.tr(),
-          message: LocaleKeys.logged_out_msg.tr(),
-          snackBarType: SnackBarType.success,
-        );
-      },
-      title: LocaleKeys.logout.tr(),
-      message: LocaleKeys.logout_hint.tr(),
     );
   }
 }

@@ -18,3 +18,4 @@ export 'package:xplore_bg_v2/presentation/location/restaurants/restaurants.scree
 export 'package:xplore_bg_v2/presentation/location/gmaps/gmaps_place_details.screen.dart';
 export 'package:xplore_bg_v2/presentation/location/reviews/reviews.screen.dart';
 export 'package:xplore_bg_v2/presentation/language/languages.screen.dart';
+export 'package:xplore_bg_v2/presentation/user_profile/edit_profile.screen.dart';

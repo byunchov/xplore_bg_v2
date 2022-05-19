@@ -1,109 +1,66 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:xplore_bg_v2/domain/core/utils/config.util.dart';
-import 'package:xplore_bg_v2/domain/core/utils/url_launcher.util.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:xplore_bg_v2/domain/core/utils/utils.dart';
+import 'package:xplore_bg_v2/infrastructure/repositories/failure.dart';
 import 'package:xplore_bg_v2/infrastructure/routing/router.gr.dart';
-import 'package:xplore_bg_v2/infrastructure/theme/apptheme.provider.dart';
+import 'package:xplore_bg_v2/presentation/authentication/controllers/auth.controller.dart';
 import 'package:xplore_bg_v2/presentation/shared/widgets.dart';
+import 'package:xplore_bg_v2/presentation/user_profile/widgets/settings_tile.widget.dart';
 
-class UserSettingSection extends StatelessWidget {
+class UserSettingSection extends ConsumerWidget {
   const UserSettingSection({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return SectionWithTitleWidget(
-      title: SectionTitleWithDividerWidget(LocaleKeys.general_settings.tr()),
+      title: SectionTitleWithDividerWidget(LocaleKeys.user_lbl.tr()),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const _DarkModeSwitch(),
-          const SizedBox(height: 1.4),
-          _SettingsListTile(
-            title: LocaleKeys.select_lang.tr(),
-            iconData: Icons.language,
-            iconColor: Colors.purple,
+          SettingsListTileWidget(
+            title: LocaleKeys.edit_profile.tr(),
+            iconData: Icons.edit,
+            iconColor: Colors.orangeAccent,
             onPressed: () {
-              context.router.navigate(const ChooseLanguageRoute());
-            },
-          ),
-          // const Divider(),
-          const SizedBox(height: 1.4),
-          _SettingsListTile(
-            title: LocaleKeys.feedback.tr(),
-            iconData: Icons.email,
-            iconColor: Colors.redAccent,
-            onPressed: () {
-              UrlLauncherUtils.launchMailTo(AppConfig.supportEmail);
+              context.router.push(const EditUserProfileRoute());
             },
           ),
           const SizedBox(height: 1.4),
-          _SettingsListTile(
-            title: LocaleKeys.privacy_policy.tr(),
-            iconData: Icons.policy_rounded,
-            iconColor: Colors.greenAccent,
+          SettingsListTileWidget(
+            title: LocaleKeys.logout.tr(),
+            iconData: Icons.logout_outlined,
+            iconColor: Colors.blueGrey,
             onPressed: () {
-              UrlLauncherUtils.launchWebsite(AppConfig.privacyPolicyUrl);
+              DialogUtils.showSignOutDialog(context, ref);
+            },
+          ),
+          const SizedBox(height: 1.4),
+          SettingsListTileWidget(
+            title: LocaleKeys.delete_account.tr(),
+            iconData: Icons.delete_forever_outlined,
+            iconColor: Colors.red,
+            onPressed: () {
+              DialogUtils.showYesNoDialog(
+                context,
+                title: LocaleKeys.delete.tr(),
+                message: LocaleKeys.delete_account_confirm.tr(),
+                onConfirm: () async {
+                  try {
+                    await ref.read(authControllerProvider.notifier).deleteUserAccount();
+                  } on Failure catch (e) {
+                    SnackbarUtils.showSnackBar(
+                      context,
+                      message: e.message,
+                      snackBarType: SnackBarType.error,
+                    );
+                  }
+                },
+              );
             },
           ),
         ],
       ),
-    );
-  }
-}
-
-class _SettingsListTile extends StatelessWidget {
-  final String title;
-  final double iconSize;
-  final IconData iconData;
-  final VoidCallback? onPressed;
-  final Color iconColor;
-  const _SettingsListTile({
-    Key? key,
-    required this.title,
-    this.iconSize = 30,
-    required this.iconData,
-    required this.iconColor,
-    this.onPressed,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(title),
-      leading: Container(
-        height: iconSize,
-        width: iconSize,
-        decoration: BoxDecoration(
-          color: iconColor,
-          borderRadius: BorderRadius.circular(iconSize * 0.2),
-        ),
-        child: Icon(
-          iconData,
-          size: iconSize * 0.65,
-          color: Colors.white,
-        ),
-      ),
-      trailing: Icon(Icons.chevron_right, size: iconSize * 0.65),
-      onTap: onPressed,
-    );
-  }
-}
-
-class _DarkModeSwitch extends ConsumerWidget {
-  const _DarkModeSwitch({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final darkModeEnabled = ref.watch(appThemeProvider);
-    final provider = ref.watch(appThemeProvider.notifier);
-
-    return SwitchListTile(
-      value: darkModeEnabled,
-      onChanged: (value) {
-        provider.setThemeMode(value);
-      },
-      title: Text(LocaleKeys.toggle_dark_mode.tr()),
     );
   }
 }

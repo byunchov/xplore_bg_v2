@@ -115,5 +115,10 @@
   "error_internal_server": "Internal Server Error.",
   "enable_location": "Grant permissions",
   "member_since": "Xplorer since {date}",
-  "no_description": "No description found."
+  "no_description": "No description found.",
+  "delete_account": "Delete Account",
+  "delete_account_confirm": "Are you sure you want to delete your account?",
+  "delete_account_deleted": "User account has successfully been deleted.",
+  "user_lbl": "User",
+  "update_profile_success": "Profile updated successfully."
 }

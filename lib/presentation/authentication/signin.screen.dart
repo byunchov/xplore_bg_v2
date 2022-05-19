@@ -36,7 +36,7 @@ class SignInScreen extends ConsumerWidget {
 
             context.router.pop();
             if (context.router.stackData.length < 2) {
-              context.router.push(const HomeRoute());
+              context.router.replaceAll([const HomeRoute()]);
             }
           },
         ),

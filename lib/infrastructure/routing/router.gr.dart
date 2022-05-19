@@ -39,6 +39,10 @@ class AppRouter extends _i3.RootStackRouter {
       return _i3.AdaptivePage<dynamic>(
           routeData: routeData, child: const _i1.HomeScreen());
     },
+    EditUserProfileRoute.name: (routeData) {
+      return _i3.AdaptivePage<dynamic>(
+          routeData: routeData, child: const _i1.EditUserProfileScreen());
+    },
     SigninRoute.name: (routeData) {
       final args = routeData.argsAs<SigninRouteArgs>(
           orElse: () => const SigninRouteArgs());
@@ -210,6 +214,7 @@ class AppRouter extends _i3.RootStackRouter {
           _i3.RouteConfig(UserProfileRoute.name,
               path: 'user', parent: HomeRoute.name)
         ]),
+        _i3.RouteConfig(EditUserProfileRoute.name, path: '/user/edit'),
         _i3.RouteConfig(SigninRoute.name, path: '/signin'),
         _i3.RouteConfig(SearchRoute.name, path: '/search'),
         _i3.RouteConfig(ChooseLanguageRoute.name, path: '/language'),
@@ -261,6 +266,15 @@ class HomeRoute extends _i3.PageRouteInfo<void> {
       : super(HomeRoute.name, path: '/home', initialChildren: children);
 
   static const String name = 'HomeRoute';
+}
+
+/// generated route for
+/// [_i1.EditUserProfileScreen]
+class EditUserProfileRoute extends _i3.PageRouteInfo<void> {
+  const EditUserProfileRoute()
+      : super(EditUserProfileRoute.name, path: '/user/edit');
+
+  static const String name = 'EditUserProfileRoute';
 }
 
 /// generated route for

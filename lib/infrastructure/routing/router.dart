@@ -42,6 +42,7 @@ import 'package:xplore_bg_v2/presentation/screens.dart';
         AutoRoute(path: 'user', page: UserProfileScreen),
       ],
     ),
+    AutoRoute(path: '/user/edit', page: EditUserProfileScreen),
     AutoRoute(path: '/signin', name: "SigninRoute", page: SignInScreen),
     AutoRoute(path: '/search', page: SearchScreen),
     AutoRoute(path: '/language', page: ChooseLanguageScreen),

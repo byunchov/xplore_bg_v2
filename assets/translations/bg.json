@@ -115,5 +115,10 @@
   "error_internal_server": "Вътрешна грешка на сървъра.",
   "enable_location": "Предоставяне на разрешения",
   "member_since": "Xplorer от {date}",
-  "no_description": "Не е намерено описание."
+  "no_description": "Не е намерено описание.",
+  "delete_account": "Изтриване на акаунт",
+  "delete_account_confirm": "Сигурни ли сте, че искате да изтриете акаунта си?",
+  "delete_account_deleted": "Потребителският акаунт е изтрит успешно.",
+  "user_lbl": "Потребител",
+  "update_profile_success": "Профилът е обновен успешно."
 }

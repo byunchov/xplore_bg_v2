@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:xplore_bg_v2/domain/core/utils/config.util.dart';
@@ -64,6 +65,8 @@ class _MaterialApp extends ConsumerWidget {
 
     // ref.read(appLocaleProvider.state).state = context.locale;
     ref.read(appLocaleProvider.notifier).setAppLocale(context.locale);
+
+    FlutterNativeSplash.remove();
 
     return MaterialApp.router(
       title: AppConfig.appName,

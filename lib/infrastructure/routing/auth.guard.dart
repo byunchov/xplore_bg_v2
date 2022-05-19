@@ -19,7 +19,12 @@ class AuthGuard extends AutoRedirectGuard {
   @override
   void onNavigation(NavigationResolver resolver, StackRouter router) {
     final authController = ref.watch(authControllerProvider.notifier);
-    if (authController.isAuthenticated || authController.isGuest) return resolver.next();
+
+    if (authController.isAuthenticated || authController.isGuest) {
+      resolver.next();
+      return;
+    }
+
     router.push(
       SigninRoute(
         onSignInCallback: (_) {
