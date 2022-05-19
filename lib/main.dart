@@ -11,22 +11,6 @@ import 'package:xplore_bg_v2/infrastructure/theme/themes.dart';
 import 'package:xplore_bg_v2/initializer.dart';
 import 'package:xplore_bg_v2/presentation/location/controllers/gmaps.provider.dart';
 
-// TODO Add user model and update auth provider and repo - DONE
-// TODO create loading card for featured places - DONE
-// TODO fix user auth on app load - DONE?
-// TODO refactor explore screen - DONE
-// TODO add user loaction service and acc. providers - DONE
-// TODO finish user screen - DONE
-// TODO add user auth checks troughout buttons - DONE
-// TODO add show more screen and acc. providers - DONE
-// TODO add review content page - DONE
-// TODO add nearby section to place details - DONE
-// TODO add change language menu and screen -DONE
-// TODO add language provider - DONE
-
-// TODO add user profile edit - DROPPED
-// TODO add clear all in category filter page - DROPPED
-
 void main() async {
   await Initializer.init();
 
@@ -38,8 +22,8 @@ void main() async {
     EasyLocalization(
       path: "assets/translations",
       supportedLocales: AppConfig.appLocales,
-      fallbackLocale: const Locale("bg"),
-      startLocale: const Locale("bg"),
+      fallbackLocale: AppConfig.appLocales.first,
+      startLocale: AppConfig.appLocales.first,
       useOnlyLangCode: true,
       child: ProviderScope(
         child: const _MaterialApp(),
@@ -58,12 +42,10 @@ class _MaterialApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.read(appThemeProvider.notifier).loadThemeMode();
-    // ref.read(appLocaleProvider.notifier).loadAppLocale();
     final darkModeEnabled = ref.watch(appThemeProvider);
 
     final appRouter = ref.read(appRouterProvider);
 
-    // ref.read(appLocaleProvider.state).state = context.locale;
     ref.read(appLocaleProvider.notifier).setAppLocale(context.locale);
 
     FlutterNativeSplash.remove();
